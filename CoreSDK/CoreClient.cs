@@ -15,8 +15,8 @@ namespace CoreSDK
 		readonly IStateController stateController;
 		readonly ClientMessenger messenger;
 
-		public static event EventHandler<PlayerConnectionArgs> ConnectedToServer;
-		public static event EventHandler<PlayerConnectionArgs> DisconnectedFromServer;
+		public static event EventHandler ConnectedToServer;
+		public static event EventHandler DisconnectedFromServer;
 
 		public bool Connected { get { return client.Connected; } }
 		public bool Connecting { get { return client.Connecting; } }
@@ -27,12 +27,13 @@ namespace CoreSDK
 			messageProcessor = new MessageProcessor(logger);
 			stateController = new ClientStateController(logger);
 			messenger = new ClientMessenger(logger, client);
-			
-			logger.Info("Client");
-			logger.Info(" - Time: " + DateTime.Now);
-			logger.Info(" - Instance Name: " + LocalId.Name + " - GUID: " + LocalId.Guid);
 
-			DisconnectedFromServer += new EventHandler<PlayerConnectionArgs>(OnDisconnectedFromServer);
+			logger.Info($@"Client
+			 - Time: {DateTime.Now}
+			 - Name: {LocalId.Name}
+			 - GUID: { LocalId.Guid}");
+
+			DisconnectedFromServer += OnDisconnectedFromServer;
 		}
 
 		public void Connect (string host, int port)
@@ -42,8 +43,6 @@ namespace CoreSDK
 			// create and start the client
 			client.Connect(host, port);
 			logger.Info("Client connected");
-
-			RequestPlayersListHandler.PlayersListRequest += OnPlayersListReceived;
 		}
 
 		public void Run ()
@@ -54,34 +53,23 @@ namespace CoreSDK
 				Message msg;
 				while (client.GetNextMessage(out msg))
 				{
+					logger.Debug($@"Client received {msg.eventType} message");
+
 					switch (msg.eventType)
 					{
 						case EventType.Connected:
-							logger.Debug("Client received EventType.Connected message");
 
-							var connectArgs = new BasicPlayerRequestArgs()
-							{
-								ConnectionId = msg.connectionId
-							};
-
-							ConnectedToServer?.Invoke(this, connectArgs);
+							ConnectedToServer?.Invoke(this, null);
 							break;
 
 						case EventType.Data:
-							logger.Debug("Client received EventType.Data message");
 
 							messageProcessor.Receive(msg.data);
 							break;
 
 						case EventType.Disconnected:
-							logger.Debug("Client received EventType.Disconnected message");
 
-							var disconnectArgs = new BasicPlayerRequestArgs()
-							{
-								ConnectionId = msg.connectionId
-							};
-
-							DisconnectedFromServer?.Invoke(this, disconnectArgs);
+							DisconnectedFromServer?.Invoke(this, null);
 							break;
 					}
 				}
@@ -100,32 +88,19 @@ namespace CoreSDK
 			messenger.Ping();
 		}
 
-		public void Send (Transmission t)
-		{
-			messenger.Send(t);
-		}
-
 		public void Disconnect ()
 		{
 			client.Disconnect();
 		}
 
-		protected void OnDisconnectedFromServer (object sender, BasicPlayerRequestArgs a)
+		public void Transmit (Transmission t)
 		{
-			client.Disconnect();
+			messenger.Transmit(t);
 		}
 
-		protected void OnPlayersListReceived (object sender, BasicPlayerRequestArgs a)
+		protected void OnDisconnectedFromServer (object sender, EventArgs a)
 		{
-			try
-			{
-				Console.WriteLine("PlayerList");
-				((List<Player>)a.Payload).ForEach(p => Console.WriteLine(p.ConnectionId + " " + p.Name + " " + p.GUID));
-			}
-			catch (Exception e)
-			{ 
-				Console.WriteLine(e); 
-			}
+			Disconnect();
 		}
 	}
 }

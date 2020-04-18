@@ -3,7 +3,7 @@
 namespace CoreSDK.Models
 {
 	[Serializable]
-	public class Entity
+	public class Entity : IOwnable
 	{
 		public string Owner { get; set; }
 		public string Guid { get; set; }

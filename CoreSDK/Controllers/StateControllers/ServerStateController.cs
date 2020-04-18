@@ -5,24 +5,25 @@ using System.Text;
 
 namespace CoreSDK.Controllers
 {
-	public class ServerStateController : StateController
+	public class ServerStateController : IStateController
 	{
 		private readonly ILogger logger;
 		private readonly PlayerManager playerManager;
 		private readonly GameState gameState;
+		private readonly IServerMessenger messenger;
 
 		public static event EventHandler GameStateRequested;
 
-		public ServerStateController (ILogger l, PlayerManager pm, GameState gs)
+		public ServerStateController (ILogger l, PlayerManager pm, GameState gs, IServerMessenger m)
 		{
 			logger = l;
 			playerManager = pm;
 			gameState = gs;
+			messenger = m;
 
-
-			PlayerHandshakeHandler.PlayerHandshaked += OnPlayerHandshake;
 			CoreServer.PlayerConnected += OnPlayerConnected;
 			GameStateRequestHandler.GameStateRequested += OnGameStateRequested;
+			PlayerHandshakeHandler.PlayerHandshaked += OnPlayerHandshake;
 		}
 
 		private void OnPlayerConnected (object sender, PlayerConnectionArgs args)
@@ -45,10 +46,11 @@ namespace CoreSDK.Controllers
 			playerManager.RemovePlayer(args.ConnectionId);
 		}
 
-		private void OnGameStateRequested (object sender)
+		private void OnGameStateRequested (object sender, GameStateRequestArgs args)
 		{
-			var t = new Transmission(MessageType.GameStateRequest, e.Payload);
-			messenger.Send(e.ConnectionId, t.Serialized());
+			var t = new Transmission(MessageType.GameStateRequest, gameState);
+
+			messenger.Transmit(args.RequestedBy, t);
 		}
 	}
 }

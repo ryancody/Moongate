@@ -6,7 +6,7 @@ namespace CoreSDK
 {
 	public class EntityHandler : IMessageHandler
 	{
-		public static event EventHandler<BasicPlayerRequestArgs> EntityReceived;
+		public static event EventHandler<EntityArgs> EntityReceived;
 
 		readonly ILogger logger;
 
@@ -19,16 +19,13 @@ namespace CoreSDK
 		{
 			var entity = (Entity)message.Payload;
 
-			var args = new BasicPlayerRequestArgs()
+			var args = new EntityArgs()
 			{
-				ClientGuid = message.SenderGuid,
-				Payload = entity
+				Entity = entity
 			};
 
 			logger.Debug($@"InstantiateEntityHandler
-			 - {args.ConnectionId}
-			 - {args.ClientGuid} 
-			 - {args.PlayerName}");
+			 - {args.Entity}");
 
 			EntityReceived?.Invoke(this, args);
 		}

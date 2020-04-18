@@ -9,9 +9,9 @@ namespace CoreSDK
 	public class MessageProcessor : IMessageProcessor
 	{
 		private readonly ILogger logger;
+		private readonly HandlerFactory handlerFactory;
 
 		List<Transmission> ReceivedQueue { get; set; }
-		HandlerFactory handlerFactory;
 
 
 		public MessageProcessor (ILogger l)
@@ -51,12 +51,14 @@ namespace CoreSDK
 		public void Receive (byte[] b)
 		{
 			Transmission t = Transmittable.Deserialized(b);
+
 			ReceivedQueue.Add(t);
 		}
 
 		public void Receive (int fromConnectionId, byte[] b)
 		{
 			Transmission t = Transmittable.Deserialized(b);
+
 			t.SenderConnectionId = fromConnectionId;
 			ReceivedQueue.Add(t);
 		}

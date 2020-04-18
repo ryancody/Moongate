@@ -6,7 +6,7 @@ using Telepathy;
 
 namespace CoreSDK.Controllers
 {
-	public class ServerMessenger : Messenger
+	public class ServerMessenger : IServerMessenger
 	{
 		readonly ILogger logger;
 		readonly Server server;
@@ -18,52 +18,45 @@ namespace CoreSDK.Controllers
 			server = s;
 			playerManager = pm;
 
-			RequestPlayersListHandler.PlayersListRequest += OnPlayersListRequested;
-			PingHandler.ReceivedPing += OnReceivedPing;
+			PingHandler.PingReceived += OnReceivedPing;
+			PlayerHandshakeHandler.PlayerHandshaked += OnPlayerJoined;
 		}
 
-		public override void Send (Transmission t)
+		private void OnPlayerJoined (object sender, PlayerHandshakeArgs args)
 		{
-			throw new NotImplementedException();
+			var t = new Transmission(MessageType.PlayerConnected, args);
+
+			Broadcast(t);
 		}
 
-		public override void Send (int connectionId, Transmission message)
+		protected void OnReceivedPing (object sender, PingArgs args)
 		{
-			logger.Debug("Send - connectonId: " + connectionId + " - messageType: " + message.MessageType.ToString());
-			server.Send(connectionId, message.Serialized());
+			var t = new Transmission(MessageType.Ping, args);
+
+			Transmit(args.ConnectionId, t);
 		}
 
 		public void Broadcast (Transmission t)
 		{
-			foreach (KeyValuePair<string, Player> p in playerManager.Players)
+
+			playerManager.Players.Values.ToList().ForEach(p =>
 			{
-				server.Send(p.Value.ConnectionId, t.Serialized());
-			}
+				Transmit(p.ConnectionId, t);
+			});
 		}
 
-		public void Relay (Transmission t)
+		public void Relay (Transmission t, string guid)
 		{
-			foreach (Player p in playerManager.Players.Values.ToList())
-			{
-				if (p.ConnectionId != t.SenderConnectionId)
-				{
-					server.Send(p.ConnectionId, t.Serialized());
-				}
-			}
+			var toId = playerManager.GetPlayer(guid).ConnectionId;
+
+			Transmit(toId, t);
 		}
 
-		protected virtual void OnPlayersListRequested (object sender, BasicPlayerRequestArgs e)
+		public void Transmit (int connectionId, Transmission message)
 		{
-			var t = new Transmission(MessageType.RequestPlayersList, playerManager.Players.Values.ToList());
+			logger.Debug("Send - connectonId: " + connectionId + " - messageType: " + message.MessageType.ToString());
 
-			server.Send(e.ConnectionId, t.Serialized());
-		}
-
-		protected virtual void OnReceivedPing (object sender, PingArgs e)
-		{
-			var t = new Transmission(MessageType.Pong, e);
-
-			server.Send(e.ConnectionId, t.Serialized());
+			server.Send(connectionId, message.Serialized());
 		}
 	}
 }

@@ -20,11 +20,10 @@ namespace CoreSDK
 
 				{ MessageType.GameStateRequest, new GameStateRequestHandler(logger) },
 				{ MessageType.CreateEntity, new EntityHandler(logger) },
-				{ MessageType.UpdateEntity, new UpdateEntityHandler() },
-				{ MessageType.RequestPlayersList, new RequestPlayersListHandler() },
+				{ MessageType.UpdateEntity, new UpdateEntityHandler(logger) },
+				{ MessageType.PlayersRequest, new PlayersRequestHandler(logger) },
 
-				{ MessageType.Ping, new PingHandler(logger) },
-				{ MessageType.Pong, new PongHandler(logger) }
+				{ MessageType.Ping, new PingHandler(logger) }
 			};
 		}
 

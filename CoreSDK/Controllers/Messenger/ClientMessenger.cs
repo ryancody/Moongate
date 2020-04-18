@@ -5,7 +5,7 @@ using CoreSDK;
 
 namespace CoreSDK.Controllers
 {
-	public class ClientMessenger : Messenger
+	public class ClientMessenger : IClientMessenger
 	{
 		readonly ILogger logger;
 		readonly Client client;
@@ -15,22 +15,34 @@ namespace CoreSDK.Controllers
 			logger = l;
 			client = c;
 
-			CoreClient.ConnectedToServer += new EventHandler<PlayerConnectionArgs>(OnConnectedToServer);
+			CoreClient.ConnectedToServer += ConnectedToServer;
+			PingHandler.PingReceived += OnPingReceived;
 		}
 
-		public override void Send (Transmission message)
+		private void OnPingReceived (object sender, PingArgs args)
 		{
-			logger.Debug("Send - messageType: " + message.MessageType.ToString());
-			client.Send(message.Serialized());
+			var ping = DateTimeOffset.Now.ToUnixTimeMilliseconds() - args.InitialTimestamp;
+
+			Console.WriteLine(ping + "ms");
+			logger.Debug($@"{ping}ms");
 		}
 
-		public override void Send (int i, Transmission t)
+		private void ConnectedToServer (object sender, EventArgs e)
 		{
-			throw new NotImplementedException();
+			InitiateHandshake();
+		}
+
+		public void Transmit (Transmission t)
+		{
+			logger.Debug("Send - messageType: " + t.MessageType.ToString());
+
+			client.Send(t.Serialized());
 		}
 
 		public void InitiateHandshake ()
 		{
+			logger.Debug("initiating handshake");
+
 			var p = new PlayerHandshakeArgs()
 			{
 				Name = LocalId.Name,
@@ -38,29 +50,18 @@ namespace CoreSDK.Controllers
 			};
 			var t = new Transmission(MessageType.PlayerHandshake, p);
 
-			Send(t);
+			Transmit(t);
 		}
 
 		public void Ping ()
 		{
-			var t = new Transmission(MessageType.Ping, null);
+			var args = new PingArgs()
+			{
+				InitialTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds()
+			};
+			var t = new Transmission(MessageType.Ping, args);
+		 
 			client.Send(t.Serialized());
-		}
-
-		// when this client creates an entity
-		public void OnEntityCreated (object sender, CreateEntityArgs args)
-		{
-			var entity = (Entity)args.Payload;
-			var t = new Transmission(MessageType.CreateEntity, entity);
-
-			client.Send(t.Serialized());
-		}
-
-		protected void OnConnectedToServer (object sender, PlayerConnectionArgs args)
-		{
-			logger.Info("Connected to server, handshaking...");
-
-			InitiateHandshake();
 		}
 	}
 }

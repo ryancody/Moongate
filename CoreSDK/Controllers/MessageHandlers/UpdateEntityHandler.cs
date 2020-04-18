@@ -5,8 +5,10 @@ namespace CoreSDK
 {
 	public class UpdateEntityHandler : IMessageHandler
 	{
-		public UpdateEntityHandler ()
+		private readonly ILogger logger;
+		public UpdateEntityHandler (ILogger l)
 		{
+			logger = l;
 		}
 
 		public void Handle (Transmission m)

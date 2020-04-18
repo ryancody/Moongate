@@ -6,15 +6,16 @@ namespace CoreSDK
 {
 	public enum MessageType
 	{ 
-		CreateEntity,
 		Ping,
-		Pong,
 		PlayerConnected,
 		PlayerHandshake,
 		PlayerDisconnected,
+				
+		CreateEntity,
 		UpdateEntity,
-		RequestPlayersList,
+		
 		GameStateRequest,
+		PlayersRequest,
 
 		Default,
 		COUNT

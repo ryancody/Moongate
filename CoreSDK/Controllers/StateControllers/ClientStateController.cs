@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace CoreSDK.Controllers
 {
-	public class ClientStateController : StateController
+	public class ClientStateController : IStateController
 	{
         readonly ILogger logger;
 
         public GameState LocalState { get; private set; }
 
-        public static event EventHandler<BasicPlayerRequestArgs> EntityCreated;
-        public static event EventHandler<BasicPlayerRequestArgs> EntityUpdated;
+        public static event EventHandler<EntityArgs> EntityCreated;
+        public static event EventHandler<EntityArgs> EntityUpdated;
 
         public ClientStateController (ILogger l)
         {
@@ -23,9 +23,9 @@ namespace CoreSDK.Controllers
             EntityHandler.EntityReceived += OnEntityReceived;
         }
 
-        private void OnGameStateReceived (object sender, BasicPlayerRequestArgs a)
+        private void OnGameStateReceived (object sender, GameStateRequestArgs args)
         {
-            var state = (GameState)a.Payload;
+            var state = args.GameState;
 
             state.Entities.Keys.ToList().ForEach(k =>
             {
@@ -42,20 +42,18 @@ namespace CoreSDK.Controllers
             });
         }
 
-        private void OnEntityReceived (object sender, BasicPlayerRequestArgs a)
+        private void OnEntityReceived (object sender, EntityArgs a)
         {
-            var entity = (Entity)a.Payload;
-
-            LocalState.Entities[entity.Guid] = entity;
+            LocalState.Entities[a.Entity.Guid] = a.Entity;
         }
 
         public void CreateEntity (Entity e)
         {
             LocalState.Entities[e.Guid] = e;
 
-            var args = new BasicPlayerRequestArgs()
+            var args = new EntityArgs()
             {
-                Payload = e
+                Entity = e
             };
 
             EntityCreated?.Invoke(this, args);
@@ -65,9 +63,9 @@ namespace CoreSDK.Controllers
         {
             LocalState.Entities[e.Guid] = e;
 
-            var args = new BasicPlayerRequestArgs()
+            var args = new EntityArgs()
             {
-                Payload = e
+                Entity = e
             };
 
             EntityUpdated?.Invoke(this, args);

@@ -6,7 +6,7 @@ namespace CoreSDK
 {
 	public class GameStateRequestHandler : IMessageHandler
 	{
-		private ILogger logger;
+		readonly ILogger logger;
 
 		public static event EventHandler<GameStateRequestArgs> GameStateReceived;
 		public static event EventHandler<GameStateRequestArgs> GameStateRequested;
@@ -18,14 +18,24 @@ namespace CoreSDK
 
 		public void Handle (Transmission m)
 		{
-
 			if (m.Payload == null)
 			{
-				GameStateRequested?.Invoke();
+				logger.Debug("received gamestate request");
+
+				var requestArgs = new GameStateRequestArgs()
+				{
+					RequestedBy = m.SenderConnectionId
+				};
+
+				GameStateRequested?.Invoke(this, requestArgs);
 			}
 			else
 			{
-				GameStateReceived?.Invoke();
+				logger.Debug("received gamestate");
+
+				var gameStateReceievedArgs = (GameStateRequestArgs)m.Payload;
+
+				GameStateReceived?.Invoke(this, gameStateReceievedArgs);
 			}
 		}
 	}

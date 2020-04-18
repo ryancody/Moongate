@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CoreSDK.Controllers
+namespace CoreSDK.Models
 {
-	public class StateController : IStateController
+	public interface IOwnable
 	{
+		string Owner { get; set; }
 	}
 }

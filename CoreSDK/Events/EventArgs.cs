@@ -1,5 +1,6 @@
 ﻿using CoreSDK.Models;
 using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Security.Cryptography.X509Certificates;
 
@@ -16,7 +17,7 @@ namespace CoreSDK
 
 	[Serializable]
 	public class PlayerConnectionArgs
-	{ 
+	{
 		public int ConnectionId { get; set; }
 	}
 
@@ -29,7 +30,7 @@ namespace CoreSDK
 	}
 
 	[Serializable]
-	public class CreateEntityArgs
+	public class EntityArgs
 	{
 		public Entity Entity { get; set; }
 	}
@@ -45,6 +46,14 @@ namespace CoreSDK
 	[Serializable]
 	public class GameStateRequestArgs
 	{
+		public int RequestedBy { get; set; }
 		public GameState GameState { get; set; }
+	}
+
+	[Serializable]
+	public class PlayersRequestArgs
+	{
+		public int RequestedBy { get; set; }
+		public List<Player> Players { get; set; }
 	}
 }

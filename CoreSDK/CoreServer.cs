@@ -12,11 +12,9 @@ namespace CoreSDK
 	public class CoreServer
 	{
 		readonly Server server;
-		readonly PlayerManager playerManager;
-		readonly GameState gameState;
 		readonly IMessageProcessor messageProcessor;
 		readonly IStateController serverStateController;
-		readonly IMessenger serverMessenger;
+		readonly ServerMessenger serverMessenger;
 		readonly ILogger logger;
 
 		public static event EventHandler<PlayerConnectionArgs> PlayerConnected;
@@ -27,36 +25,27 @@ namespace CoreSDK
 
 		public CoreServer ()
 		{
+			var playerManager = new PlayerManager();
+			var gameState = new GameState();
+			
 			server = new Server();
-			playerManager = new PlayerManager();
-			gameState = new GameState();
-			messageProcessor = new MessageProcessor(logger);
-			serverStateController = new ServerStateController(logger, playerManager, gameState);
-			serverMessenger = new ServerMessenger(logger, server, playerManager);
 			logger = new Utils.Logger("SERVER", new LoggerLevel[] { LoggerLevel.Info, LoggerLevel.Error });
+			messageProcessor = new MessageProcessor(logger);
+			serverMessenger = new ServerMessenger(logger, server, playerManager);
+			serverStateController = new ServerStateController(logger, playerManager, gameState, serverMessenger);
 		}
 
 		public void Start (int port)
 		{
-			PlayerConnected += new EventHandler<PlayerConnectionArgs>(OnPlayerConnected);
-			PlayerDisconnected += new EventHandler<PlayerConnectionArgs>(OnPlayerDisconnected);
-			PlayerHandshakeHandler.PlayerHandshaked += OnPlayerHandshake;
-			ServerStateController.GameStateRequested += OnGameStateRequested;
-
 			Console.WriteLine("SERVER - Hi, I'm " + LocalId.Name);
 			logger.Debug(@"Server
 			 - Time: {DateTime.Now}
-			 - Instance Name: {LocalId.Name} - GUID: {LocalId.Guid}");
+			 - Instance Name: {LocalId.Name}
+			 - GUID: {LocalId.Guid}");
 
 			// create and start the server
 			server.Start(port);
 			Active = true;
-		}
-
-		private void OnGameStateRequested (object sender)
-		{
-			var t = new Transmission(MessageType.GameStateRequest, e.Payload);
-			server.Send(e.ConnectionId, t.Serialized());
 		}
 
 		public void Run ()
@@ -67,36 +56,28 @@ namespace CoreSDK
 				Message msg;
 				while (server.GetNextMessage(out msg))
 				{
+					logger.Debug($@"Server received {msg.eventType} message");
+										
 					switch (msg.eventType)
 					{
 						case EventType.Connected:
-							logger.Debug("Server received EventType.Connected message");
-
-							var connectArgs = new BasicPlayerRequestArgs()
+							var connectArgs = new PlayerConnectionArgs()
 							{
 								ConnectionId = msg.connectionId
 							};
-
-							Console.WriteLine(msg.connectionId + " Connected");
 
 							PlayerConnected?.Invoke(this, connectArgs);
 							break;
 
 						case EventType.Data:
-							logger.Debug("Server received EventType.Data message");
 
 							messageProcessor.Receive(msg.connectionId, msg.data);
 							break;
 
 						case EventType.Disconnected:
-							logger.Debug("Server received EventType.Disconnected message");
-
-							var player = playerManager.GetPlayer(msg.connectionId);
-							var disconnectArgs = new BasicPlayerRequestArgs()
+							var disconnectArgs = new PlayerConnectionArgs()
 							{
-								ConnectionId = player.ConnectionId,
-								PlayerName = player.Name,
-								ClientGuid = player.GUID
+								ConnectionId = msg.connectionId
 							};
 
 							PlayerDisconnected?.Invoke(this, disconnectArgs);
@@ -118,13 +99,6 @@ namespace CoreSDK
 			Console.WriteLine("Closing Server...");
 			server.Stop();
 			Active = false;
-		}
-
-		protected virtual void OnPlayerConnected (object sender, BasicPlayerRequestArgs e)
-		{
-			logger.Debug("Server invoked OnPlayerConnected");
-
-			Console.WriteLine("Player Connected.  Connection ID: " + e.ConnectionId);
 		}
 	}
 }

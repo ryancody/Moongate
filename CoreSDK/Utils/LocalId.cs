@@ -6,7 +6,7 @@ namespace CoreSDK
 {
 	public static class LocalId
 	{
-		static List<string> NameList = new List<string>() { "Frank", "Tommy", "Rainie", "Jonny", "Valencia", "Fern", "Axel", "Conner", "Greta", "Hershel", "Bernadette", "Aberdeen" };
+		static readonly List<string> NameList = new List<string>() { "Frank", "Tommy", "Rainie", "Jonny", "Valencia", "Fern", "Axel", "Conner", "Greta", "Hershel", "Bernadette", "Aberdeen" };
 		
 		public static string Guid = System.Guid.NewGuid().ToString();
 		public static string Name = NameList[new Random().Next(NameList.Count)];

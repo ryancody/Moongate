@@ -8,8 +8,4 @@
     <PackageReference Include="Telepathy" Version="1.0.341" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CoreServer\CoreServer.csproj" />
-  </ItemGroup>
-
 </Project>

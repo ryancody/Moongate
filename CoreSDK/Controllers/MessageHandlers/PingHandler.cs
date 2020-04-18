@@ -1,14 +1,15 @@
 ﻿using CoreSDK.Controllers;
 using CoreSDK.Models;
 using System;
+using System.Net.NetworkInformation;
 
 namespace CoreSDK
 {
 	public class PingHandler : IMessageHandler
 	{
-		private ILogger logger;
+		readonly ILogger logger;
 
-		public static event EventHandler<PingArgs> ReceivedPing;
+		public static event EventHandler<PingArgs> PingReceived;
 
 		public PingHandler (ILogger logger)
 		{
@@ -17,13 +18,14 @@ namespace CoreSDK
 
 		public void Handle (Transmission m)
 		{
-			var ping = new PingArgs()
-			{
-				ConnectionId = m.SenderConnectionId,
-				InitialTimestamp = m.Timestamp
-			};
+			var pingArgs = (PingArgs)m.Payload;
 
-			ReceivedPing?.Invoke(this, ping);
+			pingArgs.Ping = DateTimeOffset.Now.ToUnixTimeMilliseconds() - pingArgs.InitialTimestamp;
+
+			Console.WriteLine($@"ping received - {pingArgs.Ping}ms");
+			logger.Debug("Invoked Received Ping");
+
+			PingReceived?.Invoke(this, pingArgs);
 		}
 	}
 }

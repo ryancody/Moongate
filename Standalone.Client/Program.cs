@@ -1,11 +1,12 @@
-﻿using CoreSDK.Models;
+﻿using CoreSDK;
+using CoreSDK.Models;
 using System;
 
 namespace CoreSDK
 {
 	class Program
 	{
-		static CoreClient client = new CoreClient();
+		static readonly CoreClient client = new CoreClient();
 
 		static void Main (string[] args)
 		{
@@ -36,19 +37,14 @@ namespace CoreSDK
 
 						case 't':
 							Console.WriteLine("Sending test message");
-							client.Send(new Transmission(MessageType.Default, null));
+							client.Transmit(new Transmission(MessageType.Default, null));
 							break;
 
 						case 'p':
 							Console.WriteLine("ping server");
-							client.Send(new Transmission(MessageType.Ping, null));
+							client.Ping();
 							break;
 
-						case 'l':
-							Console.WriteLine("Requesting list of players");
-							var tGetPlayers = new Transmission(MessageType.RequestPlayersList, null);
-							client.Send(tGetPlayers);
-							break;
 					}
 
 					if (consoleKeyInfo.Key == ConsoleKey.Escape)

@@ -5,13 +5,9 @@ VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreSDK", "CoreSDK\CoreSDK.csproj", "{B000ED19-E6E6-42D0-A699-F2B002E3A014}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreClient", "CoreClient\CoreClient.csproj", "{FC329CCC-2FA8-434F-88D5-1A9BAA0405B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standalone.Client", "Standalone.Client\Standalone.Client.csproj", "{878DBF01-B7C1-4FA2-AE0D-0C428A81F1EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreServer", "CoreServer\CoreServer.csproj", "{EA87325A-8608-424D-8034-C15C8FEDB627}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Standalone.Client", "Standalone.Client\Standalone.Client.csproj", "{878DBF01-B7C1-4FA2-AE0D-0C428A81F1EA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Standalone.Server", "Standalone.Server\Standalone.Server.csproj", "{BE63F08A-F14C-493A-8711-27F64DEC8B44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standalone.Server", "Standalone.Server\Standalone.Server.csproj", "{BE63F08A-F14C-493A-8711-27F64DEC8B44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +19,6 @@ Global
 		{B000ED19-E6E6-42D0-A699-F2B002E3A014}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B000ED19-E6E6-42D0-A699-F2B002E3A014}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B000ED19-E6E6-42D0-A699-F2B002E3A014}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FC329CCC-2FA8-434F-88D5-1A9BAA0405B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC329CCC-2FA8-434F-88D5-1A9BAA0405B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FC329CCC-2FA8-434F-88D5-1A9BAA0405B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FC329CCC-2FA8-434F-88D5-1A9BAA0405B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EA87325A-8608-424D-8034-C15C8FEDB627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA87325A-8608-424D-8034-C15C8FEDB627}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA87325A-8608-424D-8034-C15C8FEDB627}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA87325A-8608-424D-8034-C15C8FEDB627}.Release|Any CPU.Build.0 = Release|Any CPU
 		{878DBF01-B7C1-4FA2-AE0D-0C428A81F1EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{878DBF01-B7C1-4FA2-AE0D-0C428A81F1EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{878DBF01-B7C1-4FA2-AE0D-0C428A81F1EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
