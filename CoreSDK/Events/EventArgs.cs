@@ -6,9 +6,13 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace CoreSDK
 {
+	public interface IEventArgs
+	{
+		
+	}
 
 	[Serializable]
-	public class PingArgs
+	public class PingArgs : IEventArgs
 	{
 		public int ConnectionId { get; set; }
 		public long InitialTimestamp { get; set; }
@@ -16,13 +20,13 @@ namespace CoreSDK
 	}
 
 	[Serializable]
-	public class PlayerConnectionArgs
+	public class PlayerConnectionArgs : IEventArgs
 	{
 		public int ConnectionId { get; set; }
 	}
 
 	[Serializable]
-	public class PlayerHandshakeArgs
+	public class PlayerHandshakeArgs : IEventArgs
 	{
 		public string Name { get; set; }
 		public int ConnectionId { get; set; }
@@ -30,30 +34,29 @@ namespace CoreSDK
 	}
 
 	[Serializable]
-	public class EntityArgs
+	public class EntityArgs : IEventArgs
 	{
 		public Entity Entity { get; set; }
-	}
-
-	[Serializable]
-	public class UpdatePositionArgs
-	{
-		public string EntityGuid { get; set; }
-		public Position Position { get; set; }
 		public Vector Vector { get; set; }
 	}
 
 	[Serializable]
-	public class GameStateRequestArgs
+	public class PlayerInputArgs : IEventArgs
+	{ 
+		public string ControllerGuid { get; set; }
+		public Vector Vector { get; set; }
+	}
+
+	[Serializable]
+	public class GameStateRequestArgs : IEventArgs
 	{
 		public int RequestedBy { get; set; }
 		public GameState GameState { get; set; }
 	}
 
 	[Serializable]
-	public class PlayersRequestArgs
-	{
-		public int RequestedBy { get; set; }
-		public List<Player> Players { get; set; }
+	public class PlayerStateArgs : IEventArgs
+	{ 
+		public PlayerState PlayerState { get; set; }
 	}
 }

@@ -1,4 +1,6 @@
-﻿using CoreSDK.Models;
+﻿using CoreSDK.Factory;
+using CoreSDK.Models;
+using CoreSDK.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,54 +11,62 @@ namespace CoreSDK.Controllers
 	public class ServerMessenger : IServerMessenger
 	{
 		readonly ILogger logger;
+		readonly ISerializer serializer;
+		readonly ITransmittableFactory transmittableFactory;
+		readonly IHandlerFactory handlerFactory;
 		readonly Server server;
-		readonly PlayerManager playerManager;
+		readonly PlayerState playerState;
 
-		public ServerMessenger (ILogger l, Server s, PlayerManager pm)
+		public ServerMessenger (ILogger _logger, Server _server, PlayerState _playerState, ITransmittableFactory _transmittableFactory, IHandlerFactory _handlerFactory, ISerializer _serializer)
 		{
-			logger = l;
-			server = s;
-			playerManager = pm;
+			logger = _logger;
+			server = _server;
+			playerState = _playerState;
+			serializer = _serializer;
+			handlerFactory = _handlerFactory;
+			transmittableFactory = _transmittableFactory;
 
-			PingHandler.PingReceived += OnReceivedPing;
-			PlayerHandshakeHandler.PlayerHandshaked += OnPlayerJoined;
+			((PingHandler)handlerFactory.GetHandler(MessageType.Ping)).PingReceived += OnPingReceived;
+			((PlayerHandshakeHandler)handlerFactory.GetHandler(MessageType.PlayerHandshake)).PlayerHandshake += OnPlayerHandshake;
 		}
 
-		private void OnPlayerJoined (object sender, PlayerHandshakeArgs args)
+		private void OnPingReceived (object sender, PingArgs e)
 		{
-			var t = new Transmission(MessageType.PlayerConnected, args);
+			var t = transmittableFactory.Build(MessageType.Ping, e);
+
+			Transmit(e.ConnectionId, t);
+		}
+
+		private void OnPlayerHandshake (object sender, PlayerHandshakeArgs a)
+		{
+			var t = transmittableFactory.Build(MessageType.PlayerConnected, a);
 
 			Broadcast(t);
 		}
 
-		protected void OnReceivedPing (object sender, PingArgs args)
-		{
-			var t = new Transmission(MessageType.Ping, args);
-
-			Transmit(args.ConnectionId, t);
-		}
-
-		public void Broadcast (Transmission t)
+		public void Broadcast (ITransmittable t)
 		{
 
-			playerManager.Players.Values.ToList().ForEach(p =>
+			playerState.Players.Values.ToList().ForEach(p =>
 			{
 				Transmit(p.ConnectionId, t);
 			});
 		}
 
-		public void Relay (Transmission t, string guid)
+		public void Relay (ITransmittable t, string guid)
 		{
-			var toId = playerManager.GetPlayer(guid).ConnectionId;
+			var toId = playerState.GetPlayer(guid).ConnectionId;
 
 			Transmit(toId, t);
 		}
 
-		public void Transmit (int connectionId, Transmission message)
+		public void Transmit (int connectionId, ITransmittable message)
 		{
 			logger.Debug("Send - connectonId: " + connectionId + " - messageType: " + message.MessageType.ToString());
 
-			server.Send(connectionId, message.Serialized());
+			var bytes = serializer.Serialize(message);
+
+			server.Send(connectionId, bytes);
 		}
 	}
 }

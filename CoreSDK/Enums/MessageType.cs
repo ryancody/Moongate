@@ -10,9 +10,9 @@ namespace CoreSDK
 		PlayerConnected,
 		PlayerHandshake,
 		PlayerDisconnected,
+		PlayerInput,
 				
-		CreateEntity,
-		UpdateEntity,
+		EntityUpdate,
 		
 		GameStateRequest,
 		PlayersRequest,

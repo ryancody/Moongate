@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CoreSDK
 {
-	public class PlayerManager
+	public class PlayerState
 	{
 		// GUID to Player
 		public Dictionary<string, Player> Players { get; set; }
@@ -13,7 +13,7 @@ namespace CoreSDK
 		// ConnectionId to GUID
 		public Dictionary<int, string> GUIDs { get; set; }
 
-		public PlayerManager ()
+		public PlayerState ()
 		{
 			Players = new Dictionary<string, Player>();
 			GUIDs = new Dictionary<int, string>();

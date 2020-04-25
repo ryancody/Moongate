@@ -1,39 +1,43 @@
 ﻿using CoreSDK.Controllers;
+using CoreSDK.Factory;
 using CoreSDK.Models;
 using CoreSDK.Utils;
 using System;
-using System.Collections.Generic;
 using Telepathy;
 
 namespace CoreSDK
 {
 	public class CoreClient
 	{
-		readonly Client client = new Client();
-		readonly IMessageProcessor messageProcessor;
-		readonly ILogger logger;
-		readonly IStateController stateController;
-		readonly ClientMessenger messenger;
-
-		public static event EventHandler ConnectedToServer;
-		public static event EventHandler DisconnectedFromServer;
-
 		public bool Connected { get { return client.Connected; } }
 		public bool Connecting { get { return client.Connecting; } }
 		
+		readonly Client client = new Client();
+		readonly ILogger logger;
+		readonly IMessageProcessor messageProcessor;
+		readonly IStateController stateController;
+		readonly IClientMessenger messenger;
+		readonly ITransmittableFactory transmittableFactory;
+		readonly ISerializer serializer;
+		readonly IHandlerFactory handlerFactory;
+
+		public static event EventHandler ConnectedToServer;
+		public static event EventHandler DisconnectedFromServer;
+		
 		public CoreClient ()
 		{
+			serializer = new Serializer();
 			logger = new Utils.Logger("CLIENT", new LoggerLevel[] { LoggerLevel.Info, LoggerLevel.Error });
-			messageProcessor = new MessageProcessor(logger);
+			handlerFactory = new HandlerFactory(logger);
 			stateController = new ClientStateController(logger);
-			messenger = new ClientMessenger(logger, client);
+			transmittableFactory = new TransmittableFactory(logger);
+			messageProcessor = new MessageProcessor(logger, serializer, handlerFactory);
+			messenger = new ClientMessenger(logger, client, transmittableFactory, serializer);
 
 			logger.Info($@"Client
 			 - Time: {DateTime.Now}
 			 - Name: {LocalId.Name}
 			 - GUID: { LocalId.Guid}");
-
-			DisconnectedFromServer += OnDisconnectedFromServer;
 		}
 
 		public void Connect (string host, int port)
@@ -69,7 +73,7 @@ namespace CoreSDK
 
 						case EventType.Disconnected:
 
-							DisconnectedFromServer?.Invoke(this, null);
+							Disconnect();
 							break;
 					}
 				}
@@ -90,17 +94,18 @@ namespace CoreSDK
 
 		public void Disconnect ()
 		{
+			DisconnectedFromServer?.Invoke(this, null);
 			client.Disconnect();
 		}
 
-		public void Transmit (Transmission t)
+		public void Transmit (ITransmittable t)
 		{
 			messenger.Transmit(t);
 		}
 
-		protected void OnDisconnectedFromServer (object sender, EventArgs a)
+		public void Receive (ITransmittable t)
 		{
-			Disconnect();
+			messageProcessor.Receive(t);
 		}
 	}
 }

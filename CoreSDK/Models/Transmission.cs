@@ -5,7 +5,7 @@ using CoreSDK.Utils;
 namespace CoreSDK.Models
 {
 	[Serializable]
-	public class Transmission : Transmittable
+	public class Transmission : ITransmittable
 	{
 		public string SenderGuid { get; set; }
 		public int SenderConnectionId { get; set; }

@@ -4,6 +4,7 @@ namespace CoreSDK.Controllers
 {
 	public interface IClientMessenger
 	{
-		void Transmit (Transmission t);
+		void Transmit (ITransmittable t);
+		void Ping ();
 	}
 }

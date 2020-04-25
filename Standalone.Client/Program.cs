@@ -1,4 +1,5 @@
 ﻿using CoreSDK;
+using CoreSDK.Controllers;
 using CoreSDK.Models;
 using System;
 
@@ -20,14 +21,14 @@ namespace CoreSDK
 			{
 
 				if (Console.KeyAvailable)
-				{ 
+				{
 					consoleKeyInfo = Console.ReadKey(true);
 
 					switch (consoleKeyInfo.KeyChar)
 					{
 						case 'c':
 							Console.WriteLine("Connecting...");
-							client.Connect("localhost", 8888);			
+							client.Connect("localhost", 8888);
 							break;
 
 						case 'd':
@@ -40,11 +41,27 @@ namespace CoreSDK
 							client.Transmit(new Transmission(MessageType.Default, null));
 							break;
 
+						case 'e':
+							Console.WriteLine("creating entity");
+							var entity = new Entity()
+							{
+								Guid = Guid.NewGuid().ToString(),
+								Id = "test ID",
+								Name = "test Name",
+								Owner = LocalId.Guid,
+								Position = new Position() { x = 0, y = 0 }
+							};
+							client.Receive(new Transmission(MessageType.EntityUpdate, entity));
+							break;
+
 						case 'p':
 							Console.WriteLine("ping server");
 							client.Ping();
 							break;
 
+						default:
+							Console.WriteLine("unknown command");
+							break;
 					}
 
 					if (consoleKeyInfo.Key == ConsoleKey.Escape)
@@ -53,8 +70,8 @@ namespace CoreSDK
 
 						Console.WriteLine("press 'q' to quit");
 
-						if (consoleKeyInfo.KeyChar == 'q') 
-						{ 
+						if (consoleKeyInfo.KeyChar == 'q')
+						{
 							running = false;
 							client.Disconnect();
 						}

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CoreSDK
+namespace CoreSDK.EventPublisher
 {
-	public static class Settings
+	interface IEventPublisher
 	{
-
+		
 	}
 }

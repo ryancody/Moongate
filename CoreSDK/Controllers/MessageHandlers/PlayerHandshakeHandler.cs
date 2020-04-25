@@ -6,16 +6,16 @@ namespace CoreSDK
 {
 	public class PlayerHandshakeHandler : IMessageHandler
 	{
-		public static event EventHandler<PlayerHandshakeArgs> PlayerHandshaked;
-
 		readonly ILogger logger;
+
+		public event EventHandler<PlayerHandshakeArgs> PlayerHandshake;
 
 		public PlayerHandshakeHandler (ILogger l)
 		{
 			logger = l;
 		}
 
-		public void Handle (Transmission m)
+		public void Handle (ITransmittable m)
 		{
 			// unpack payload
 			var playerHandshakeArgs = (PlayerHandshakeArgs)m.Payload;
@@ -28,7 +28,12 @@ namespace CoreSDK
 			 - {playerHandshakeArgs.ConnectionId}
 			 - {playerHandshakeArgs.Guid}");
 
-			PlayerHandshaked?.Invoke(this, playerHandshakeArgs);
+			PlayerHandshake?.Invoke(this, playerHandshakeArgs);
+		}
+
+		public void Sub (Delegate listener)
+		{
+			PlayerHandshake += (EventHandler<PlayerHandshakeArgs>)listener;
 		}
 	}
 }

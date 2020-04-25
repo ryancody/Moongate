@@ -1,4 +1,6 @@
-﻿using CoreSDK.Models;
+﻿using CoreSDK.Factory;
+using CoreSDK.Models;
+using CoreSDK.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,23 +11,24 @@ namespace CoreSDK
 	public class MessageProcessor : IMessageProcessor
 	{
 		private readonly ILogger logger;
-		private readonly HandlerFactory handlerFactory;
+		private readonly ISerializer serializer;
+		private readonly IHandlerFactory handlerFactory;
 
-		List<Transmission> ReceivedQueue { get; set; }
+		List<ITransmittable> ReceivedQueue { get; set; }
 
-
-		public MessageProcessor (ILogger l)
+		public MessageProcessor (ILogger _logger, ISerializer _serializer, IHandlerFactory _handlerFactory)
 		{
-			logger = l;
-			ReceivedQueue = new List<Transmission>();
-			handlerFactory = new HandlerFactory(logger);
+			logger = _logger;
+			serializer = _serializer;
+			ReceivedQueue = new List<ITransmittable>();
+			handlerFactory = _handlerFactory;
 		}
 
 		public void Process ()
 		{
 			while (ReceivedQueue.Count > 0)
 			{
-				Transmission message = ReceivedQueue.First();
+				ITransmittable message = ReceivedQueue.First();
 
 				try
 				{
@@ -50,17 +53,22 @@ namespace CoreSDK
 
 		public void Receive (byte[] b)
 		{
-			Transmission t = Transmittable.Deserialized(b);
+			var t = serializer.Deserialize<ITransmittable>(b);
 
+			Receive(t);
+		}
+
+		public void Receive (ITransmittable t)
+		{
 			ReceivedQueue.Add(t);
 		}
 
 		public void Receive (int fromConnectionId, byte[] b)
 		{
-			Transmission t = Transmittable.Deserialized(b);
+			var t = serializer.Deserialize<ITransmittable>(b);
 
 			t.SenderConnectionId = fromConnectionId;
-			ReceivedQueue.Add(t);
+			Receive(t);
 		}
 	}
 }

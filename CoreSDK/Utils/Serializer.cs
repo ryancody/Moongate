@@ -6,10 +6,10 @@ using System.Text;
 
 namespace CoreSDK.Utils
 {
-	public static class Serializer
+	public class Serializer : ISerializer
 	{
         // Convert an object to a byte array
-        public static byte[] ObjectToByteArray (object obj)
+        public byte[] Serialize (object obj)
         {
             if (obj == null)
                 return null;
@@ -22,7 +22,7 @@ namespace CoreSDK.Utils
         }
 
 		// Convert a byte array to an Object
-		public static T ByteArrayToObject<T> (byte[] arrBytes)
+		public T Deserialize<T> (byte[] arrBytes)
         {
             MemoryStream memStream = new MemoryStream();
             BinaryFormatter binForm = new BinaryFormatter();

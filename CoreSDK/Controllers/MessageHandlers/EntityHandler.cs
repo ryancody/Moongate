@@ -1,12 +1,13 @@
 ﻿using CoreSDK.Controllers;
 using CoreSDK.Models;
 using System;
+using System.Xml;
 
 namespace CoreSDK
 {
 	public class EntityHandler : IMessageHandler
 	{
-		public static event EventHandler<EntityArgs> EntityReceived;
+		public event EventHandler<EntityArgs> EntityReceived;
 
 		readonly ILogger logger;
 
@@ -15,7 +16,7 @@ namespace CoreSDK
 			logger = l;
 		}
 
-		public void Handle (Transmission message)
+		public void Handle (ITransmittable message)
 		{
 			var entity = (Entity)message.Payload;
 

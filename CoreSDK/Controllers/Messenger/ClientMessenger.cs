@@ -2,53 +2,52 @@
 using System;
 using Telepathy;
 using CoreSDK;
+using CoreSDK.Factory;
+using CoreSDK.Utils;
 
 namespace CoreSDK.Controllers
 {
 	public class ClientMessenger : IClientMessenger
 	{
-		readonly ILogger logger;
 		readonly Client client;
+		readonly ILogger logger;
+		readonly ITransmittableFactory transmittableFactory;
+		readonly ISerializer serializer;
 
-		public ClientMessenger (ILogger l, Client c)
+		public ClientMessenger (ILogger _logger, Client _client, ITransmittableFactory _transmittableFactory, ISerializer _serializer)
 		{
-			logger = l;
-			client = c;
+			logger = _logger;
+			client = _client;
+			transmittableFactory = _transmittableFactory;
+			serializer = _serializer;
 
-			CoreClient.ConnectedToServer += ConnectedToServer;
-			PingHandler.PingReceived += OnPingReceived;
+			CoreClient.ConnectedToServer += CoreClient_ConnectedToServer;
 		}
 
-		private void OnPingReceived (object sender, PingArgs args)
-		{
-			var ping = DateTimeOffset.Now.ToUnixTimeMilliseconds() - args.InitialTimestamp;
-
-			Console.WriteLine(ping + "ms");
-			logger.Debug($@"{ping}ms");
-		}
-
-		private void ConnectedToServer (object sender, EventArgs e)
+		private void CoreClient_ConnectedToServer (object sender, EventArgs e)
 		{
 			InitiateHandshake();
 		}
 
-		public void Transmit (Transmission t)
+		public void Transmit (ITransmittable t)
 		{
+			var serTransmit = serializer.Serialize(t);
+			
 			logger.Debug("Send - messageType: " + t.MessageType.ToString());
 
-			client.Send(t.Serialized());
+			client.Send(serTransmit);
 		}
 
 		public void InitiateHandshake ()
 		{
 			logger.Debug("initiating handshake");
 
-			var p = new PlayerHandshakeArgs()
+			var args = new PlayerHandshakeArgs()
 			{
 				Name = LocalId.Name,
 				Guid = LocalId.Guid
 			};
-			var t = new Transmission(MessageType.PlayerHandshake, p);
+			var t = transmittableFactory.Build(MessageType.PlayerHandshake, args);
 
 			Transmit(t);
 		}
@@ -59,9 +58,9 @@ namespace CoreSDK.Controllers
 			{
 				InitialTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds()
 			};
-			var t = new Transmission(MessageType.Ping, args);
-		 
-			client.Send(t.Serialized());
+			var t = transmittableFactory.Build(MessageType.Ping, args);
+
+			Transmit(t);
 		}
 	}
 }

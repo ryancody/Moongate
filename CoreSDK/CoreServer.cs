@@ -1,10 +1,7 @@
 ﻿using CoreSDK.Controllers;
-using CoreSDK.Models;
+using CoreSDK.Factory;
 using CoreSDK.Utils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Telepathy;
 
 namespace CoreSDK
@@ -14,31 +11,38 @@ namespace CoreSDK
 		readonly Server server;
 		readonly IMessageProcessor messageProcessor;
 		readonly IStateController serverStateController;
-		readonly ServerMessenger serverMessenger;
+		readonly IServerMessenger serverMessenger;
 		readonly ILogger logger;
+		readonly ISerializer serializer;
+		readonly ITransmittableFactory transmittableFactory;
+		readonly IHandlerFactory handlerFactory;
 
 		public static event EventHandler<PlayerConnectionArgs> PlayerConnected;
 		public static event EventHandler<PlayerConnectionArgs> PlayerDisconnected;
 
 		public bool Active { get; private set; }
 
-
 		public CoreServer ()
 		{
-			var playerManager = new PlayerManager();
+			var playerState = new PlayerState();
 			var gameState = new GameState();
 			
 			server = new Server();
 			logger = new Utils.Logger("SERVER", new LoggerLevel[] { LoggerLevel.Info, LoggerLevel.Error });
-			messageProcessor = new MessageProcessor(logger);
-			serverMessenger = new ServerMessenger(logger, server, playerManager);
-			serverStateController = new ServerStateController(logger, playerManager, gameState, serverMessenger);
+			serializer = new Serializer();
+			transmittableFactory = new TransmittableFactory(logger);
+
+			handlerFactory = new HandlerFactory(logger);
+			messageProcessor = new MessageProcessor(logger, serializer, handlerFactory);
+			serverMessenger = new ServerMessenger(logger, server, playerState, transmittableFactory, handlerFactory, serializer);
+			serverStateController = new ServerStateController(logger, playerState, gameState, handlerFactory, serverMessenger);
 		}
 
 		public void Start (int port)
 		{
 			Console.WriteLine("SERVER - Hi, I'm " + LocalId.Name);
-			logger.Debug(@"Server
+
+			logger.Info(@"Server
 			 - Time: {DateTime.Now}
 			 - Instance Name: {LocalId.Name}
 			 - GUID: {LocalId.Guid}");

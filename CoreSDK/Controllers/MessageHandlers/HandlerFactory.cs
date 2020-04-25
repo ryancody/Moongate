@@ -1,11 +1,13 @@
 ﻿using CoreSDK.Controllers;
+using CoreSDK.Factory;
+using CoreSDK.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CoreSDK
 {
-	class HandlerFactory
+	class HandlerFactory : IHandlerFactory
 	{
 		readonly Dictionary<MessageType, IMessageHandler> handlers;
 		readonly ILogger logger;
@@ -16,12 +18,11 @@ namespace CoreSDK
 
 			handlers = new Dictionary<MessageType, IMessageHandler>
 			{
+				{ MessageType.PlayerConnected, new PlayerConnectedHandler(logger) },
 				{ MessageType.PlayerHandshake, new PlayerHandshakeHandler(logger) },
 
 				{ MessageType.GameStateRequest, new GameStateRequestHandler(logger) },
-				{ MessageType.CreateEntity, new EntityHandler(logger) },
-				{ MessageType.UpdateEntity, new UpdateEntityHandler(logger) },
-				{ MessageType.PlayersRequest, new PlayersRequestHandler(logger) },
+				{ MessageType.EntityUpdate, new EntityHandler(logger) },
 
 				{ MessageType.Ping, new PingHandler(logger) }
 			};

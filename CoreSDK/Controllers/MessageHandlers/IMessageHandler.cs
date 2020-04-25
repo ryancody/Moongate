@@ -5,8 +5,8 @@ using System.Text;
 
 namespace CoreSDK.Controllers
 {
-	interface IMessageHandler
+	public interface IMessageHandler
 	{
-		void Handle (Transmission m);
+		void Handle (ITransmittable m);
 	}
 }

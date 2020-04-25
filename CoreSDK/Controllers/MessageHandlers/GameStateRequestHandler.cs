@@ -16,7 +16,7 @@ namespace CoreSDK
 			this.logger = logger;
 		}
 
-		public void Handle (Transmission m)
+		public void Handle (ITransmittable m)
 		{
 			if (m.Payload == null)
 			{
@@ -37,6 +37,11 @@ namespace CoreSDK
 
 				GameStateReceived?.Invoke(this, gameStateReceievedArgs);
 			}
+		}
+
+		public void Sub (Delegate listener)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
