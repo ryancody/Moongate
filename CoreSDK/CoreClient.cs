@@ -11,6 +11,7 @@ namespace CoreSDK
 	{
 		public bool Connected { get { return client.Connected; } }
 		public bool Connecting { get { return client.Connecting; } }
+		public EventPublisherBase EventPublisher;
 		
 		readonly Client client = new Client();
 		readonly ILogger logger;
@@ -33,6 +34,8 @@ namespace CoreSDK
 			transmittableFactory = new TransmittableFactory(logger);
 			messageProcessor = new MessageProcessor(logger, serializer, handlerFactory);
 			messenger = new ClientMessenger(logger, client, transmittableFactory, serializer);
+
+			EventPublisher = new EventPublisher(logger, handlerFactory);
 
 			logger.Info($@"Client
 			 - Time: {DateTime.Now}

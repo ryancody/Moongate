@@ -11,5 +11,10 @@ namespace CoreSDK
 	public class GameState
 	{
 		public Dictionary<string, Entity> Entities { get; set; }
+
+		public GameState () 
+		{
+			Entities = new Dictionary<string, Entity>();
+		}
 	}
 }

@@ -20,12 +20,14 @@ namespace CoreSDK.Controllers
 
             GameState = new GameState();
 
+            // TODO:  fix these listeners up
+
             // find away to expose events to outside of the core without exposing handler factory?
             // extend it? wrap it?
 
             GameStateRequestHandler.GameStateReceived += OnGameStateReceived;
-            EntityHandler.EntityReceived += OnEntityReceived;
-            PlayerConnectedHandler.PlayerStateUpdated += OnPlayerStateUpdated;
+            //EntityHandler.EntityReceived += OnEntityReceived;
+            //PlayerConnectedHandler.PlayerStateUpdated += OnPlayerStateUpdated;
         }
 
         private void OnPlayerStateUpdated (object sender, PlayerStateArgs args)

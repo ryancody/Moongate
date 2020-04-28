@@ -24,18 +24,22 @@ namespace CoreSDK
 
 		public CoreServer ()
 		{
-			var playerState = new PlayerState();
-			var gameState = new GameState();
 			
 			server = new Server();
 			logger = new Utils.Logger("SERVER", new LoggerLevel[] { LoggerLevel.Info, LoggerLevel.Error });
 			serializer = new Serializer();
 			transmittableFactory = new TransmittableFactory(logger);
 
+			var playerState = new PlayerState();
+			var gameState = new GameState();
+
+			var playerStateController = new PlayerStateController(logger, playerState);
+			var gameStateController = new GameStateController(logger, gameState);
+
 			handlerFactory = new HandlerFactory(logger);
 			messageProcessor = new MessageProcessor(logger, serializer, handlerFactory);
-			serverMessenger = new ServerMessenger(logger, server, playerState, transmittableFactory, handlerFactory, serializer);
-			serverStateController = new ServerStateController(logger, playerState, gameState, handlerFactory, serverMessenger);
+			serverMessenger = new ServerMessenger(logger, server, playerStateController, transmittableFactory, handlerFactory, serializer);
+			serverStateController = new ServerStateController(logger, playerStateController, gameStateController, handlerFactory, serverMessenger);
 		}
 
 		public void Start (int port)

@@ -15,13 +15,13 @@ namespace CoreSDK.Controllers
 		readonly ITransmittableFactory transmittableFactory;
 		readonly IHandlerFactory handlerFactory;
 		readonly Server server;
-		readonly PlayerState playerState;
+		readonly PlayerStateController playerStateController;
 
-		public ServerMessenger (ILogger _logger, Server _server, PlayerState _playerState, ITransmittableFactory _transmittableFactory, IHandlerFactory _handlerFactory, ISerializer _serializer)
+		public ServerMessenger (ILogger _logger, Server _server, PlayerStateController _playerStateController, ITransmittableFactory _transmittableFactory, IHandlerFactory _handlerFactory, ISerializer _serializer)
 		{
 			logger = _logger;
 			server = _server;
-			playerState = _playerState;
+			playerStateController = _playerStateController;
 			serializer = _serializer;
 			handlerFactory = _handlerFactory;
 			transmittableFactory = _transmittableFactory;
@@ -47,7 +47,7 @@ namespace CoreSDK.Controllers
 		public void Broadcast (ITransmittable t)
 		{
 
-			playerState.Players.Values.ToList().ForEach(p =>
+			playerStateController.GetPlayers().ForEach(p =>
 			{
 				Transmit(p.ConnectionId, t);
 			});
@@ -55,7 +55,7 @@ namespace CoreSDK.Controllers
 
 		public void Relay (ITransmittable t, string guid)
 		{
-			var toId = playerState.GetPlayer(guid).ConnectionId;
+			var toId = playerStateController.GetPlayer(guid).ConnectionId;
 
 			Transmit(toId, t);
 		}
