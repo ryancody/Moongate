@@ -4,6 +4,7 @@ using System.Text;
 
 namespace CoreSDK.Models
 {
+	[Serializable]
 	public class Vector
 	{
 		public float x { get; set; }

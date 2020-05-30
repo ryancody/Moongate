@@ -9,9 +9,13 @@ namespace CoreSDK
 	{
 		public abstract EventHandler<PingArgs> PingReceived { get; set; }
 		public abstract EventHandler<EntityArgs> EntityAdded { get; set; }
+		public abstract EventHandler<EntityArgs> EntityUpdated { get; set; }
+		public abstract EventHandler<PlayerInputArgs> PlayerInput { get; set; }
 
 		public abstract void OnPingReceived (object sender, PingArgs args);
-		public abstract void OnEntityReceived (object sender, EntityArgs args);
+		public abstract void OnEntityAdded (object sender, EntityArgs args);
+		public abstract void OnEntityUpdated (object sender, EntityArgs args);
+		public abstract void OnPlayerInput (object sender, PlayerInputArgs args);
 
 	}
 }

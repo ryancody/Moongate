@@ -8,32 +8,62 @@ namespace CoreSDK.Controllers
 	public class GameStateController
 	{
 		readonly ILogger logger;
-		readonly GameState gameState;
+
+		public GameState GameState { get; }
+
+		public EventHandler<EntityArgs> EntityAdded { get; set; }
+		public EventHandler<EntityArgs> EntityUpdated { get; set; }
 
 		public GameStateController (ILogger _logger, GameState _gameState)
 		{
 			logger = _logger;
-			gameState = _gameState;
+			GameState = _gameState;
 		}
 
 		public Entity GetEntity (string guid)
 		{
-			return gameState.Entities[guid];
+			return GameState.Entities[guid];
+		}
+
+		public void ProcessEntity (Entity e)
+		{
+			if (HasEntity(e))
+			{
+				UpdateEntity(e);
+			}
+			else
+			{
+				AddEntity(e);
+			}
 		}
 
 		public void AddEntity (Entity e)
 		{
-			gameState.Entities.Add(e.Guid, e);
+			GameState.Entities.Add(e.Guid, e);
+
+			var args = new EntityArgs()
+			{
+				Entity = e
+			};
+
+			EntityAdded?.Invoke(this, args);
 		}
 
 		public void UpdateEntity (Entity e)
 		{
-			gameState.Entities[e.Guid] = e;
+			GameState.Entities[e.Guid] = e;
+
+			var args = new EntityArgs()
+			{
+				Entity = e
+			};
+
+			EntityUpdated?.Invoke(this, args);
 		}
 
 		public bool HasEntity (Entity e)
 		{
-			return gameState.Entities.ContainsKey(e.Guid);
+			return GameState.Entities.ContainsKey(e.Guid);
 		}
 	}
 }

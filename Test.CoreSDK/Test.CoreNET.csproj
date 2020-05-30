@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CoreSDK\CoreSDK.csproj" />
+    <ProjectReference Include="..\CoreSDK\CoreNET.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreNET.Controllers.Messenger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,7 +34,7 @@ namespace CoreSDK.Controllers
 			}
 		}
 
-		public Player GetPlayer (int connectionId)
+		public Player GetPlayer (ConnectionId connectionId)
 		{
 			if (GetPlayerGuid(connectionId) != null && playerState.Players.ContainsKey(GetPlayerGuid(connectionId)))
 			{
@@ -45,7 +46,7 @@ namespace CoreSDK.Controllers
 			}
 		}
 
-		public string GetPlayerGuid (int connectionId)
+		public string GetPlayerGuid (ConnectionId connectionId)
 		{
 			if(playerState.GUIDs.ContainsKey(connectionId))
 			{ 
@@ -57,7 +58,7 @@ namespace CoreSDK.Controllers
 			}
 		}
 
-		public void AddPlayer (int connectionId, string guid, string name)
+		public void AddPlayer (ConnectionId connectionId, string guid, string name)
 		{
 			var player = new Player()
 			{
@@ -78,7 +79,7 @@ namespace CoreSDK.Controllers
 			}
 		}
 
-		public void RemovePlayer (int connectionId)
+		public void RemovePlayer (ConnectionId connectionId)
 		{
 			var guid = GetPlayerGuid(connectionId);
 

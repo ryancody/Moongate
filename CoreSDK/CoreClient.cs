@@ -1,8 +1,10 @@
-﻿using CoreSDK.Controllers;
+﻿using CoreNET.Controllers.Messenger;
+using CoreSDK.Controllers;
 using CoreSDK.Factory;
 using CoreSDK.Models;
 using CoreSDK.Utils;
 using System;
+using System.Collections.Generic;
 using Telepathy;
 
 namespace CoreSDK
@@ -12,30 +14,41 @@ namespace CoreSDK
 		public bool Connected { get { return client.Connected; } }
 		public bool Connecting { get { return client.Connecting; } }
 		public EventPublisherBase EventPublisher;
-		
+		public EventListener EventListener;
+
 		readonly Client client = new Client();
 		readonly ILogger logger;
 		readonly IMessageProcessor messageProcessor;
 		readonly IStateController stateController;
-		readonly IClientMessenger messenger;
+		readonly IMessenger messenger;
 		readonly ITransmittableFactory transmittableFactory;
 		readonly ISerializer serializer;
 		readonly IHandlerFactory handlerFactory;
+		readonly PlayerStateController playerStateController;
+		readonly GameStateController gameStateController;
 
 		public static event EventHandler ConnectedToServer;
 		public static event EventHandler DisconnectedFromServer;
-		
+
 		public CoreClient ()
 		{
-			serializer = new Serializer();
+			var playerState = new PlayerState();
+			var gameState = new GameState();
+
 			logger = new Utils.Logger("CLIENT", new LoggerLevel[] { LoggerLevel.Info, LoggerLevel.Error });
+
+			playerStateController = new PlayerStateController(logger, playerState);
+			gameStateController = new GameStateController(logger, gameState);
+
+			serializer = new Serializer();
 			handlerFactory = new HandlerFactory(logger);
-			stateController = new ClientStateController(logger);
 			transmittableFactory = new TransmittableFactory(logger);
 			messageProcessor = new MessageProcessor(logger, serializer, handlerFactory);
-			messenger = new ClientMessenger(logger, client, transmittableFactory, serializer);
+			messenger = new ClientMessenger(logger, client, transmittableFactory, gameStateController, serializer);
+			stateController = new AgentStateController(logger, playerStateController, gameStateController, handlerFactory, messenger, transmittableFactory);
 
-			EventPublisher = new EventPublisher(logger, handlerFactory);
+			EventPublisher = new EventPublisher(logger, handlerFactory, gameStateController);
+			EventListener = new EventListener(logger, transmittableFactory, messenger, gameStateController);
 
 			logger.Info($@"Client
 			 - Time: {DateTime.Now}
@@ -71,7 +84,7 @@ namespace CoreSDK
 
 						case EventType.Data:
 
-							messageProcessor.Receive(msg.data);
+							messageProcessor.Receive(ConnectionId.Server, msg.data);
 							break;
 
 						case EventType.Disconnected:
@@ -82,6 +95,7 @@ namespace CoreSDK
 				}
 
 				messageProcessor.Process();
+				messenger.TransmitQueue();
 			}
 			catch (Exception e)
 			{
@@ -92,7 +106,7 @@ namespace CoreSDK
 
 		public void Ping ()
 		{
-			messenger.Ping();
+			((ClientMessenger)messenger).Ping();
 		}
 
 		public void Disconnect ()
@@ -101,14 +115,19 @@ namespace CoreSDK
 			client.Disconnect();
 		}
 
-		public void Transmit (ITransmittable t)
+		public void QueueTransmission (ITransmittable t)
 		{
-			messenger.Transmit(t);
+			messenger.QueueTransmission(t);
+		}
+
+		public void Transmit ()
+		{
+			messenger.TransmitQueue();
 		}
 
 		public void Receive (ITransmittable t)
 		{
-			messageProcessor.Receive(t);
+			messageProcessor.Queue(t);
 		}
 	}
 }

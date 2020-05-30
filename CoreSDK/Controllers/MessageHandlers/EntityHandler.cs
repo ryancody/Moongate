@@ -18,12 +18,7 @@ namespace CoreSDK
 
 		public void Handle (ITransmittable message)
 		{
-			var entity = (Entity)message.Payload;
-
-			var args = new EntityArgs()
-			{
-				Entity = entity
-			};
+			var args = (EntityArgs)message.Payload;
 
 			logger.Debug($@"InstantiateEntityHandler
 			 - {args.Entity}");

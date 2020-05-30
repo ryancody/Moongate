@@ -1,7 +1,10 @@
-﻿using CoreSDK;
+﻿using CoreNET.Controllers.Messenger;
+using CoreSDK;
 using CoreSDK.Controllers;
 using CoreSDK.Models;
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace CoreSDK
 {
@@ -16,6 +19,13 @@ namespace CoreSDK
 
 			var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
 			Console.WriteLine(version);
+
+			Console.WriteLine($@"
+			c - connect
+			d - disconnect
+			e - create entity
+			w - player input, up
+			p - ping server");
 
 			while (running)
 			{
@@ -36,11 +46,6 @@ namespace CoreSDK
 							client.Disconnect();
 							break;
 
-						case 't':
-							Console.WriteLine("Sending test message");
-							client.Transmit(new Transmission(MessageType.Default, null));
-							break;
-
 						case 'e':
 							Console.WriteLine("creating entity");
 							var entity = new Entity()
@@ -51,7 +56,19 @@ namespace CoreSDK
 								Owner = LocalId.Guid,
 								Position = new Position() { x = 0, y = 0 }
 							};
-							client.Receive(new Transmission(MessageType.EntityUpdate, entity));
+							var entityArgs = new EntityArgs()
+							{
+								Entity = entity
+							};
+							var entityTransmission = new Transmission()
+							{
+								ToId = ConnectionId.Server,
+								MessageType = MessageType.EntityTransmit,
+								Payload = entityArgs,
+								SenderConnectionId = LocalId.ConnectionId,
+								SenderGuid = LocalId.Guid
+							};
+							client.QueueTransmission(entityTransmission);
 							break;
 
 						case 'p':

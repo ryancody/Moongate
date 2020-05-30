@@ -12,7 +12,7 @@ namespace CoreSDK
 		PlayerDisconnected,
 		PlayerInput,
 				
-		EntityUpdate,
+		EntityTransmit,
 		
 		GameStateRequest,
 		PlayersRequest,

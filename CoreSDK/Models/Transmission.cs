@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.WebSockets;
+using CoreNET.Controllers.Messenger;
 using CoreSDK.Utils;
 
 namespace CoreSDK.Models
@@ -8,17 +9,15 @@ namespace CoreSDK.Models
 	public class Transmission : ITransmittable
 	{
 		public string SenderGuid { get; set; }
-		public int SenderConnectionId { get; set; }
-		public long Timestamp { get; set; }
+		public ConnectionId SenderConnectionId { get; set; }
+		public long Timestamp { get; }
+		public ConnectionId ToId { get; set; }
 		public MessageType MessageType { get; set; }
 		public object Payload { get; set; }
 
-		public Transmission (MessageType messageType, object payload)
+		public Transmission ()
 		{
-			SenderGuid = LocalId.Guid;
 			Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-			MessageType = messageType;
-			Payload = payload;
 		}
 	}
 }

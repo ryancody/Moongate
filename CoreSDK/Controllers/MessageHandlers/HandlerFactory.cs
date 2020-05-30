@@ -20,9 +20,10 @@ namespace CoreSDK
 			{
 				{ MessageType.PlayerConnected, new PlayerConnectedHandler(logger) },
 				{ MessageType.PlayerHandshake, new PlayerHandshakeHandler(logger) },
+				{ MessageType.PlayerInput, new PlayerInputHandler(logger) },
 
 				{ MessageType.GameStateRequest, new GameStateRequestHandler(logger) },
-				{ MessageType.EntityUpdate, new EntityHandler(logger) },
+				{ MessageType.EntityTransmit, new EntityHandler(logger) },
 
 				{ MessageType.Ping, new PingHandler(logger) }
 			};

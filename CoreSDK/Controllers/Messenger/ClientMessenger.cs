@@ -4,38 +4,58 @@ using Telepathy;
 using CoreSDK;
 using CoreSDK.Factory;
 using CoreSDK.Utils;
+using System.Collections.Generic;
+using System.Linq;
+using CoreNET.Controllers.Messenger;
 
 namespace CoreSDK.Controllers
 {
-	public class ClientMessenger : IClientMessenger
+	public class ClientMessenger : IMessenger
 	{
 		readonly Client client;
 		readonly ILogger logger;
 		readonly ITransmittableFactory transmittableFactory;
 		readonly ISerializer serializer;
+		readonly GameStateController gameStateController;
 
-		public ClientMessenger (ILogger _logger, Client _client, ITransmittableFactory _transmittableFactory, ISerializer _serializer)
+		Queue<ITransmittable> transmissionQueue = new Queue<ITransmittable>();
+
+		public ClientMessenger (ILogger _logger, Client _client, ITransmittableFactory _transmittableFactory, GameStateController _gameStateController, ISerializer _serializer)
 		{
 			logger = _logger;
 			client = _client;
 			transmittableFactory = _transmittableFactory;
 			serializer = _serializer;
+			gameStateController = _gameStateController;
 
 			CoreClient.ConnectedToServer += CoreClient_ConnectedToServer;
+			gameStateController.EntityAdded += OnEntityAdded;
+			gameStateController.EntityUpdated += OnEntityUpdated;
+		}
+
+		private void OnEntityUpdated (object sender, EntityArgs e)
+		{
+			if (e.Entity.Owner == LocalId.Guid)
+			{
+				var t = transmittableFactory.Build(ConnectionId.Server, MessageType.EntityTransmit, e);
+
+				QueueTransmission(t);
+			}
+		}
+
+		private void OnEntityAdded (object sender, EntityArgs e)
+		{
+			if (e.Entity.Owner == LocalId.Guid)
+			{
+				var t = transmittableFactory.Build(ConnectionId.Server, MessageType.EntityTransmit, e);
+
+				QueueTransmission(t);
+			}
 		}
 
 		private void CoreClient_ConnectedToServer (object sender, EventArgs e)
 		{
 			InitiateHandshake();
-		}
-
-		public void Transmit (ITransmittable t)
-		{
-			var serTransmit = serializer.Serialize(t);
-			
-			logger.Debug("Send - messageType: " + t.MessageType.ToString());
-
-			client.Send(serTransmit);
 		}
 
 		public void InitiateHandshake ()
@@ -47,9 +67,9 @@ namespace CoreSDK.Controllers
 				Name = LocalId.Name,
 				Guid = LocalId.Guid
 			};
-			var t = transmittableFactory.Build(MessageType.PlayerHandshake, args);
+			var t = transmittableFactory.Build(ConnectionId.Server, MessageType.PlayerHandshake, args);
 
-			Transmit(t);
+			QueueTransmission(t);
 		}
 
 		public void Ping ()
@@ -58,9 +78,28 @@ namespace CoreSDK.Controllers
 			{
 				InitialTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds()
 			};
-			var t = transmittableFactory.Build(MessageType.Ping, args);
+			var t = transmittableFactory.Build(ConnectionId.Server, MessageType.Ping, args);
 
-			Transmit(t);
+			QueueTransmission(t);
+		}
+
+		public void QueueTransmission (ITransmittable message)
+		{
+			transmissionQueue.Enqueue(message);
+		}
+
+		public void TransmitQueue ()
+		{
+			if (transmissionQueue.Count > 0)
+			{
+				var serTransmit = serializer.Serialize(transmissionQueue);
+
+				logger.Debug($"Sending {serTransmit.Count()} messages");
+
+				client.Send(serTransmit);
+
+				transmissionQueue.Clear();
+			}
 		}
 	}
 }

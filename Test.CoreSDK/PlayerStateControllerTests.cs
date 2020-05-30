@@ -1,4 +1,5 @@
-﻿using CoreSDK;
+﻿using CoreNET.Controllers.Messenger;
+using CoreSDK;
 using CoreSDK.Controllers;
 using CoreSDK.Factory;
 using CoreSDK.Models;
@@ -26,13 +27,13 @@ namespace Test.CoreSDK
 			var playerState = new PlayerState();
 			var playerStateController = new PlayerStateController(logger.Object, playerState);
 
-			playerStateController.AddPlayer(0, "guid0", "name0");
-			playerStateController.AddPlayer(1, "guid1", "name1");
-			playerStateController.AddPlayer(2, "guid2", "name3");
+			playerStateController.AddPlayer(ConnectionId.Client00, "guid0", "name0");
+			playerStateController.AddPlayer(ConnectionId.Client01, "guid1", "name1");
+			playerStateController.AddPlayer(ConnectionId.Client02, "guid2", "name3");
 
-			var player = playerStateController.GetPlayer(1);
+			var player = playerStateController.GetPlayer(ConnectionId.Client01);
 
-			Assert.Equal(1, player.ConnectionId);
+			Assert.Equal(ConnectionId.Client01, player.ConnectionId);
 			Assert.Equal("guid1", player.GUID);
 			Assert.Equal("name1", player.Name);
 		}
@@ -43,9 +44,9 @@ namespace Test.CoreSDK
 			var playerState = new PlayerState();
 			var playerStateController = new PlayerStateController(logger.Object, playerState);
 
-			playerStateController.AddPlayer(0, "guid0", "name0");
-			playerStateController.AddPlayer(1, "guid1", "name1");
-			playerStateController.AddPlayer(2, "guid2", "name3");
+			playerStateController.AddPlayer(ConnectionId.Client00, "guid0", "name0");
+			playerStateController.AddPlayer(ConnectionId.Client01, "guid1", "name1");
+			playerStateController.AddPlayer(ConnectionId.Client02, "guid2", "name3");
 
 			var players = playerStateController.GetPlayers();
 
@@ -58,13 +59,13 @@ namespace Test.CoreSDK
 			var playerState = new PlayerState();
 			var playerStateController = new PlayerStateController(logger.Object, playerState);
 
-			playerStateController.AddPlayer(0, "guid0", "name0");
-			playerStateController.AddPlayer(1, "guid1", "name1");
-			playerStateController.AddPlayer(2, "guid2", "name3");
+			playerStateController.AddPlayer(ConnectionId.Client00, "guid0", "name0");
+			playerStateController.AddPlayer(ConnectionId.Client01, "guid1", "name1");
+			playerStateController.AddPlayer(ConnectionId.Client02, "guid2", "name3");
 
-			var player = playerStateController.GetPlayer(1);
+			var player = playerStateController.GetPlayer(ConnectionId.Client01);
 
-			Assert.Equal(1, player.ConnectionId);
+			Assert.Equal(ConnectionId.Client01, player.ConnectionId);
 		}
 
 		[Fact]
@@ -73,9 +74,9 @@ namespace Test.CoreSDK
 			var playerState = new PlayerState();
 			var playerStateController = new PlayerStateController(logger.Object, playerState);
 
-			playerStateController.AddPlayer(0, "guid0", "name0");
-			playerStateController.AddPlayer(1, "guid1", "name1");
-			playerStateController.AddPlayer(2, "guid2", "name3");
+			playerStateController.AddPlayer(ConnectionId.Client00, "guid0", "name0");
+			playerStateController.AddPlayer(ConnectionId.Client01, "guid1", "name1");
+			playerStateController.AddPlayer(ConnectionId.Client02, "guid2", "name3");
 
 			var player = playerStateController.GetPlayer("guid1");
 
@@ -88,11 +89,11 @@ namespace Test.CoreSDK
 			var playerState = new PlayerState();
 			var playerStateController = new PlayerStateController(logger.Object, playerState);
 
-			playerStateController.AddPlayer(0, "guid0", "name0");
-			playerStateController.AddPlayer(1, "guid1", "name1");
-			playerStateController.AddPlayer(2, "guid2", "name3");
+			playerStateController.AddPlayer(ConnectionId.Client00, "guid0", "name0");
+			playerStateController.AddPlayer(ConnectionId.Client01, "guid1", "name1");
+			playerStateController.AddPlayer(ConnectionId.Client02, "guid2", "name3");
 
-			var guid = playerStateController.GetPlayerGuid(1);
+			var guid = playerStateController.GetPlayerGuid(ConnectionId.Client01);
 
 			Assert.Equal("guid1", guid);
 		}
@@ -103,12 +104,12 @@ namespace Test.CoreSDK
 			var playerState = new PlayerState();
 			var playerStateController = new PlayerStateController(logger.Object, playerState);
 
-			playerStateController.AddPlayer(0, "guid0", "name0");
-			playerStateController.AddPlayer(1, "guid1", "name1");
-			playerStateController.AddPlayer(2, "guid2", "name3");
+			playerStateController.AddPlayer(ConnectionId.Client00, "guid0", "name0");
+			playerStateController.AddPlayer(ConnectionId.Client01, "guid1", "name1");
+			playerStateController.AddPlayer(ConnectionId.Client02, "guid2", "name3");
 
-			playerStateController.RemovePlayer(1);
-			var player = playerStateController.GetPlayer(1);
+			playerStateController.RemovePlayer(ConnectionId.Client01);
+			var player = playerStateController.GetPlayer(ConnectionId.Client01);
 
 			Assert.Null(player);
 		}

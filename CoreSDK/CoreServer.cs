@@ -1,4 +1,5 @@
-﻿using CoreSDK.Controllers;
+﻿using CoreNET.Controllers.Messenger;
+using CoreSDK.Controllers;
 using CoreSDK.Factory;
 using CoreSDK.Utils;
 using System;
@@ -11,7 +12,7 @@ namespace CoreSDK
 		readonly Server server;
 		readonly IMessageProcessor messageProcessor;
 		readonly IStateController serverStateController;
-		readonly IServerMessenger serverMessenger;
+		readonly IMessenger serverMessenger;
 		readonly ILogger logger;
 		readonly ISerializer serializer;
 		readonly ITransmittableFactory transmittableFactory;
@@ -24,7 +25,6 @@ namespace CoreSDK
 
 		public CoreServer ()
 		{
-			
 			server = new Server();
 			logger = new Utils.Logger("SERVER", new LoggerLevel[] { LoggerLevel.Info, LoggerLevel.Error });
 			serializer = new Serializer();
@@ -38,8 +38,8 @@ namespace CoreSDK
 
 			handlerFactory = new HandlerFactory(logger);
 			messageProcessor = new MessageProcessor(logger, serializer, handlerFactory);
-			serverMessenger = new ServerMessenger(logger, server, playerStateController, transmittableFactory, handlerFactory, serializer);
-			serverStateController = new ServerStateController(logger, playerStateController, gameStateController, handlerFactory, serverMessenger);
+			serverMessenger = new ServerMessenger(logger, server, playerStateController, messageProcessor, transmittableFactory, handlerFactory, serializer);
+			serverStateController = new AgentStateController(logger, playerStateController, gameStateController, handlerFactory, serverMessenger, transmittableFactory);
 		}
 
 		public void Start (int port)
@@ -64,6 +64,7 @@ namespace CoreSDK
 				Message msg;
 				while (server.GetNextMessage(out msg))
 				{
+					var connectionId = (ConnectionId)msg.connectionId;
 					logger.Debug($@"Server received {msg.eventType} message");
 										
 					switch (msg.eventType)
@@ -71,7 +72,7 @@ namespace CoreSDK
 						case EventType.Connected:
 							var connectArgs = new PlayerConnectionArgs()
 							{
-								ConnectionId = msg.connectionId
+								ConnectionId = connectionId
 							};
 
 							PlayerConnected?.Invoke(this, connectArgs);
@@ -79,13 +80,13 @@ namespace CoreSDK
 
 						case EventType.Data:
 
-							messageProcessor.Receive(msg.connectionId, msg.data);
+							messageProcessor.Receive(connectionId, msg.data);
 							break;
 
 						case EventType.Disconnected:
 							var disconnectArgs = new PlayerConnectionArgs()
 							{
-								ConnectionId = msg.connectionId
+								ConnectionId = connectionId
 							};
 
 							PlayerDisconnected?.Invoke(this, disconnectArgs);
@@ -94,6 +95,7 @@ namespace CoreSDK
 				}
 
 				messageProcessor.Process();
+				serverMessenger.TransmitQueue();
 			}
 			catch (Exception e)
 			{

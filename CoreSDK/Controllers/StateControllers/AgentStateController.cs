@@ -1,32 +1,41 @@
 ﻿using CoreSDK.Factory;
 using CoreSDK.Models;
+using System;
 
 namespace CoreSDK.Controllers
 {
-	public class ServerStateController : IStateController
+	public class AgentStateController : IStateController
 	{
 		private readonly ILogger logger;
 		private readonly PlayerStateController playerStateController;
 		private readonly GameStateController gameStateController;
 		private readonly IHandlerFactory handlerFactory;
-		private readonly IServerMessenger messenger;
+		private readonly IMessenger messenger;
+		private readonly ITransmittableFactory transmittableFactory;
 
-		public ServerStateController (ILogger _logger, PlayerStateController _playerStateController, GameStateController _gameStateController, IHandlerFactory _handlerFactory, IServerMessenger _messenger)
+		public AgentStateController (ILogger _logger, 
+			PlayerStateController _playerStateController, 
+			GameStateController _gameStateController, 
+			IHandlerFactory _handlerFactory, 
+			IMessenger _messenger,
+			ITransmittableFactory _transmittableFactory)
 		{
 			logger = _logger;
 			playerStateController = _playerStateController;
 			gameStateController = _gameStateController;
 			messenger = _messenger;
 			handlerFactory = _handlerFactory;
+			transmittableFactory = _transmittableFactory;
 
 			((PlayerConnectedHandler)handlerFactory.GetHandler(MessageType.PlayerConnected)).PlayerConnected += OnPlayerConnected;
 			((PlayerHandshakeHandler)handlerFactory.GetHandler(MessageType.PlayerHandshake)).PlayerHandshake += OnPlayerHandshake;
-			((EntityHandler)handlerFactory.GetHandler(MessageType.EntityUpdate)).EntityReceived += OnEntityReceived;
+			((EntityHandler)handlerFactory.GetHandler(MessageType.EntityTransmit)).EntityReceived += OnEntityReceived;
 		}
 
 		private void OnPlayerConnected (object sender, PlayerConnectionArgs args)
 		{
-			logger.Info($@"Player connected on {args.ConnectionId}");
+			// player connects but only client cares, server waits for handshake
+			//logger.Info($@"Player connected on {args.ConnectionId}");
 		}
 
 		private void OnPlayerHandshake (object sender, PlayerHandshakeArgs args)
@@ -46,25 +55,14 @@ namespace CoreSDK.Controllers
 
 		private void OnGameStateRequested (object sender, GameStateRequestArgs args)
 		{
-			var t = new Transmission(MessageType.GameStateRequest, playerStateController);
+			var t = transmittableFactory.Build(args.RequestedBy, MessageType.GameStateRequest, gameStateController.GameState);
 
-			messenger.Transmit(args.RequestedBy, t);
+			messenger.QueueTransmission(t);
 		}
 
 		private void OnEntityReceived (object sender, EntityArgs args)
 		{
-			if (gameStateController.HasEntity(args.Entity))
-			{
-				gameStateController.UpdateEntity(args.Entity);
-
-				// invoke entity updated
-			}
-			else
-			{
-				gameStateController.AddEntity(args.Entity);
-
-				// invoke entity added
-			}
+			gameStateController.ProcessEntity(args.Entity);
 		}
 	}
 }

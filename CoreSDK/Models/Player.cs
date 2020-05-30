@@ -1,4 +1,5 @@
 ﻿
+using CoreNET.Controllers.Messenger;
 using System;
 
 namespace CoreSDK
@@ -7,7 +8,7 @@ namespace CoreSDK
 	public class Player
 	{
 		public string GUID { get; set; }
-		public int ConnectionId { get; set; }
+		public ConnectionId ConnectionId { get; set; }
 		public string Name { get; set; }
 	}
 }

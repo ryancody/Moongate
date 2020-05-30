@@ -1,4 +1,5 @@
-﻿using CoreSDK.Factory;
+﻿using CoreNET.Controllers.Messenger;
+using CoreSDK.Factory;
 using CoreSDK.Models;
 using CoreSDK.Utils;
 using System;
@@ -14,13 +15,14 @@ namespace CoreSDK
 		private readonly ISerializer serializer;
 		private readonly IHandlerFactory handlerFactory;
 
-		List<ITransmittable> ReceivedQueue { get; set; }
+		Queue<ITransmittable> ReceivedQueue { get; set; } = new Queue<ITransmittable>();
+
+		public EventHandler<MessageArgs> MessageReceived { get; set; }
 
 		public MessageProcessor (ILogger _logger, ISerializer _serializer, IHandlerFactory _handlerFactory)
 		{
 			logger = _logger;
 			serializer = _serializer;
-			ReceivedQueue = new List<ITransmittable>();
 			handlerFactory = _handlerFactory;
 		}
 
@@ -28,7 +30,7 @@ namespace CoreSDK
 		{
 			while (ReceivedQueue.Count > 0)
 			{
-				ITransmittable message = ReceivedQueue.First();
+				var message = ReceivedQueue.Dequeue();
 
 				try
 				{
@@ -46,29 +48,36 @@ namespace CoreSDK
 					logger.Error(e.ToString());
 					Console.WriteLine(e);
 				}
-
-				ReceivedQueue.Remove(message);
 			}
 		}
 
-		public void Receive (byte[] b)
+		public void Queue (ITransmittable t)
 		{
-			var t = serializer.Deserialize<ITransmittable>(b);
-
-			Receive(t);
+			ReceivedQueue.Enqueue(t);
 		}
 
-		public void Receive (ITransmittable t)
+		public void Receive (ConnectionId fromConnectionId, byte[] b)
 		{
-			ReceivedQueue.Add(t);
+			var transmittables = serializer.Deserialize<IEnumerable<ITransmittable>>(b);
+
+			Receive(fromConnectionId, transmittables);
 		}
 
-		public void Receive (int fromConnectionId, byte[] b)
+		public void Receive (ConnectionId fromConnectionId, IEnumerable<ITransmittable> transmittables)
 		{
-			var t = serializer.Deserialize<ITransmittable>(b);
 
-			t.SenderConnectionId = fromConnectionId;
-			Receive(t);
+			transmittables.ToList().ForEach(t =>
+			{
+				var e = new MessageArgs
+				{
+					Message = t
+				};
+
+				MessageReceived?.Invoke(this, e);
+
+				t.SenderConnectionId = fromConnectionId;
+				Queue(t);
+			});
 		}
 	}
 }
