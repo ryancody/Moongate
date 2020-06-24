@@ -19,14 +19,10 @@ namespace CoreSDK
 		{
 			// unpack payload
 			var playerHandshakeArgs = (PlayerHandshakeArgs)m.Payload;
-
-			// add ConnectionId to Player
-			playerHandshakeArgs.ConnectionId = m.SenderConnectionId;
+			playerHandshakeArgs.ConnectionId = m.SenderConnectionId.GetValueOrDefault();
 
 			logger.Debug($@"PlayerHandshakeHandler: 
-			 - {playerHandshakeArgs.Name}
-			 - {playerHandshakeArgs.ConnectionId}
-			 - {playerHandshakeArgs.Guid}");
+			 - {playerHandshakeArgs.Name}");
 
 			PlayerHandshake?.Invoke(this, playerHandshakeArgs);
 		}

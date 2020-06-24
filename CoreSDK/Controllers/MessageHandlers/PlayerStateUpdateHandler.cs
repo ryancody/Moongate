@@ -9,7 +9,7 @@ namespace CoreSDK
 		readonly ILogger logger;
 
 		public static event EventHandler<PlayerStateArgs> PlayerStateUpdated;
-
+		
 		public PlayerStateUpdateHandler (ILogger l)
 		{
 			logger = l;

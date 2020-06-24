@@ -19,7 +19,7 @@ namespace CoreSDK
 		{
 			var playerConnectionArgs = new PlayerConnectionArgs()
 			{
-				 ConnectionId = message.SenderConnectionId
+				ConnectionId = message.SenderConnectionId.GetValueOrDefault()
 			};
 
 			PlayerConnected?.Invoke(this, playerConnectionArgs);

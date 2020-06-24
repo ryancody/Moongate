@@ -55,7 +55,7 @@ namespace CoreSDK.Controllers
 
 		private void OnGameStateRequested (object sender, GameStateRequestArgs args)
 		{
-			var t = transmittableFactory.Build(args.RequestedBy, MessageType.GameStateRequest, gameStateController.GameState);
+			var t = transmittableFactory.Build(MessageType.GameStateRequest, gameStateController.GameState);
 
 			messenger.QueueTransmission(t);
 		}

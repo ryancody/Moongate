@@ -1,10 +1,9 @@
-﻿using CoreNET.Controllers.Messenger;
+﻿using CoreNET.Controllers.MessageProcessor;
 using CoreSDK.Controllers;
 using CoreSDK.Factory;
 using CoreSDK.Models;
 using CoreSDK.Utils;
 using System;
-using System.Collections.Generic;
 using Telepathy;
 
 namespace CoreSDK
@@ -18,6 +17,7 @@ namespace CoreSDK
 
 		readonly Client client = new Client();
 		readonly ILogger logger;
+		readonly IMessageReceiver messageReceiver;
 		readonly IMessageProcessor messageProcessor;
 		readonly IStateController stateController;
 		readonly IMessenger messenger;
@@ -27,8 +27,8 @@ namespace CoreSDK
 		readonly PlayerStateController playerStateController;
 		readonly GameStateController gameStateController;
 
-		public static event EventHandler ConnectedToServer;
-		public static event EventHandler DisconnectedFromServer;
+		public static event EventHandler<PlayerConnectionArgs> ConnectedToServer;
+		public static event EventHandler<PlayerConnectionArgs> DisconnectedFromServer;
 
 		public CoreClient ()
 		{
@@ -43,7 +43,8 @@ namespace CoreSDK
 			serializer = new Serializer();
 			handlerFactory = new HandlerFactory(logger);
 			transmittableFactory = new TransmittableFactory(logger);
-			messageProcessor = new MessageProcessor(logger, serializer, handlerFactory);
+			messageReceiver = new MessageReceiver(logger, serializer);
+			messageProcessor = new MessageProcessor(logger, messageReceiver, handlerFactory);
 			messenger = new ClientMessenger(logger, client, transmittableFactory, gameStateController, serializer);
 			stateController = new AgentStateController(logger, playerStateController, gameStateController, handlerFactory, messenger, transmittableFactory);
 
@@ -84,7 +85,7 @@ namespace CoreSDK
 
 						case EventType.Data:
 
-							messageProcessor.Receive(ConnectionId.Server, msg.data);
+							messageReceiver.Receive(null, msg.data);
 							break;
 
 						case EventType.Disconnected:
@@ -94,7 +95,6 @@ namespace CoreSDK
 					}
 				}
 
-				messageProcessor.Process();
 				messenger.TransmitQueue();
 			}
 			catch (Exception e)
@@ -127,7 +127,7 @@ namespace CoreSDK
 
 		public void Receive (ITransmittable t)
 		{
-			messageProcessor.Queue(t);
+			messageReceiver.Receive(null, t);
 		}
 	}
 }

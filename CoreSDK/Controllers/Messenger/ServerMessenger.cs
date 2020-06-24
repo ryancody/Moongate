@@ -1,12 +1,9 @@
-﻿using CoreNET.Controllers.Messenger;
-using CoreSDK.Factory;
+﻿using CoreSDK.Factory;
 using CoreSDK.Models;
 using CoreSDK.Utils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using Telepathy;
 
 namespace CoreSDK.Controllers
@@ -17,16 +14,16 @@ namespace CoreSDK.Controllers
 		readonly ISerializer serializer;
 		readonly ITransmittableFactory transmittableFactory;
 		readonly IHandlerFactory handlerFactory;
-		readonly IMessageProcessor messageProcessor;
+		readonly IMessageReceiver messageProcessor;
 		readonly Server server;
 		readonly PlayerStateController playerStateController;
-
-		Dictionary<ConnectionId, Queue<ITransmittable>> TransmissionQueue { get; set; } = new Dictionary<ConnectionId, Queue<ITransmittable>>();
+		
+		Queue<ITransmittable> TransmissionQueue { get; set; } = new Queue<ITransmittable>();
 
 		public ServerMessenger (ILogger _logger,
 			Server _server,
 			PlayerStateController _playerStateController,
-			IMessageProcessor _messageProcessor,
+			IMessageReceiver _messageProcessor,
 			ITransmittableFactory _transmittableFactory,
 			IHandlerFactory _handlerFactory,
 			ISerializer _serializer)
@@ -41,23 +38,22 @@ namespace CoreSDK.Controllers
 
 			((PingHandler)handlerFactory.GetHandler(MessageType.Ping)).PingReceived += OnPingReceived;
 			((PlayerHandshakeHandler)handlerFactory.GetHandler(MessageType.PlayerHandshake)).PlayerHandshake += OnPlayerHandshake;
-			((PlayerInputHandler)handlerFactory.GetHandler(MessageType.PlayerInput)).PlayerInput += OnPlayerInput;
+			((PlayerInputHandler)handlerFactory.GetHandler(MessageType.PlayerInput)).PlayerInputChanged += OnPlayerInput;
 			((EntityHandler)handlerFactory.GetHandler(MessageType.EntityTransmit)).EntityReceived += OnEntityReceived;
 		}
 
 		private void OnEntityReceived (object sender, EntityArgs e)
 		{
-			var t = transmittableFactory.Build(ConnectionId.All, MessageType.EntityTransmit, e);
-			t.SenderConnectionId = playerStateController.GetPlayer(e.Entity.Owner).ConnectionId;
+			var t = transmittableFactory.Build(MessageType.EntityTransmit, e);
 
 			QueueTransmission(t);
 		}
 
-		private void OnPlayerInput (object sender, PlayerInputArgs e)
+		private void OnPlayerInput (object sender, ControlArgs e)
 		{
 			try
 			{
-				var t = transmittableFactory.Build(ConnectionId.All, MessageType.PlayerInput, e);
+				var t = transmittableFactory.Build(MessageType.PlayerInput, e);
 
 				QueueTransmission(t);
 			}
@@ -67,53 +63,37 @@ namespace CoreSDK.Controllers
 			}
 		}
 
-		private void OnPingReceived (object sender, PingArgs e)
+		private void OnPingReceived (object sender, PingArgs a)
 		{
-			var t = transmittableFactory.Build(e.ConnectionId, MessageType.Ping, e);
+			var t = transmittableFactory.Build(MessageType.Ping, a);
 
 			QueueTransmission(t);
 		}
 
 		private void OnPlayerHandshake (object sender, PlayerHandshakeArgs a)
 		{
-			var t = transmittableFactory.Build(ConnectionId.All, MessageType.PlayerConnected, a);
+			var t = transmittableFactory.Build(MessageType.PlayerConnected, a);
 
 			QueueTransmission(t);
 		}
 
 		public void QueueTransmission (ITransmittable message)
 		{
-			if (!TransmissionQueue.ContainsKey(message.ToId))
-			{
-				TransmissionQueue.Add(message.ToId, new Queue<ITransmittable>());
-			}
-
-			TransmissionQueue[message.ToId].Enqueue(message);
+			TransmissionQueue.Enqueue(message);
 		}
 
 		public void TransmitQueue ()
 		{
-			TransmissionQueue.Keys.ToList().ForEach(k =>
-			{
-				if (TransmissionQueue[k].Count > 0)
-				{
-					var tSer = serializer.Serialize(TransmissionQueue[k]);
+			if (TransmissionQueue.Count > 0)
+			{ 
+				var serializedQueue = serializer.Serialize(TransmissionQueue);
 
-					if (k == ConnectionId.All)
-					{
-						playerStateController.GetPlayers().ForEach(p =>
-						{
-							server.Send((int)p.ConnectionId, tSer);
-						});
-					}
-					else
-					{
-						server.Send((int)k, tSer);
-					}
+				playerStateController.GetPlayers().ForEach(p => {
+					server.Send(p.ConnectionId, serializedQueue);
+				});
 
-					TransmissionQueue[k].Clear();
-				}
-			});
+				TransmissionQueue.Clear();
+			}
 		}
 	}
 }

@@ -1,9 +1,6 @@
 ﻿using CoreSDK.Controllers;
 using CoreSDK.Factory;
-using CoreSDK.Utils;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CoreSDK
 {
@@ -16,7 +13,7 @@ namespace CoreSDK
 		public override EventHandler<PingArgs> PingReceived { get; set; }
 		public override EventHandler<EntityArgs> EntityAdded { get; set; }
 		public override EventHandler<EntityArgs> EntityUpdated { get; set; }
-		public override EventHandler<PlayerInputArgs> PlayerInput { get; set; }
+		public override EventHandler<ControlArgs> PlayerInputChanged { get; set; }
 
 		public EventPublisher (ILogger _logger, IHandlerFactory _handlerFactory, GameStateController _gameStateController) 
 		{
@@ -27,12 +24,12 @@ namespace CoreSDK
 			((PingHandler)handlerFactory.GetHandler(MessageType.Ping)).PingReceived += OnPingReceived;
 			gameStateController.EntityAdded += OnEntityAdded;
 			gameStateController.EntityUpdated += OnEntityUpdated;
-			((PlayerInputHandler)handlerFactory.GetHandler(MessageType.PlayerInput)).PlayerInput += OnPlayerInput;
+			((PlayerInputHandler)handlerFactory.GetHandler(MessageType.PlayerInput)).PlayerInputChanged += OnPlayerInputChanged;
 		}
 
-		public override void OnPlayerInput (object sender, PlayerInputArgs args)
+		public override void OnPlayerInputChanged (object sender, ControlArgs args)
 		{
-			PlayerInput?.Invoke(this, args);
+			PlayerInputChanged?.Invoke(this, args);
 		}
 
 		public override void OnPingReceived (object sender, PingArgs args)

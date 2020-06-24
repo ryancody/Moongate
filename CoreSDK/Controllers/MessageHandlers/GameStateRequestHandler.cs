@@ -24,7 +24,7 @@ namespace CoreSDK
 
 				var requestArgs = new GameStateRequestArgs()
 				{
-					RequestedBy = m.SenderConnectionId
+					SenderGuid = m.SenderGuid
 				};
 
 				GameStateRequested?.Invoke(this, requestArgs);

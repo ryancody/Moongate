@@ -1,19 +1,17 @@
-﻿using CoreNET.Controllers.Messenger;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
 namespace CoreSDK
 {
 	public class PlayerState
 	{
-		// GUID to Player
-		public Dictionary<string, Player> Players { get; set; }
+		/// <summary>
+		/// Guid to Player pair
+		/// </summary>
+		public Dictionary<string, Player> Players { get; set; } = new Dictionary<string, Player>();
 
-		// ConnectionId to GUID
-		public Dictionary<ConnectionId, string> GUIDs { get; set; }
-
-		public PlayerState ()
-		{
-			Players = new Dictionary<string, Player>();
-			GUIDs = new Dictionary<ConnectionId, string>();
-		}
+		/// <summary>
+		/// ConnectionId to Guid pair
+		/// </summary>
+		public Dictionary<int, string> GUIDs { get; set; } = new Dictionary<int, string>();
 	}
 }

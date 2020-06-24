@@ -1,5 +1,4 @@
-﻿using CoreNET.Controllers.Messenger;
-using CoreSDK.Controllers;
+﻿using CoreSDK.Controllers;
 using CoreSDK.Factory;
 
 namespace CoreSDK
@@ -19,15 +18,15 @@ namespace CoreSDK
 			gameStateController = _gameStateController;
 		}
 
-		public void OnPlayerInput (object sender, PlayerInputArgs e)
+		public void OnPlayerInputChanged (object sender, ControlArgs e)
 		{
-			var t = transmittableFactory.Build(ConnectionId.Server, MessageType.PlayerInput, e);
+			var t = transmittableFactory.Build(MessageType.PlayerInput, e);
 			messenger.QueueTransmission(t);
 		}
 
 		public void OnEntityUpdate (object sender, EntityArgs e)
 		{
-			var t = transmittableFactory.Build(ConnectionId.Server, MessageType.EntityTransmit, e);
+			var t = transmittableFactory.Build(MessageType.EntityTransmit, e);
 			messenger.QueueTransmission(t);
 		}
 	}

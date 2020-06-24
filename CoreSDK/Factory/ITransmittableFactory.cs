@@ -1,10 +1,9 @@
-﻿using CoreNET.Controllers.Messenger;
-using CoreSDK.Models;
+﻿using CoreSDK.Models;
 
 namespace CoreSDK.Factory
 {
 	public interface ITransmittableFactory
 	{
-		ITransmittable Build (ConnectionId toId, MessageType messageType, object payload);
+		ITransmittable Build (MessageType messageType, object payload);
 	}
 }

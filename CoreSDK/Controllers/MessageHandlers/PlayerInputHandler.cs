@@ -8,7 +8,7 @@ namespace CoreSDK
 	{
 		readonly ILogger logger;
 
-		public event EventHandler<PlayerInputArgs> PlayerInput;
+		public event EventHandler<ControlArgs> PlayerInputChanged;
 
 		public PlayerInputHandler (ILogger l)
 		{
@@ -17,9 +17,9 @@ namespace CoreSDK
 
 		public void Handle (ITransmittable message)
 		{
-			var playerInputArgs = (PlayerInputArgs)message.Payload;
+			var playerInputArgs = (ControlArgs)message.Payload;
 
-			PlayerInput?.Invoke(this, playerInputArgs);
+			PlayerInputChanged?.Invoke(this, playerInputArgs);
 		}
 	}
 }

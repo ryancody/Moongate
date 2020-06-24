@@ -1,10 +1,5 @@
-﻿using CoreNET.Controllers.Messenger;
-using CoreSDK;
-using CoreSDK.Controllers;
-using CoreSDK.Models;
+﻿using CoreSDK.Models;
 using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace CoreSDK
 {
@@ -62,10 +57,8 @@ namespace CoreSDK
 							};
 							var entityTransmission = new Transmission()
 							{
-								ToId = ConnectionId.Server,
 								MessageType = MessageType.EntityTransmit,
 								Payload = entityArgs,
-								SenderConnectionId = LocalId.ConnectionId,
 								SenderGuid = LocalId.Guid
 							};
 							client.QueueTransmission(entityTransmission);

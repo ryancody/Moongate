@@ -1,14 +1,6 @@
-﻿using CoreNET.Controllers.Messenger;
-using CoreSDK;
-using CoreSDK.Controllers;
-using CoreSDK.Factory;
-using CoreSDK.Models;
-using CoreSDK.Utils;
+﻿using CoreSDK;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Telepathy;
 using Xunit;
 
 namespace Test.CoreSDK

@@ -1,12 +1,10 @@
 ﻿using CoreSDK.Models;
 using System;
 using Telepathy;
-using CoreSDK;
 using CoreSDK.Factory;
 using CoreSDK.Utils;
 using System.Collections.Generic;
 using System.Linq;
-using CoreNET.Controllers.Messenger;
 
 namespace CoreSDK.Controllers
 {
@@ -37,7 +35,7 @@ namespace CoreSDK.Controllers
 		{
 			if (e.Entity.Owner == LocalId.Guid)
 			{
-				var t = transmittableFactory.Build(ConnectionId.Server, MessageType.EntityTransmit, e);
+				var t = transmittableFactory.Build(MessageType.EntityTransmit, e);
 
 				QueueTransmission(t);
 			}
@@ -47,18 +45,13 @@ namespace CoreSDK.Controllers
 		{
 			if (e.Entity.Owner == LocalId.Guid)
 			{
-				var t = transmittableFactory.Build(ConnectionId.Server, MessageType.EntityTransmit, e);
+				var t = transmittableFactory.Build(MessageType.EntityTransmit, e);
 
 				QueueTransmission(t);
 			}
 		}
 
 		private void CoreClient_ConnectedToServer (object sender, EventArgs e)
-		{
-			InitiateHandshake();
-		}
-
-		public void InitiateHandshake ()
 		{
 			logger.Debug("initiating handshake");
 
@@ -67,7 +60,7 @@ namespace CoreSDK.Controllers
 				Name = LocalId.Name,
 				Guid = LocalId.Guid
 			};
-			var t = transmittableFactory.Build(ConnectionId.Server, MessageType.PlayerHandshake, args);
+			var t = transmittableFactory.Build(MessageType.PlayerHandshake, args);
 
 			QueueTransmission(t);
 		}
@@ -78,7 +71,7 @@ namespace CoreSDK.Controllers
 			{
 				InitialTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds()
 			};
-			var t = transmittableFactory.Build(ConnectionId.Server, MessageType.Ping, args);
+			var t = transmittableFactory.Build(MessageType.Ping, args);
 
 			QueueTransmission(t);
 		}

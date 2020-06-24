@@ -1,69 +1,99 @@
-﻿using CoreNET.Controllers.Messenger;
-using CoreSDK.Models;
+﻿using CoreSDK.Models;
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Security.Cryptography.X509Certificates;
 
 namespace CoreSDK
 {
 	public interface IEventArgs
 	{
-		
 	}
 
 	[Serializable]
-	public class MessageArgs : IEventArgs
-	{ 
+	public class EventArgs : IEventArgs
+	{
+	}
+
+	[Serializable]
+	public class MessageArgs : EventArgs
+	{
 		public ITransmittable Message { get; set; }
 	}
 
 	[Serializable]
-	public class PingArgs : IEventArgs
+	public class PingArgs : EventArgs
 	{
-		public ConnectionId ConnectionId { get; set; }
 		public long InitialTimestamp { get; set; }
 		public long Ping { get; set; }
+		public string SenderGuid { get; set; }
 	}
 
 	[Serializable]
-	public class PlayerConnectionArgs : IEventArgs
+	public class PlayerConnectionArgs : EventArgs
 	{
-		public ConnectionId ConnectionId { get; set; }
+		public int ConnectionId { get; set; }
 	}
 
 	[Serializable]
-	public class PlayerHandshakeArgs : IEventArgs
+	public class PlayerHandshakeArgs : EventArgs
 	{
-		public string Name { get; set; }
-		public ConnectionId ConnectionId { get; set; }
+		public int ConnectionId { get; set; }
 		public string Guid { get; set; }
+		public string Name { get; set; }
 	}
 
 	[Serializable]
-	public class EntityArgs : IEventArgs
+	public class EntityArgs : EventArgs
 	{
 		public Entity Entity { get; set; }
-		public Vector Vector { get; set; }
 	}
 
 	[Serializable]
-	public class PlayerInputArgs : IEventArgs
-	{ 
+	public class ControlArgs : EventArgs
+	{
 		public string ControllerGuid { get; set; }
 		public Vector Vector { get; set; }
+
+		public override bool Equals (object obj)
+		{
+			if (obj == null)
+			{
+				return false;
+			}
+
+			ControlArgs compare;
+
+			try
+			{
+				compare = (ControlArgs)obj;
+			}
+			catch
+			{
+				throw new Exception("Failed to cast object to type ControlArgs");
+			}
+
+			if (ControllerGuid != null
+				&& ControllerGuid == compare.ControllerGuid
+				&& Vector != null
+				&& Vector.Equals(compare.Vector))
+			{
+				return true;
+			}
+			else	
+			{
+				return false;
+			}
+		}
 	}
 
 	[Serializable]
-	public class GameStateRequestArgs : IEventArgs
+	public class GameStateRequestArgs : EventArgs
 	{
-		public ConnectionId RequestedBy { get; set; }
+		public string SenderGuid { get; set; }
 		public GameState GameState { get; set; }
 	}
 
 	[Serializable]
-	public class PlayerStateArgs : IEventArgs
-	{ 
+	public class PlayerStateArgs : EventArgs
+	{
 		public PlayerState PlayerState { get; set; }
 	}
 }

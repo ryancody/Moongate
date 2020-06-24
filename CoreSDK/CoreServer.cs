@@ -1,4 +1,4 @@
-﻿using CoreNET.Controllers.Messenger;
+﻿using CoreNET.Controllers.MessageProcessor;
 using CoreSDK.Controllers;
 using CoreSDK.Factory;
 using CoreSDK.Utils;
@@ -10,6 +10,7 @@ namespace CoreSDK
 	public class CoreServer
 	{
 		readonly Server server;
+		readonly IMessageReceiver messageReceiver;
 		readonly IMessageProcessor messageProcessor;
 		readonly IStateController serverStateController;
 		readonly IMessenger serverMessenger;
@@ -37,8 +38,9 @@ namespace CoreSDK
 			var gameStateController = new GameStateController(logger, gameState);
 
 			handlerFactory = new HandlerFactory(logger);
-			messageProcessor = new MessageProcessor(logger, serializer, handlerFactory);
-			serverMessenger = new ServerMessenger(logger, server, playerStateController, messageProcessor, transmittableFactory, handlerFactory, serializer);
+			messageReceiver = new MessageReceiver(logger, serializer);
+			messageProcessor = new MessageProcessor(logger, messageReceiver, handlerFactory);
+			serverMessenger = new ServerMessenger(logger, server, playerStateController, messageReceiver, transmittableFactory, handlerFactory, serializer);
 			serverStateController = new AgentStateController(logger, playerStateController, gameStateController, handlerFactory, serverMessenger, transmittableFactory);
 		}
 
@@ -46,7 +48,7 @@ namespace CoreSDK
 		{
 			Console.WriteLine("SERVER - Hi, I'm " + LocalId.Name);
 
-			logger.Info(@"Server
+			logger.Info($@"Server
 			 - Time: {DateTime.Now}
 			 - Instance Name: {LocalId.Name}
 			 - GUID: {LocalId.Guid}");
@@ -60,33 +62,27 @@ namespace CoreSDK
 		{
 			try
 			{
-				// grab all new messages. do this in your Update loop.
 				Message msg;
 				while (server.GetNextMessage(out msg))
 				{
-					var connectionId = (ConnectionId)msg.connectionId;
-					logger.Debug($@"Server received {msg.eventType} message");
-										
+					logger.Debug($@"Server received {msg.eventType} message from {msg.connectionId}");
+
 					switch (msg.eventType)
 					{
 						case EventType.Connected:
-							var connectArgs = new PlayerConnectionArgs()
-							{
-								ConnectionId = connectionId
-							};
+							logger.Debug($@"{server.GetClientAddress(msg.connectionId)} connected on {msg.connectionId}");
 
-							PlayerConnected?.Invoke(this, connectArgs);
 							break;
 
 						case EventType.Data:
 
-							messageProcessor.Receive(connectionId, msg.data);
+							messageReceiver.Receive(msg.connectionId, msg.data);
 							break;
 
 						case EventType.Disconnected:
 							var disconnectArgs = new PlayerConnectionArgs()
 							{
-								ConnectionId = connectionId
+								ConnectionId = msg.connectionId
 							};
 
 							PlayerDisconnected?.Invoke(this, disconnectArgs);
@@ -94,7 +90,6 @@ namespace CoreSDK
 					}
 				}
 
-				messageProcessor.Process();
 				serverMessenger.TransmitQueue();
 			}
 			catch (Exception e)

@@ -1,83 +1,50 @@
-﻿using CoreNET.Controllers.Messenger;
+﻿using CoreSDK;
 using CoreSDK.Factory;
 using CoreSDK.Models;
-using CoreSDK.Utils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace CoreSDK
+namespace CoreNET.Controllers.MessageProcessor
 {
-	public class MessageProcessor : IMessageProcessor
+	class MessageProcessor : IMessageProcessor
 	{
 		private readonly ILogger logger;
-		private readonly ISerializer serializer;
 		private readonly IHandlerFactory handlerFactory;
+		private readonly IMessageReceiver messageReceiver;
 
-		Queue<ITransmittable> ReceivedQueue { get; set; } = new Queue<ITransmittable>();
-
-		public EventHandler<MessageArgs> MessageReceived { get; set; }
-
-		public MessageProcessor (ILogger _logger, ISerializer _serializer, IHandlerFactory _handlerFactory)
+		public MessageProcessor (ILogger logger, IMessageReceiver messageReceiver, IHandlerFactory handlerFactory)
 		{
-			logger = _logger;
-			serializer = _serializer;
-			handlerFactory = _handlerFactory;
+			this.logger = logger;
+			this.handlerFactory = handlerFactory;
+			this.messageReceiver = messageReceiver;
+
+			this.messageReceiver.MessageReceived += OnMessageReceived;
 		}
 
-		public void Process ()
+		public void OnMessageReceived (object sender, MessageArgs a) 
 		{
-			while (ReceivedQueue.Count > 0)
-			{
-				var message = ReceivedQueue.Dequeue();
+			Process(a.Message);
+		}
 
-				try
+		public void Process (ITransmittable message)
+		{
+			try
+			{
+				if (message.SenderGuid != LocalId.Guid)
 				{
 					var handler = handlerFactory.GetHandler(message.MessageType);
 
 					handler.Handle(message);
 
 					logger.Debug($@"Message handled:
-					 - {message.SenderConnectionId}
-					 - {message.SenderGuid}
-					 - {message.MessageType}");
-				}
-				catch (Exception e)
-				{
-					logger.Error(e.ToString());
-					Console.WriteLine(e);
+						- {message.SenderGuid}
+						- {message.MessageType}");
 				}
 			}
-		}
-
-		public void Queue (ITransmittable t)
-		{
-			ReceivedQueue.Enqueue(t);
-		}
-
-		public void Receive (ConnectionId fromConnectionId, byte[] b)
-		{
-			var transmittables = serializer.Deserialize<IEnumerable<ITransmittable>>(b);
-
-			Receive(fromConnectionId, transmittables);
-		}
-
-		public void Receive (ConnectionId fromConnectionId, IEnumerable<ITransmittable> transmittables)
-		{
-
-			transmittables.ToList().ForEach(t =>
+			catch (Exception e)
 			{
-				var e = new MessageArgs
-				{
-					Message = t
-				};
-
-				MessageReceived?.Invoke(this, e);
-
-				t.SenderConnectionId = fromConnectionId;
-				Queue(t);
-			});
+				logger.Error(e.ToString());
+				Console.WriteLine(e);
+			}
 		}
 	}
 }

@@ -1,8 +1,6 @@
-﻿using CoreNET.Controllers.Messenger;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CoreSDK.Controllers
 {
@@ -30,40 +28,36 @@ namespace CoreSDK.Controllers
 			}
 			else
 			{
-				return null;
+				logger.Error($@"player guid {guid} not found!");
+				throw new Exception("Player guid key not found!");
 			}
 		}
 
-		public Player GetPlayer (ConnectionId connectionId)
+		public Player GetPlayer (int connectionId)
 		{
-			if (GetPlayerGuid(connectionId) != null && playerState.Players.ContainsKey(GetPlayerGuid(connectionId)))
+			if (playerState.GUIDs.ContainsKey(connectionId))
 			{
-				return playerState.Players[GetPlayerGuid(connectionId)];
+				return GetPlayer(playerState.GUIDs[connectionId]);
 			}
 			else
 			{
-				return null;
+				logger.Error($@"player connectionId {connectionId} not found!");
+				throw new Exception("Player connectionId key not found!");
 			}
 		}
 
-		public string GetPlayerGuid (ConnectionId connectionId)
-		{
-			if(playerState.GUIDs.ContainsKey(connectionId))
-			{ 
-				return playerState.GUIDs[connectionId];
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-		public void AddPlayer (ConnectionId connectionId, string guid, string name)
+		/// <summary>
+		/// Add a player to the player list.
+		/// </summary>
+		/// <param name="connectionId"></param>
+		/// <param name="guid"></param>
+		/// <param name="name"></param>
+		public void AddPlayer (int connectionId, string guid, string name)
 		{
 			var player = new Player()
 			{
 				ConnectionId = connectionId,
-				GUID = guid,
+				Guid = guid,
 				Name = name,
 			};
 
@@ -79,12 +73,12 @@ namespace CoreSDK.Controllers
 			}
 		}
 
-		public void RemovePlayer (ConnectionId connectionId)
+		public void RemovePlayer (int connectionId)
 		{
-			var guid = GetPlayerGuid(connectionId);
+			var guid = GetPlayer(connectionId).Guid;
 
-			playerState.Players.Remove(guid);
 			playerState.GUIDs.Remove(connectionId);
+			playerState.Players.Remove(guid);
 		}
 	}
 }

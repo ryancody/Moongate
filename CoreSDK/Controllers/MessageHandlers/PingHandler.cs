@@ -21,7 +21,6 @@ namespace CoreSDK
 			var pingArgs = (PingArgs)m.Payload;
 
 			pingArgs.Ping = DateTimeOffset.Now.ToUnixTimeMilliseconds() - pingArgs.InitialTimestamp;
-			pingArgs.ConnectionId = m.SenderConnectionId;
 
 			Console.WriteLine($@"ping received - {pingArgs.Ping}ms");
 			logger.Debug("Invoked Received Ping");
