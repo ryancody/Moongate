@@ -71,7 +71,25 @@ namespace Test.CoreSDK
 				}
 			};
 
-			Assert.False(args.Equals(null));
+			Assert.Throws<NullReferenceException>(() => args.Equals(null));
+		}
+
+		[Fact]
+		public void ControlArgsVectorNullEquals ()
+		{
+			var args = new ControlArgs()
+			{
+				ControllerGuid = "abc",
+				Vector = null
+			};
+
+			var other = new ControlArgs()
+			{
+				ControllerGuid = "abc",
+				Vector = null
+			};
+
+			Assert.Throws<NullReferenceException>(() => args.Equals(other));
 		}
 	}
 }

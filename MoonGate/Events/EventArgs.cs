@@ -47,38 +47,22 @@ namespace CoreSDK
 	}
 
 	[Serializable]
-	public class ControlArgs : EventArgs
+	public class ControlArgs : EventArgs, IEquatable<ControlArgs>
 	{
 		public string ControllerGuid { get; set; }
-		public Vector Vector { get; set; }
+		public Vector Vector { get; set; } = new Vector();
 
-		public override bool Equals (object obj)
+		public bool Equals (ControlArgs other)
 		{
-			if (obj == null)
-			{
-				return false;
-			}
+			if (other == null) throw new NullReferenceException();
 
-			ControlArgs compare;
-
-			try
-			{
-				compare = (ControlArgs)obj;
-			}
-			catch
-			{
-				throw new Exception("Failed to cast object to type ControlArgs");
-			}
-
-			if (ControllerGuid != null
-				&& ControllerGuid == compare.ControllerGuid
-				&& Vector != null
-				&& Vector.Equals(compare.Vector))
+			if (ControllerGuid == other.ControllerGuid
+			&& Vector.Equals(other.Vector))
 			{
 				return true;
 			}
-			else	
-			{
+			else
+			{ 
 				return false;
 			}
 		}
