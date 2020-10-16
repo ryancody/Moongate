@@ -1,7 +1,7 @@
-﻿using CoreSDK.Models;
+﻿using Network.Models;
 using System;
 
-namespace CoreSDK
+namespace Network
 {
 	public interface IEventArgs
 	{

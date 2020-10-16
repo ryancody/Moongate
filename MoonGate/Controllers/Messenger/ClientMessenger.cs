@@ -1,16 +1,16 @@
-﻿using CoreSDK.Models;
+﻿using Network.Models;
 using System;
 using Telepathy;
-using CoreSDK.Factory;
-using CoreSDK.Utils;
+using Network.Factory;
+using Network.Utils;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CoreSDK.Controllers
+namespace Network.Controllers
 {
 	public class ClientMessenger : IMessenger
 	{
-		readonly Client client;
+		readonly Telepathy.Client client;
 		readonly ILogger logger;
 		readonly ITransmittableFactory transmittableFactory;
 		readonly ISerializer serializer;
@@ -18,7 +18,7 @@ namespace CoreSDK.Controllers
 
 		Queue<ITransmittable> transmissionQueue = new Queue<ITransmittable>();
 
-		public ClientMessenger (ILogger _logger, Client _client, ITransmittableFactory _transmittableFactory, GameStateController _gameStateController, ISerializer _serializer)
+		public ClientMessenger (ILogger _logger, Telepathy.Client _client, ITransmittableFactory _transmittableFactory, GameStateController _gameStateController, ISerializer _serializer)
 		{
 			logger = _logger;
 			client = _client;
@@ -26,7 +26,7 @@ namespace CoreSDK.Controllers
 			serializer = _serializer;
 			gameStateController = _gameStateController;
 
-			CoreClient.ConnectedToServer += CoreClient_ConnectedToServer;
+			Client.ConnectedToServer += CoreClient_ConnectedToServer;
 			gameStateController.EntityAdded += OnEntityAdded;
 			gameStateController.EntityUpdated += OnEntityUpdated;
 		}

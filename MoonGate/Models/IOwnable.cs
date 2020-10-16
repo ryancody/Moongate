@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CoreSDK.Models
+namespace Network.Models
 {
 	public interface IOwnable
 	{

@@ -1,8 +1,8 @@
-﻿using CoreSDK.Controllers;
-using CoreSDK.Models;
+﻿using Network.Controllers;
+using Network.Models;
 using System;
 
-namespace CoreSDK
+namespace Network
 {
 	public class PlayerInputHandler : IMessageHandler
 	{

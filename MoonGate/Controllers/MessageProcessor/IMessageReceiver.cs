@@ -1,8 +1,8 @@
-﻿using CoreSDK.Models;
+﻿using Network.Models;
 using System;
 using System.Collections.Generic;
 
-namespace CoreSDK
+namespace Network
 {
 	public interface IMessageReceiver
 	{

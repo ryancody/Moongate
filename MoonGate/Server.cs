@@ -1,15 +1,15 @@
 ﻿using CoreNET.Controllers.MessageProcessor;
-using CoreSDK.Controllers;
-using CoreSDK.Factory;
-using CoreSDK.Utils;
+using Network.Controllers;
+using Network.Factory;
+using Network.Utils;
 using System;
 using Telepathy;
 
-namespace CoreSDK
+namespace Network
 {
-	public class CoreServer
+	public class Server
 	{
-		readonly Server server;
+		readonly Telepathy.Server server;
 		readonly IMessageReceiver messageReceiver;
 		readonly IMessageProcessor messageProcessor;
 		readonly IStateController serverStateController;
@@ -24,9 +24,9 @@ namespace CoreSDK
 
 		public bool Active { get; private set; }
 
-		public CoreServer ()
+		public Server ()
 		{
-			server = new Server();
+			server = new Telepathy.Server();
 			logger = new Utils.Logger("SERVER", new LoggerLevel[] { LoggerLevel.Info, LoggerLevel.Error });
 			serializer = new Serializer();
 			transmittableFactory = new TransmittableFactory(logger);

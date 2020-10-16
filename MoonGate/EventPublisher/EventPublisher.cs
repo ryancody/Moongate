@@ -1,8 +1,8 @@
-﻿using CoreSDK.Controllers;
-using CoreSDK.Factory;
+﻿using Network.Controllers;
+using Network.Factory;
 using System;
 
-namespace CoreSDK
+namespace Network
 {
 	public class EventPublisher : EventPublisherBase
 	{

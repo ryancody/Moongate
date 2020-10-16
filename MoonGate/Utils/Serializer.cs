@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
-namespace CoreSDK.Utils
+namespace Network.Utils
 {
 	public class Serializer : ISerializer
 	{

@@ -1,5 +1,5 @@
-﻿using CoreSDK;
-using CoreSDK.Controllers;
+﻿using Network;
+using Network.Controllers;
 using Moq;
 using System;
 using Xunit;

@@ -1,7 +1,7 @@
-﻿using CoreSDK.Controllers;
-using CoreSDK.Factory;
+﻿using Network.Controllers;
+using Network.Factory;
 
-namespace CoreSDK
+namespace Network
 {
 	public class EventListener
 	{

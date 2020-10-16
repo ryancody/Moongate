@@ -1,9 +1,9 @@
-﻿using CoreSDK.Controllers;
-using CoreSDK.Factory;
+﻿using Network.Controllers;
+using Network.Factory;
 using System;
 using System.Collections.Generic;
 
-namespace CoreSDK
+namespace Network
 {
 	class HandlerFactory : IHandlerFactory
 	{

@@ -1,7 +1,7 @@
-﻿using CoreSDK.Controllers;
-using CoreSDK.Models;
+﻿using Network.Controllers;
+using Network.Models;
 
-namespace CoreSDK.Factory
+namespace Network.Factory
 {
 	public interface IHandlerFactory
 	{

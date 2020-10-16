@@ -1,4 +1,4 @@
-﻿using CoreSDK;
+﻿using Network;
 using Moq;
 using System.Threading.Tasks;
 using Xunit;
@@ -9,8 +9,8 @@ namespace Test.CoreSDK
 	{
 		private Mock<ILogger> logger;
 
-		private CoreServer coreServer;
-		private CoreClient coreClient;
+		private Server coreServer;
+		private Client coreClient;
 
 		private bool testing = true;
 
@@ -18,8 +18,8 @@ namespace Test.CoreSDK
 		{
 			logger = new Mock<ILogger>();
 
-			coreServer = new CoreServer();
-			coreClient = new CoreClient();
+			coreServer = new Server();
+			coreClient = new Client();
 
 			coreServer.Start(8888);
 			coreClient.Connect("localhost", 8888);

@@ -1,6 +1,6 @@
-﻿using CoreSDK.Models;
+﻿using Network.Models;
 
-namespace CoreSDK.Factory
+namespace Network.Factory
 {
 	class TransmittableFactory : ITransmittableFactory
 	{

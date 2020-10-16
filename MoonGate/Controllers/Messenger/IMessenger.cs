@@ -1,7 +1,7 @@
-﻿using CoreSDK.Models;
+﻿using Network.Models;
 using System.Collections.Generic;
 
-namespace CoreSDK.Controllers
+namespace Network.Controllers
 {
 	public interface IMessenger
 	{

@@ -1,6 +1,6 @@
-﻿using CoreSDK;
-using CoreSDK.Factory;
-using CoreSDK.Models;
+﻿using Network;
+using Network.Factory;
+using Network.Models;
 using System;
 
 namespace CoreNET.Controllers.MessageProcessor

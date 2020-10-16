@@ -1,21 +1,21 @@
 ﻿using CoreNET.Controllers.MessageProcessor;
-using CoreSDK.Controllers;
-using CoreSDK.Factory;
-using CoreSDK.Models;
-using CoreSDK.Utils;
+using Network.Controllers;
+using Network.Factory;
+using Network.Models;
+using Network.Utils;
 using System;
 using Telepathy;
 
-namespace CoreSDK
+namespace Network
 {
-	public class CoreClient
+	public class Client
 	{
 		public bool Connected { get { return client.Connected; } }
 		public bool Connecting { get { return client.Connecting; } }
 		public EventPublisherBase EventPublisher;
 		public EventListener EventListener;
 
-		readonly Client client = new Client();
+		readonly Telepathy.Client client = new Telepathy.Client();
 		readonly ILogger logger;
 		readonly IMessageReceiver messageReceiver;
 		readonly IMessageProcessor messageProcessor;
@@ -30,7 +30,7 @@ namespace CoreSDK
 		public static event EventHandler<PlayerConnectionArgs> ConnectedToServer;
 		public static event EventHandler<PlayerConnectionArgs> DisconnectedFromServer;
 
-		public CoreClient ()
+		public Client ()
 		{
 			var playerState = new PlayerState();
 			var gameState = new GameState();

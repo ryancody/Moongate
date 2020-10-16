@@ -1,4 +1,4 @@
-﻿namespace CoreSDK.Models
+﻿namespace Network.Models
 {
 
 	public interface ITransmittable

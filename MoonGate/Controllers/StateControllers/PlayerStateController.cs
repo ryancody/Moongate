@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CoreSDK.Controllers
+namespace Network.Controllers
 {
 	public class PlayerStateController
 	{

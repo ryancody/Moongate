@@ -1,9 +1,9 @@
-﻿using CoreSDK.Models;
+﻿using Network.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CoreSDK.Controllers
+namespace Network.Controllers
 {
 	public class GameStateController
 	{

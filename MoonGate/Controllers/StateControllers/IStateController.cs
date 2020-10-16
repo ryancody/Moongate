@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CoreSDK.Controllers
+namespace Network.Controllers
 {
 	public interface IStateController
 	{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace CoreSDK.Utils
+namespace Network.Utils
 {
 	public enum LoggerLevel
 	{

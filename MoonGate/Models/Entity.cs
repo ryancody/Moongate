@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CoreSDK.Models
+namespace Network.Models
 {
 	[Serializable]
 	public class Entity : IOwnable

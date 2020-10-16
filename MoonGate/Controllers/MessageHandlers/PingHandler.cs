@@ -1,9 +1,9 @@
-﻿using CoreSDK.Controllers;
-using CoreSDK.Models;
+﻿using Network.Controllers;
+using Network.Models;
 using System;
 using System.Net.NetworkInformation;
 
-namespace CoreSDK
+namespace Network
 {
 	public class PingHandler : IMessageHandler
 	{

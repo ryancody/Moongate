@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace CoreSDK
+namespace Network
 {
 	[Serializable]
 	public class Player

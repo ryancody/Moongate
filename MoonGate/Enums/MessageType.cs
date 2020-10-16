@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CoreSDK
+namespace Network
 {
 	public enum MessageType
 	{ 

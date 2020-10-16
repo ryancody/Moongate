@@ -1,9 +1,9 @@
-﻿using CoreSDK.Controllers;
-using CoreSDK.Models;
+﻿using Network.Controllers;
+using Network.Models;
 using System;
 using System.Xml;
 
-namespace CoreSDK
+namespace Network
 {
 	public class EntityHandler : IMessageHandler
 	{

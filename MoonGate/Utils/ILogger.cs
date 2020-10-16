@@ -1,4 +1,4 @@
-﻿namespace CoreSDK
+﻿namespace Network
 {
 	public interface ILogger
 	{

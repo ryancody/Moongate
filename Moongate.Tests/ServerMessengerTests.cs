@@ -1,7 +1,7 @@
-﻿using CoreSDK;
-using CoreSDK.Controllers;
-using CoreSDK.Factory;
-using CoreSDK.Utils;
+﻿using Network;
+using Network.Controllers;
+using Network.Factory;
+using Network.Utils;
 using Moq;
 using Telepathy;
 
@@ -11,7 +11,7 @@ namespace Test.CoreSDK
 	{
 		private Mock<IMessenger> serverMessenger;
 		private Mock<ILogger> logger;
-		private Mock<Server> server;
+		private Mock<Telepathy.Server> server;
 		private Mock<PlayerStateController> playerStateController;
 		private Mock<ITransmittableFactory> transmittableFactory;
 		private Mock<IHandlerFactory> handlerFactory;
@@ -20,7 +20,7 @@ namespace Test.CoreSDK
 		public ServerMessengerTests ()
 		{
 			logger = new Mock<ILogger>();
-			server = new Mock<Server>();
+			server = new Mock<Telepathy.Server>();
 			playerStateController = new Mock<PlayerStateController>();
 			transmittableFactory = new Mock<ITransmittableFactory>();
 			handlerFactory = new Mock<IHandlerFactory>();

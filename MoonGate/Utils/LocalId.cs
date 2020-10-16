@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CoreSDK
+namespace Network
 {
 	public static class LocalId
 	{

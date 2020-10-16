@@ -1,12 +1,12 @@
-﻿using CoreSDK.Factory;
-using CoreSDK.Models;
-using CoreSDK.Utils;
+﻿using Network.Factory;
+using Network.Models;
+using Network.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Telepathy;
 
-namespace CoreSDK.Controllers
+namespace Network.Controllers
 {
 	public class ServerMessenger : IMessenger
 	{
@@ -15,13 +15,13 @@ namespace CoreSDK.Controllers
 		readonly ITransmittableFactory transmittableFactory;
 		readonly IHandlerFactory handlerFactory;
 		readonly IMessageReceiver messageProcessor;
-		readonly Server server;
+		readonly Telepathy.Server server;
 		readonly PlayerStateController playerStateController;
 		
 		Queue<ITransmittable> TransmissionQueue { get; set; } = new Queue<ITransmittable>();
 
 		public ServerMessenger (ILogger _logger,
-			Server _server,
+			Telepathy.Server _server,
 			PlayerStateController _playerStateController,
 			IMessageReceiver _messageProcessor,
 			ITransmittableFactory _transmittableFactory,

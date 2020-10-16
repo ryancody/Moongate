@@ -1,11 +1,11 @@
-﻿using CoreSDK.Models;
-using CoreSDK.Utils;
+﻿using Network.Models;
+using Network.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Telepathy;
 
-namespace CoreSDK
+namespace Network
 {
 	public class MessageReceiver : IMessageReceiver
 	{

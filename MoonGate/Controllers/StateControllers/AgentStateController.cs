@@ -1,8 +1,8 @@
-﻿using CoreSDK.Factory;
-using CoreSDK.Models;
+﻿using Network.Factory;
+using Network.Models;
 using System;
 
-namespace CoreSDK.Controllers
+namespace Network.Controllers
 {
 	public class AgentStateController : IStateController
 	{

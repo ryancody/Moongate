@@ -1,11 +1,11 @@
-﻿using CoreSDK.Models;
+﻿using Network.Models;
 using System;
 
-namespace CoreSDK
+namespace Network
 {
 	class Program
 	{
-		static readonly CoreClient client = new CoreClient();
+		static readonly Client client = new Client();
 
 		static void Main (string[] args)
 		{

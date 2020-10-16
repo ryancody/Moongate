@@ -1,11 +1,11 @@
-﻿using CoreSDK.Models;
+﻿using Network.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
-using CoreSDK.Utils;
+using Network.Utils;
 
-namespace CoreSDK
+namespace Network
 {
 	[Serializable]
 	public class GameState
