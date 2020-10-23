@@ -1,7 +1,8 @@
-﻿using Network.Models;
+﻿using Network;
+using Network.Models;
 using System;
 
-namespace Network
+namespace Moongate.Network.Events
 {
 	public interface IEventArgs
 	{

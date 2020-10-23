@@ -1,12 +1,15 @@
 ﻿using CoreNET.Controllers.MessageProcessor;
+using Moongate.Network.Events;
+using Network;
 using Network.Controllers;
 using Network.Factory;
 using Network.Models;
 using Network.Utils;
 using System;
 using Telepathy;
+using Logger = Network.Utils.Logger;
 
-namespace Network
+namespace Moongate.Network
 {
 	public class Client
 	{
@@ -35,7 +38,7 @@ namespace Network
 			var playerState = new PlayerState();
 			var gameState = new GameState();
 
-			logger = new Utils.Logger("CLIENT", new LoggerLevel[] { LoggerLevel.Info, LoggerLevel.Error });
+			logger = new Logger("CLIENT", new LoggerLevel[] { LoggerLevel.Info, LoggerLevel.Error });
 
 			playerStateController = new PlayerStateController(logger, playerState);
 			gameStateController = new GameStateController(logger, gameState);

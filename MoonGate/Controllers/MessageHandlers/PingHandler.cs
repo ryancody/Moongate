@@ -1,7 +1,7 @@
-﻿using Network.Controllers;
+﻿using Moongate.Network.Events;
+using Network.Controllers;
 using Network.Models;
 using System;
-using System.Net.NetworkInformation;
 
 namespace Network
 {

@@ -1,4 +1,6 @@
-﻿using Network.Models;
+﻿using Moongate.Network;
+using Moongate.Network.Events;
+using Network.Models;
 using System;
 
 namespace Network

@@ -1,4 +1,5 @@
-﻿using Network;
+﻿using Moongate.Network.Events;
+using Network;
 using Network.Factory;
 using Network.Models;
 using System;

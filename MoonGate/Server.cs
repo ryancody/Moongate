@@ -1,4 +1,5 @@
 ﻿using CoreNET.Controllers.MessageProcessor;
+using Moongate.Network.Events;
 using Network.Controllers;
 using Network.Factory;
 using Network.Utils;

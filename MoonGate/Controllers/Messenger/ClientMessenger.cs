@@ -5,12 +5,13 @@ using Network.Factory;
 using Network.Utils;
 using System.Collections.Generic;
 using System.Linq;
+using Moongate.Network.Events;
 
 namespace Network.Controllers
 {
 	public class ClientMessenger : IMessenger
 	{
-		readonly Telepathy.Client client;
+		readonly Client client;
 		readonly ILogger logger;
 		readonly ITransmittableFactory transmittableFactory;
 		readonly ISerializer serializer;

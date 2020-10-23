@@ -1,4 +1,5 @@
-﻿using Network.Models;
+﻿using Moongate.Network.Events;
+using Network.Models;
 using Network.Utils;
 using System;
 using System.Collections.Generic;
