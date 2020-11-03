@@ -1,12 +1,19 @@
-﻿namespace Network
+﻿using Microsoft.Extensions.DependencyInjection;
+using Moongate;
+
+namespace Network
 {
 	class Program
 	{
         static bool running = true;
-        static Server server = new Server();
+        private static Container services;
+        static Server server;
 
         static void Main (string[] args)
-		{
+        {
+            services = new Container();
+            server = services.ServiceProvider.GetRequiredService<Server>();
+
             server.Start(8888);
 
             while (running)

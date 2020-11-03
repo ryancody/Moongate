@@ -1,7 +1,9 @@
-﻿using Moongate.Network.Events;
-using Network;
-using Network.Controllers;
-using Network.Models;
+﻿using Moongate.Logger;
+using Moongate.MessageReceiver;
+using Moongate.Messenger;
+using Moongate.Models;
+using Moongate.Models.Events;
+using Moongate.Transmittable.Models;
 using System;
 using Telepathy;
 using TelepathyClient = Telepathy.Client;
@@ -31,7 +33,7 @@ namespace Moongate.Network
 			logger.Info($@"Client
 			 - Time: {DateTime.Now}
 			 - Name: {LocalId.Name}
-			 - GUID: { LocalId.Guid}");
+			 - GUID: {LocalId.Guid}");
 		}
 
 		public void Connect (string host, int port)

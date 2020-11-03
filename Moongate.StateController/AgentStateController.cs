@@ -1,4 +1,11 @@
-﻿namespace Moongate.StateController
+﻿using Moongate.HandlerFactory;
+using Moongate.Logger;
+using Moongate.TransmittableFactory;
+using Moongate.HandlerFactory.MessageHandlers;
+using Moongate.Models.Events;
+using Moongate.Transmittable.Models;
+
+namespace Moongate.StateController
 {
 	public class AgentStateController : IStateController
 	{
@@ -6,22 +13,19 @@
 		private readonly PlayerStateController playerStateController;
 		private readonly GameStateController gameStateController;
 		private readonly IHandlerFactory handlerFactory;
-		private readonly IMessenger messenger;
 		private readonly ITransmittableFactory transmittableFactory;
 
-		public AgentStateController (ILogger _logger, 
-			PlayerStateController _playerStateController, 
-			GameStateController _gameStateController, 
-			IHandlerFactory _handlerFactory, 
-			IMessenger _messenger,
-			ITransmittableFactory _transmittableFactory)
+		public AgentStateController (ILogger logger, 
+			PlayerStateController playerStateController, 
+			GameStateController gameStateController, 
+			IHandlerFactory handlerFactory, 
+			ITransmittableFactory transmittableFactory)
 		{
-			logger = _logger;
-			playerStateController = _playerStateController;
-			gameStateController = _gameStateController;
-			messenger = _messenger;
-			handlerFactory = _handlerFactory;
-			transmittableFactory = _transmittableFactory;
+			this.logger = logger;
+			this.playerStateController = playerStateController;
+			this.gameStateController = gameStateController;
+			this.handlerFactory = handlerFactory;
+			this.transmittableFactory = transmittableFactory;
 
 			((PlayerConnectedHandler)handlerFactory.GetHandler(MessageType.PlayerConnected)).PlayerConnected += OnPlayerConnected;
 			((PlayerHandshakeHandler)handlerFactory.GetHandler(MessageType.PlayerHandshake)).PlayerHandshake += OnPlayerHandshake;
@@ -53,7 +57,7 @@
 		{
 			var t = transmittableFactory.Build(MessageType.GameStateRequest, gameStateController.GameState);
 
-			messenger.QueueTransmission(t);
+			//messenger.QueueTransmission(t);
 		}
 
 		private void OnEntityReceived (object sender, EntityArgs args)

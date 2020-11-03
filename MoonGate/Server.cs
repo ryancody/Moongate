@@ -1,5 +1,8 @@
-﻿using Moongate.Network.Events;
-using Network.Controllers;
+﻿using Moongate.Logger;
+using Moongate.MessageReceiver;
+using Moongate.Messenger;
+using Moongate.Models;
+using Moongate.Models.Events;
 using System;
 using Telepathy;
 using TelepathyServer = Telepathy.Server;

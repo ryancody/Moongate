@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Moongate.Models.Events;
+using Moongate.Transmittable.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Moongate.MessageReceiver

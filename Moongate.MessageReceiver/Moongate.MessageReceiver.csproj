@@ -4,4 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Moongate.Logger\Moongate.Logger.csproj" />
+    <ProjectReference Include="..\Moongate.Models\Moongate.Models.csproj" />
+    <ProjectReference Include="..\Moongate.Utils\Moongate.Utils.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,21 +1,16 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moongate.Logger;
-using Moongate.Network;
-using Network;
-using Network.Utils;
 using System;
-using TelepathyClient = Telepathy.Client;
-using TelepathyServer = Telepathy.Server;
 
 namespace Moongate
 {
-	public class Startup
+	public class Container
 	{
 		public IServiceProvider ServiceProvider { get; set; }
 		public IConfiguration Configuration { get; set; }
 
-		public Startup ()
+		public Container ()
 		{
 			var configuration = new ConfigurationBuilder();
 

@@ -1,7 +1,5 @@
-﻿using Network.Models;
+﻿using Moongate.Models.Events;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Moongate.Network.Events
 {

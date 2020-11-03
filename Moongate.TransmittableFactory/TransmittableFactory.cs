@@ -1,6 +1,8 @@
-﻿using Network.Models;
+﻿using Moongate.Logger;
+using Moongate.Models;
+using Moongate.Transmittable.Models;
 
-namespace Network.Factory
+namespace Moongate.TransmittableFactory
 {
 	class TransmittableFactory : ITransmittableFactory
 	{

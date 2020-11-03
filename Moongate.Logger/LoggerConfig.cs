@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace Moongate.Logger
+﻿namespace Moongate.Logger
 {
 	public class LoggerConfig
 	{

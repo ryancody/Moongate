@@ -1,5 +1,6 @@
-﻿using Moongate.Network.Events;
-using Network.Models;
+﻿using Moongate.Logger;
+using Moongate.Models.Events;
+using Moongate.State.Models;
 using System;
 
 namespace Moongate.StateController

@@ -1,5 +1,4 @@
-﻿using Network.Models;
-using System.Collections.Generic;
+﻿using Moongate.Transmittable.Models;
 
 namespace Moongate.Messenger
 {

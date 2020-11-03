@@ -1,6 +1,8 @@
-﻿using Network;
-using Network.Controllers;
-using Network.Factory;
+﻿using Moongate.Logger;
+using Moongate.Messenger;
+using Moongate.Models.Events;
+using Moongate.Transmittable.Models;
+using Moongate.TransmittableFactory;
 
 namespace Moongate.Network.Events
 {
@@ -9,14 +11,12 @@ namespace Moongate.Network.Events
 		readonly ILogger logger;
 		readonly ITransmittableFactory transmittableFactory;
 		readonly IMessenger messenger;
-		readonly GameStateController gameStateController;
 
-		public EventListener (ILogger _logger, ITransmittableFactory _transmittableFactory, IMessenger _messenger, GameStateController _gameStateController) 
+		public EventListener (ILogger logger, ITransmittableFactory transmittableFactory, IMessenger messenger) 
 		{
-			logger = _logger;
-			transmittableFactory = _transmittableFactory;
-			messenger = _messenger;
-			gameStateController = _gameStateController;
+			this.logger = logger;
+			this.transmittableFactory = transmittableFactory;
+			this.messenger = messenger;
 		}
 
 		public void OnPlayerInputChanged (object sender, ControlArgs e)

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Network
+namespace Moongate.Models
 {
 	public static class LocalId
 	{

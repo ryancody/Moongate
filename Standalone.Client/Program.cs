@@ -1,20 +1,21 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Moongate.Startup;
+using Moongate.Models;
+using Moongate.Models.Events;
 using Moongate.Network;
-using Moongate.Network.Events;
-using Network.Models;
+using Moongate.State.Models;
+using Moongate.Transmittable.Models;
 using System;
 
-namespace Network
+namespace Moongate
 {
 	class Program
 	{
-		private static DependencyInjection services;
+		private static Container services;
 		private static Client client;
 
 		static void Main (string[] args)
 		{
-			services = new DependencyInjection();
+			services = new Container();
 			client = services.ServiceProvider.GetRequiredService<Client>();
 
 			var running = true;

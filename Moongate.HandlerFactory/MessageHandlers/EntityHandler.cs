@@ -7,7 +7,7 @@ namespace Moongate.HandlerFactory.MessageHandlers
 {
 	public class EntityHandler : BaseHandler, IMessageHandler
 	{
-		public event EventHandler<EventArgs> EntityReceived;
+		public event EventHandler<EntityArgs> EntityReceived;
 
 		public EntityHandler (ILogger logger) : base(logger) { }
 

@@ -1,4 +1,6 @@
-﻿namespace Moongate.MessageProcessor
+﻿using Moongate.Transmittable.Models;
+
+namespace Moongate.MessageProcessor
 {
 	interface IMessageProcessor
 	{
