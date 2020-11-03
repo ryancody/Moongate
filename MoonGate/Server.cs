@@ -1,48 +1,29 @@
-﻿using CoreNET.Controllers.MessageProcessor;
-using Moongate.Network.Events;
+﻿using Moongate.Network.Events;
 using Network.Controllers;
-using Network.Factory;
-using Network.Utils;
 using System;
 using Telepathy;
+using TelepathyServer = Telepathy.Server;
 
 namespace Network
 {
 	public class Server
 	{
-		readonly Telepathy.Server server;
+		readonly TelepathyServer telepathyServer;
 		readonly IMessageReceiver messageReceiver;
-		readonly IMessageProcessor messageProcessor;
-		readonly IStateController serverStateController;
 		readonly IMessenger serverMessenger;
 		readonly ILogger logger;
-		readonly ISerializer serializer;
-		readonly ITransmittableFactory transmittableFactory;
-		readonly IHandlerFactory handlerFactory;
 
 		public static event EventHandler<PlayerConnectionArgs> PlayerConnected;
 		public static event EventHandler<PlayerConnectionArgs> PlayerDisconnected;
 
-		public bool Active { get; private set; }
+		public bool Active { get => telepathyServer.Active; }
 
-		public Server ()
+		public Server (ILogger logger, TelepathyServer telepathyServer, IMessenger messenger, IMessageReceiver messageReceiver)
 		{
-			server = new Telepathy.Server();
-			logger = new Utils.Logger("SERVER", new LoggerLevel[] { LoggerLevel.Info, LoggerLevel.Error });
-			serializer = new Serializer();
-			transmittableFactory = new TransmittableFactory(logger);
-
-			var playerState = new PlayerState();
-			var gameState = new GameState();
-
-			var playerStateController = new PlayerStateController(logger, playerState);
-			var gameStateController = new GameStateController(logger, gameState);
-
-			handlerFactory = new HandlerFactory(logger);
-			messageReceiver = new MessageReceiver(logger, serializer);
-			messageProcessor = new MessageProcessor(logger, messageReceiver, handlerFactory);
-			serverMessenger = new ServerMessenger(logger, server, playerStateController, messageReceiver, transmittableFactory, handlerFactory, serializer);
-			serverStateController = new AgentStateController(logger, playerStateController, gameStateController, handlerFactory, serverMessenger, transmittableFactory);
+			this.telepathyServer = telepathyServer;
+			this.logger = logger;
+			this.serverMessenger = messenger;
+			this.messageReceiver = messageReceiver;
 		}
 
 		public void Start (int port)
@@ -54,24 +35,21 @@ namespace Network
 			 - Instance Name: {LocalId.Name}
 			 - GUID: {LocalId.Guid}");
 
-			// create and start the server
-			server.Start(port);
-			Active = true;
+			telepathyServer.Start(port);
 		}
 
 		public void Run ()
 		{
 			try
 			{
-				Message msg;
-				while (server.GetNextMessage(out msg))
+				while (telepathyServer.GetNextMessage(out var msg))
 				{
 					logger.Debug($@"Server received {msg.eventType} message from {msg.connectionId}");
 
 					switch (msg.eventType)
 					{
 						case EventType.Connected:
-							logger.Debug($@"{server.GetClientAddress(msg.connectionId)} connected on {msg.connectionId}");
+							logger.Debug($@"{telepathyServer.GetClientAddress(msg.connectionId)} connected on {msg.connectionId}");
 
 							break;
 
@@ -103,8 +81,7 @@ namespace Network
 		public void Stop ()
 		{
 			Console.WriteLine("Closing Server...");
-			server.Stop();
-			Active = false;
+			telepathyServer.Stop();
 		}
 	}
 }

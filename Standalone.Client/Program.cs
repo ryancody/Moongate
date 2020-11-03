@@ -1,4 +1,6 @@
-﻿using Moongate.Network;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Moongate.Startup;
+using Moongate.Network;
 using Moongate.Network.Events;
 using Network.Models;
 using System;
@@ -7,10 +9,14 @@ namespace Network
 {
 	class Program
 	{
-		static readonly Client client = new Client();
+		private static DependencyInjection services;
+		private static Client client;
 
 		static void Main (string[] args)
 		{
+			services = new DependencyInjection();
+			client = services.ServiceProvider.GetRequiredService<Client>();
+
 			var running = true;
 			ConsoleKeyInfo consoleKeyInfo;
 
