@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Moongate.HandlerFactory\Moongate.HandlerFactory.csproj" />
+    <ProjectReference Include="..\Moongate.HandlerFactory\Moongate.Messaging.Handler.csproj" />
     <ProjectReference Include="..\Moongate.Logger\Moongate.Logger.csproj" />
     <ProjectReference Include="..\Moongate.Models\Moongate.Models.csproj" />
     <ProjectReference Include="..\Moongate.StateController\Moongate.StateController.csproj" />

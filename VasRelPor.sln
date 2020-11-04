@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Logger", "Moongate
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.TransmittableProcessor", "Moongate.MessageProcessor\Moongate.TransmittableProcessor.csproj", "{EECDB6B0-4C4A-402C-9B9C-0A189B83D8B5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.MessageReceiver", "Moongate.MessageReceiver\Moongate.MessageReceiver.csproj", "{E1AC66C8-5725-478B-A020-081AD92A6B81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Receiver", "Moongate.MessageReceiver\Moongate.Messaging.Receiver.csproj", "{E1AC66C8-5725-478B-A020-081AD92A6B81}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messenger", "Moongate.Messenger\Moongate.Messenger.csproj", "{18146876-D995-46EB-8860-63C1FF849262}"
 EndProject
@@ -29,9 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Events", "Moongate
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Utils", "Moongate.Utils\Moongate.Utils.csproj", "{19CA8703-C034-42FC-985F-BCB9BCA8D3A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.MessageListener", "Moongate.Listener\Moongate.MessageListener.csproj", "{6BCB3D21-528C-4DE6-801F-43902F386F58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Listener", "Moongate.Listener\Moongate.Messaging.Listener.csproj", "{6BCB3D21-528C-4DE6-801F-43902F386F58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Farspeaker", "Moongate.Farspeaker\Moongate.Farspeaker.csproj", "{0B16F246-8713-428E-84F4-C2427753352E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Farspeaker", "Moongate.Farspeaker\Moongate.Farspeaker.csproj", "{0B16F246-8713-428E-84F4-C2427753352E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

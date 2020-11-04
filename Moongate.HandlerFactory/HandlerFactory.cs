@@ -1,20 +1,16 @@
-﻿using Moongate.HandlerFactory.MessageHandlers;
-using Moongate.Logger;
+﻿using Moongate.Logger;
 using Moongate.Transmittable.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Moongate.HandlerFactory
+namespace Moongate.Messaging.Handler
 {
 	class HandlerFactory : IHandlerFactory
 	{
 		readonly Dictionary<MessageType, IMessageHandler> handlers;
-		readonly ILogger logger;
 
-		public HandlerFactory (ILogger l)
+		public HandlerFactory (ILogger logger)
 		{
-			logger = l;
-
 			handlers = new Dictionary<MessageType, IMessageHandler>
 			{
 				{ MessageType.PlayerConnected, new PlayerConnectedHandler(logger) },

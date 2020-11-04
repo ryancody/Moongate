@@ -3,7 +3,7 @@ using Moongate.Transmittable.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Moongate.MessageReceiver
+namespace Moongate.Messaging.Receiver
 {
 	public interface IMessageReceiver
 	{

@@ -4,7 +4,7 @@ using Moongate.State.Models;
 using Moongate.Transmittable.Models;
 using System;
 
-namespace Moongate.HandlerFactory.MessageHandlers
+namespace Moongate.Messaging.Handler
 {
 	public class PlayerStateUpdateHandler : BaseHandler, IMessageHandler
 	{

@@ -1,16 +1,24 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moongate.Logger;
+using Moongate.Messaging.Listener;
 using System;
+using TelepathyClient = Telepathy.Client;
+using TelepathyServer = Telepathy.Server;
+using Telepathy;
+using Moongate.Messaging.Receiver;
+using Moongate.TransmittableProcessor;
 
 namespace Moongate
 {
-	public class Container
+	public class Startup
 	{
 		public IServiceProvider ServiceProvider { get; set; }
 		public IConfiguration Configuration { get; set; }
 
-		public Container ()
+		private readonly bool isServer = false;
+
+		public Startup ()
 		{
 			var configuration = new ConfigurationBuilder();
 
@@ -36,12 +44,6 @@ namespace Moongate
 			//var messageReceiver = new MessageReceiver(logger, serializer);
 			//serviceCollection.AddSingleton(messageReceiver);
 
-			//var telepathyClient = new TelepathyClient();
-			//serviceCollection.AddSingleton(telepathyClient);
-
-			//var telepathyServer = new TelepathyServer();
-			//serviceCollection.AddSingleton(telepathyServer);
-
 			//var clientMessenger = new ClientMessenger(logger, telepathyClient, transmittableFactory, gameStateController, serializer);
 			//serviceCollection.AddSingleton(clientMessenger);
 
@@ -62,7 +64,28 @@ namespace Moongate
 			var loggerConfig = new LoggerConfig();
 			services.AddLogger(loggerConfig);
 
+
+			Common telepathyCommon;
+			if (isServer)
+			{
+				telepathyCommon = new TelepathyServer();
+			}
+			else
+			{
+				telepathyCommon = new TelepathyClient();
+			}
+
+			services.AddMessageListener(telepathyCommon);
+
+			services.AddMessageReceiver();
+
+			services.AddTransmittableProcessor();
+
+			services.AddHandlerFactory();
+
 			services.AddStateController();
+
+
 		}
 	}
 }

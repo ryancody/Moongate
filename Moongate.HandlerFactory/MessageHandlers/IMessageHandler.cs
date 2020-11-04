@@ -1,6 +1,6 @@
 ﻿using Moongate.Transmittable.Models;
 
-namespace Moongate.HandlerFactory.MessageHandlers
+namespace Moongate.Messaging.Handler
 {
 	public interface IMessageHandler
 	{

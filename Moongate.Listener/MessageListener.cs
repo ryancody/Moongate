@@ -4,9 +4,9 @@ using Moongate.Transmittable.Models;
 using System;
 using Telepathy;
 
-namespace Moongate.MessageListener
+namespace Moongate.Messaging.Listener
 {
-	class MessageListener
+	class MessageListener : IMessageListener
 	{
 		private readonly ILogger logger;
 		private readonly Common common;

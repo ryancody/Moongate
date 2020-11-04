@@ -10,12 +10,12 @@ namespace Moongate
 {
 	class Program
 	{
-		private static Container services;
+		private static Startup services;
 		private static Client client;
 
 		static void Main (string[] args)
 		{
-			services = new Container();
+			services = new Startup();
 			client = services.ServiceProvider.GetRequiredService<Client>();
 
 			var running = true;

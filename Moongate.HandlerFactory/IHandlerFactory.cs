@@ -1,7 +1,6 @@
-﻿using Moongate.HandlerFactory.MessageHandlers;
-using Moongate.Transmittable.Models;
+﻿using Moongate.Transmittable.Models;
 
-namespace Moongate.HandlerFactory
+namespace Moongate.Messaging.Handler
 {
 	public interface IHandlerFactory
 	{

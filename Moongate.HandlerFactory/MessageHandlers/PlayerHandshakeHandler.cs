@@ -3,7 +3,7 @@ using Moongate.Models.Events;
 using Moongate.Transmittable.Models;
 using System;
 
-namespace Moongate.HandlerFactory.MessageHandlers
+namespace Moongate.Messaging.Handler
 {
 	public class PlayerHandshakeHandler : BaseHandler, IMessageHandler
 	{

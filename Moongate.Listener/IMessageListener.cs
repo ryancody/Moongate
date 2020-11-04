@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Moongate.MessageListener
+namespace Moongate.Messaging.Listener
 {
 	public class IMessageListener
 	{

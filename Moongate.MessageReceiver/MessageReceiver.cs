@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Moongate.MessageReceiver
+namespace Moongate.Messaging.Receiver
 {
 	public class MessageReceiver : IMessageReceiver
 	{

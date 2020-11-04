@@ -1,6 +1,6 @@
 ﻿using Moongate.Transmittable.Models;
 
-namespace Moongate.MessageProcessor
+namespace Moongate.TransmittableProcessor
 {
 	interface ITransmittableProcessor
 	{

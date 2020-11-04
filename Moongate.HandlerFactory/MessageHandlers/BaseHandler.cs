@@ -1,6 +1,6 @@
 ﻿using Moongate.Logger;
 
-namespace Moongate.HandlerFactory.MessageHandlers
+namespace Moongate.Messaging.Handler
 {
 	public class BaseHandler
 	{

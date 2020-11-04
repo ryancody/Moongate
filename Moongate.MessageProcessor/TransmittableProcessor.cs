@@ -1,20 +1,18 @@
-﻿using Moongate.HandlerFactory;
-using Moongate.Logger;
-using Moongate.MessageReceiver;
+﻿using Moongate.Logger;
+using Moongate.Messaging.Handler;
+using Moongate.Messaging.Receiver;
 using Moongate.Models;
 using Moongate.Models.Events;
 using Moongate.Transmittable.Models;
 using System;
 
-namespace Moongate.MessageProcessor
+namespace Moongate.TransmittableProcessor
 {
 	class TransmittableProcessor : ITransmittableProcessor
 	{
 		private readonly ILogger logger;
 		private readonly IHandlerFactory handlerFactory;
 		private readonly IMessageReceiver messageReceiver;
-
-		private readonly EventArgs eventArgs;
 
 		public TransmittableProcessor (ILogger logger, IMessageReceiver messageReceiver, IHandlerFactory handlerFactory)
 		{

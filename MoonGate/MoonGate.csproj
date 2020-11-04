@@ -12,8 +12,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Moongate.HandlerFactory\Moongate.HandlerFactory.csproj" />
+    <ProjectReference Include="..\Moongate.Listener\Moongate.Messaging.Listener.csproj" />
     <ProjectReference Include="..\Moongate.Logger\Moongate.Logger.csproj" />
-    <ProjectReference Include="..\Moongate.MessageReceiver\Moongate.MessageReceiver.csproj" />
+    <ProjectReference Include="..\Moongate.MessageReceiver\Moongate.Messaging.Receiver.csproj" />
     <ProjectReference Include="..\Moongate.Messenger\Moongate.Messenger.csproj" />
   </ItemGroup>
 
