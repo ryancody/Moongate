@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Telepathy" Version="1.0.341" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Moongate.Logger\Moongate.Logger.csproj" />
+    <ProjectReference Include="..\Moongate.Models\Moongate.Models.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -54,7 +54,7 @@ namespace Moongate.Models.Events
 				return true;
 			}
 			else
-			{ 
+			{
 				return false;
 			}
 		}

@@ -8,7 +8,7 @@ using System;
 
 namespace Moongate.MessageProcessor
 {
-	class MessageProcessor : IMessageProcessor
+	class TransmittableProcessor : ITransmittableProcessor
 	{
 		private readonly ILogger logger;
 		private readonly IHandlerFactory handlerFactory;
@@ -16,7 +16,7 @@ namespace Moongate.MessageProcessor
 
 		private readonly EventArgs eventArgs;
 
-		public MessageProcessor (ILogger logger, IMessageReceiver messageReceiver, IHandlerFactory handlerFactory)
+		public TransmittableProcessor (ILogger logger, IMessageReceiver messageReceiver, IHandlerFactory handlerFactory)
 		{
 			this.logger = logger;
 			this.handlerFactory = handlerFactory;

@@ -2,7 +2,7 @@
 
 namespace Moongate.MessageProcessor
 {
-	interface IMessageProcessor
+	interface ITransmittableProcessor
 	{
 		void Process (ITransmittable t);
 	}
