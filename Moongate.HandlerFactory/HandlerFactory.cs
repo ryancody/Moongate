@@ -7,24 +7,24 @@ namespace Moongate.Messaging.Handler
 {
 	class HandlerFactory : IHandlerFactory
 	{
-		readonly Dictionary<MessageType, IMessageHandler> handlers;
+		readonly Dictionary<TransmissionType, IMessageHandler> handlers;
 
 		public HandlerFactory (ILogger logger)
 		{
-			handlers = new Dictionary<MessageType, IMessageHandler>
+			handlers = new Dictionary<TransmissionType, IMessageHandler>
 			{
-				{ MessageType.PlayerConnected, new PlayerConnectedHandler(logger) },
-				{ MessageType.PlayerHandshake, new PlayerHandshakeHandler(logger) },
-				{ MessageType.PlayerInput, new PlayerInputHandler(logger) },
+				{ TransmissionType.PlayerConnected, new PlayerConnectedHandler(logger) },
+				{ TransmissionType.PlayerHandshake, new PlayerHandshakeHandler(logger) },
+				{ TransmissionType.PlayerInput, new PlayerInputHandler(logger) },
 
-				{ MessageType.GameStateRequest, new GameStateRequestHandler(logger) },
-				{ MessageType.EntityTransmit, new EntityHandler(logger) },
+				{ TransmissionType.GameStateRequest, new GameStateRequestHandler(logger) },
+				{ TransmissionType.EntityTransmit, new EntityHandler(logger) },
 
-				{ MessageType.Ping, new PingHandler(logger) }
+				{ TransmissionType.Ping, new PingHandler(logger) }
 			};
 		}
 
-		public IMessageHandler GetHandler (MessageType t)
+		public IMessageHandler GetHandler (TransmissionType t)
 		{
 			try
 			{

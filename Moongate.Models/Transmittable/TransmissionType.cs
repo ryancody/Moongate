@@ -1,6 +1,6 @@
 ﻿namespace Moongate.Transmittable.Models
 {
-	public enum MessageType
+	public enum TransmissionType
 	{ 
 		Ping,
 		PlayerConnected,

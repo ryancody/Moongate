@@ -21,13 +21,13 @@ namespace Moongate.Network.Events
 
 		public void OnPlayerInputChanged (object sender, ControlArgs e)
 		{
-			var t = transmittableFactory.Build(MessageType.PlayerInput, e);
+			var t = transmittableFactory.Build(TransmissionType.PlayerInput, e);
 			messenger.QueueTransmission(t);
 		}
 
 		public void OnEntityUpdate (object sender, EntityArgs e)
 		{
-			var t = transmittableFactory.Build(MessageType.EntityTransmit, e);
+			var t = transmittableFactory.Build(TransmissionType.EntityTransmit, e);
 			messenger.QueueTransmission(t);
 		}
 	}

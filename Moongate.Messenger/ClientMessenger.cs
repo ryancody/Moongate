@@ -39,7 +39,7 @@ namespace Moongate.Messenger
 		{
 			if (e.Entity.Owner == LocalId.Guid)
 			{
-				var t = transmittableFactory.Build(MessageType.EntityTransmit, e);
+				var t = transmittableFactory.Build(TransmissionType.EntityTransmit, e);
 
 				QueueTransmission(t);
 			}
@@ -49,7 +49,7 @@ namespace Moongate.Messenger
 		{
 			if (e.Entity.Owner == LocalId.Guid)
 			{
-				var t = transmittableFactory.Build(MessageType.EntityTransmit, e);
+				var t = transmittableFactory.Build(TransmissionType.EntityTransmit, e);
 
 				QueueTransmission(t);
 			}
@@ -75,7 +75,7 @@ namespace Moongate.Messenger
 			{
 				InitialTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds()
 			};
-			var t = transmittableFactory.Build(MessageType.Ping, args);
+			var t = transmittableFactory.Build(TransmissionType.Ping, args);
 
 			QueueTransmission(t);
 		}

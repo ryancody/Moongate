@@ -5,7 +5,7 @@
 		string SenderGuid { get; set; }
 		int? SenderConnectionId { get; set; }
 		long Timestamp { get; }
-		MessageType MessageType { get; set; }
+		TransmissionType TransmissionType { get; set; }
 		object Payload { get; set; }
 	}
 }

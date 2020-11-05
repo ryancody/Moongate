@@ -35,15 +35,15 @@ namespace Moongate.Messenger
 			this.playerStateController = playerStateController;
 			this.transmittableFactory = transmittableFactory;
 
-			((PingHandler)handlerFactory.GetHandler(MessageType.Ping)).PingReceived += OnPingReceived;
-			((PlayerHandshakeHandler)handlerFactory.GetHandler(MessageType.PlayerHandshake)).PlayerHandshake += OnPlayerHandshake;
-			((PlayerInputHandler)handlerFactory.GetHandler(MessageType.PlayerInput)).PlayerInputChanged += OnPlayerInput;
-			((EntityHandler)handlerFactory.GetHandler(MessageType.EntityTransmit)).EntityReceived += OnEntityReceived;
+			((PingHandler)handlerFactory.GetHandler(TransmissionType.Ping)).PingReceived += OnPingReceived;
+			((PlayerHandshakeHandler)handlerFactory.GetHandler(TransmissionType.PlayerHandshake)).PlayerHandshake += OnPlayerHandshake;
+			((PlayerInputHandler)handlerFactory.GetHandler(TransmissionType.PlayerInput)).PlayerInputChanged += OnPlayerInput;
+			((EntityHandler)handlerFactory.GetHandler(TransmissionType.EntityTransmit)).EntityReceived += OnEntityReceived;
 		}
 
 		private void OnEntityReceived (object sender, EntityArgs e)
 		{
-			var t = transmittableFactory.Build(MessageType.EntityTransmit, e);
+			var t = transmittableFactory.Build(TransmissionType.EntityTransmit, e);
 
 			QueueTransmission(t);
 		}
@@ -52,7 +52,7 @@ namespace Moongate.Messenger
 		{
 			try
 			{
-				var t = transmittableFactory.Build(MessageType.PlayerInput, e);
+				var t = transmittableFactory.Build(TransmissionType.PlayerInput, e);
 
 				QueueTransmission(t);
 			}
@@ -64,14 +64,14 @@ namespace Moongate.Messenger
 
 		private void OnPingReceived (object sender, PingArgs a)
 		{
-			var t = transmittableFactory.Build(MessageType.Ping, a);
+			var t = transmittableFactory.Build(TransmissionType.Ping, a);
 
 			QueueTransmission(t);
 		}
 
 		private void OnPlayerHandshake (object sender, PlayerHandshakeArgs a)
 		{
-			var t = transmittableFactory.Build(MessageType.PlayerConnected, a);
+			var t = transmittableFactory.Build(TransmissionType.PlayerConnected, a);
 
 			QueueTransmission(t);
 		}

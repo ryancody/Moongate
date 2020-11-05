@@ -1,6 +1,5 @@
 ﻿using Moongate.Logger;
 using Moongate.Models.Events;
-using Moongate.Transmittable.Models;
 using System;
 using Telepathy;
 
@@ -27,43 +26,24 @@ namespace Moongate.Messaging.Listener
 			{
 				logger.Debug($@"Telepathy.Common received {msg.eventType} message");
 
+				var args = new MessageArgs
+				{
+					SenderConnectionId = msg.connectionId,
+					Payload = msg.data
+				};
+
 				switch (msg.eventType)
 				{
 					case EventType.Connected:
-						var connectedArgs = new MessageArgs
-						{
-							Message = new Transmission
-							{
-								SenderConnectionId = msg.connectionId
-							}
-						};
-
-						Connected?.Invoke(this, connectedArgs);
+						Connected?.Invoke(this, args);
 						break;
 
 					case EventType.Data:
-						var dataArgs = new MessageArgs
-						{
-							Message = new Transmission
-							{
-								SenderConnectionId = msg.connectionId,
-								Payload = msg.data
-							}
-						};
-
-						DataReceived?.Invoke(this, dataArgs);
+						DataReceived?.Invoke(this, args);
 						break;
 
 					case EventType.Disconnected:
-						var disconnectedArgs = new MessageArgs
-						{
-							Message = new Transmission
-							{
-								SenderConnectionId = msg.connectionId
-							}
-						};
-
-						Disconnected?.Invoke(this, disconnectedArgs);
+						Disconnected?.Invoke(this, args);
 						break;
 
 					default:

@@ -25,10 +25,10 @@ namespace Moongate.Network.Events
 			this.handlerFactory = handlerFactory;
 			this.gameStateController = gameStateController;
 
-			((PingHandler)handlerFactory.GetHandler(MessageType.Ping)).PingReceived += OnPingReceived;
+			((PingHandler)handlerFactory.GetHandler(TransmissionType.Ping)).PingReceived += OnPingReceived;
 			gameStateController.EntityAdded += OnEntityAdded;
 			gameStateController.EntityUpdated += OnEntityUpdated;
-			((PlayerInputHandler)handlerFactory.GetHandler(MessageType.PlayerInput)).PlayerInputChanged += OnPlayerInputChanged;
+			((PlayerInputHandler)handlerFactory.GetHandler(TransmissionType.PlayerInput)).PlayerInputChanged += OnPlayerInputChanged;
 		}
 
 		public override void OnPlayerInputChanged (object sender, ControlArgs args)

@@ -13,11 +13,11 @@ namespace Moongate.TransmittableFactory
 			logger = _logger;
 		}
 
-		public ITransmittable Build (MessageType messageType, object payload)
+		public ITransmittable Build (TransmissionType messageType, object payload)
 		{
 			var t = new Transmission()
 			{
-				MessageType = messageType,
+				TransmissionType = messageType,
 				Payload = payload,
 				SenderGuid = LocalId.Guid
 			};

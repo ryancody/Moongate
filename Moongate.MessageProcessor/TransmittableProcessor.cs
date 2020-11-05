@@ -34,13 +34,13 @@ namespace Moongate.TransmittableProcessor
 			{
 				if (message.SenderGuid != LocalId.Guid)
 				{
-					var handler = handlerFactory.GetHandler(message.MessageType);
+					var handler = handlerFactory.GetHandler(message.TransmissionType);
 
 					handler.Handle(message);
 
 					logger.Debug($@"Message handled:
 						- {message.SenderGuid}
-						- {message.MessageType}");
+						- {message.TransmissionType}");
 				}
 			}
 			catch (Exception e)

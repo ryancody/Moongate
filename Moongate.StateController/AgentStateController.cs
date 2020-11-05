@@ -27,9 +27,9 @@ namespace Moongate.StateController
 			this.handlerFactory = handlerFactory;
 			this.transmittableFactory = transmittableFactory;
 
-			((PlayerConnectedHandler)handlerFactory.GetHandler(MessageType.PlayerConnected)).PlayerConnected += OnPlayerConnected;
-			((PlayerHandshakeHandler)handlerFactory.GetHandler(MessageType.PlayerHandshake)).PlayerHandshake += OnPlayerHandshake;
-			((EntityHandler)handlerFactory.GetHandler(MessageType.EntityTransmit)).EntityReceived += OnEntityReceived;
+			((PlayerConnectedHandler)handlerFactory.GetHandler(TransmissionType.PlayerConnected)).PlayerConnected += OnPlayerConnected;
+			((PlayerHandshakeHandler)handlerFactory.GetHandler(TransmissionType.PlayerHandshake)).PlayerHandshake += OnPlayerHandshake;
+			((EntityHandler)handlerFactory.GetHandler(TransmissionType.EntityTransmit)).EntityReceived += OnEntityReceived;
 		}
 
 		private void OnPlayerConnected (object sender, PlayerConnectionArgs args)
@@ -55,7 +55,7 @@ namespace Moongate.StateController
 
 		private void OnGameStateRequested (object sender, GameStateRequestArgs args)
 		{
-			var t = transmittableFactory.Build(MessageType.GameStateRequest, gameStateController.GameState);
+			var t = transmittableFactory.Build(TransmissionType.GameStateRequest, gameStateController.GameState);
 
 			//messenger.QueueTransmission(t);
 		}

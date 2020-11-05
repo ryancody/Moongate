@@ -66,7 +66,7 @@ namespace Moongate
 							};
 							var entityTransmission = new Transmission()
 							{
-								MessageType = MessageType.EntityTransmit,
+								TransmissionType = TransmissionType.EntityTransmit,
 								Payload = entityArgs,
 								SenderGuid = LocalId.Guid
 							};

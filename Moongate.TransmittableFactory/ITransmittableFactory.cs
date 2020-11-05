@@ -4,6 +4,6 @@ namespace Moongate.TransmittableFactory
 {
 	public interface ITransmittableFactory
 	{
-		ITransmittable Build (MessageType messageType, object payload);
+		ITransmittable Build (TransmissionType messageType, object payload);
 	}
 }

@@ -7,7 +7,14 @@ namespace Moongate.Models.Events
 	[Serializable]
 	public class MessageArgs : EventArgs
 	{
-		public ITransmittable Message { get; set; }
+		public int SenderConnectionId { get; set; }
+		public byte[] Payload { get; set; }
+	}
+
+	[Serializable]
+	public class TransmissionArgs : EventArgs
+	{
+		public ITransmittable Transmission { get; set; }	
 	}
 
 	[Serializable]

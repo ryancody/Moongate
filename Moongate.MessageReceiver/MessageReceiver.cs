@@ -14,7 +14,7 @@ namespace Moongate.Messaging.Receiver
 		private readonly ILogger logger;
 		private readonly ISerializer serializer;
 
-		public EventHandler<MessageArgs> MessageReceived { get; set; }
+		public EventHandler<TransmissionArgs> TransmissionReceived { get; set; }
 		
 		public MessageReceiver (ILogger logger, ISerializer serializer, IMessageListener messageListener)
 		{
@@ -26,29 +26,29 @@ namespace Moongate.Messaging.Receiver
 
 		public void OnDataReceived (object sender, MessageArgs messageArgs)
 		{
-			Receive(messageArgs.Message.SenderConnectionId, messageArgs.Message);
+			Receive(messageArgs.SenderConnectionId, messageArgs.Payload);
 		}
 
 		/// <summary>
 		/// Queues a single transmittable.
 		/// </summary>
 		/// <param name="transmittable"></param>
-		public void Receive (int? fromConnectionId, ITransmittable transmittable)
+		void Receive (int? fromConnectionId, ITransmittable transmittable)
 		{
 			transmittable.SenderConnectionId = fromConnectionId;
 
-			var e = new MessageArgs() 
+			var e = new TransmissionArgs() 
 			{ 
-				Message = transmittable				
+				Transmission = transmittable				
 			};
-			MessageReceived?.Invoke(this, e);
+			TransmissionReceived?.Invoke(this, e);
 		}
 
 		/// <summary>
 		/// Deserializes a batch of transmittables and sends them to be queued up by Receive.
 		/// </summary>
 		/// <param name="byteArray"></param>
-		public void Receive (int? fromConnectionId, byte[] byteArray)
+		void Receive (int? fromConnectionId, byte[] byteArray)
 		{
 			var transmittables = serializer.Deserialize<IEnumerable<ITransmittable>>(byteArray);
 
@@ -59,9 +59,9 @@ namespace Moongate.Messaging.Receiver
 		/// Receives a batch of transmittables and queues them up.  Fires MessageReceived after they are queued.
 		/// </summary>
 		/// <param name="transmittables"></param>
-		public void Receive (int? fromConnectionId, IEnumerable<ITransmittable> transmittables)
+		void Receive (int? fromConnectionId, IEnumerable<ITransmittable> transmittables)
 		{
-			transmittables.ToList().ForEach(t =>
+			transmittables.Select(t =>
 			{
 				Receive(fromConnectionId, t);
 			});
