@@ -6,11 +6,12 @@ namespace Moongate.Messaging.Listener
 {
 	public static class ServiceConfiguration
 	{
-		public static void AddMessageListener (this IServiceCollection services, Common common)
+		public static void AddMessageListener (this IServiceCollection services)
 		{
 			services.AddSingleton<IMessageListener, MessageListener>(s => 
 			{
 				var logger = s.GetRequiredService<ILogger>();
+				var common = s.GetRequiredService<Common>();
 				
 				return new MessageListener(logger, common);
 			});

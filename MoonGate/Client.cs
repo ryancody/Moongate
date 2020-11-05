@@ -1,11 +1,10 @@
 ﻿using Moongate.Logger;
-using Moongate.MessageReceiver;
+using Moongate.Messaging.Listener;
 using Moongate.Messenger;
 using Moongate.Models;
 using Moongate.Models.Events;
 using Moongate.Transmittable.Models;
 using System;
-using Telepathy;
 using TelepathyClient = Telepathy.Client;
 
 namespace Moongate.Network
@@ -15,20 +14,20 @@ namespace Moongate.Network
 		public bool Connected { get => telepathyClient.Connected; }
 		public bool Connecting { get => telepathyClient.Connecting; }
 
-		private readonly TelepathyClient telepathyClient;
 		private readonly ILogger logger;
-		private readonly IMessageReceiver messageReceiver;
+		private readonly TelepathyClient telepathyClient;
+		private readonly IMessageListener messageListener;
 		private readonly IMessenger messenger;
 
 		public static event EventHandler<PlayerConnectionArgs> ConnectedToServer;
 		public static event EventHandler<PlayerConnectionArgs> DisconnectedFromServer;
 
-		public Client (ILogger logger, TelepathyClient telepathyClient, IMessenger messenger, IMessageReceiver messageReceiver)
+		public Client (ILogger logger, TelepathyClient telepathyClient, IMessageListener messageListener, IMessenger messenger)
 		{
 			this.logger = logger;
 			this.telepathyClient = telepathyClient;
+			this.messageListener = messageListener;
 			this.messenger = messenger;
-			this.messageReceiver = messageReceiver;
 
 			logger.Info($@"Client
 			 - Time: {DateTime.Now}
@@ -46,28 +45,7 @@ namespace Moongate.Network
 		{
 			try
 			{
-				while (telepathyClient.GetNextMessage(out var msg))
-				{
-					logger.Debug($@"Client received {msg.eventType} message");
-
-					switch (msg.eventType)
-					{
-						case EventType.Connected:
-
-							ConnectedToServer?.Invoke(this, null);
-							break;
-
-						case EventType.Data:
-
-							messageReceiver.Receive(null, msg.data);
-							break;
-
-						case EventType.Disconnected:
-
-							Disconnect();
-							break;
-					}
-				}
+				messageListener.Listen();
 
 				messenger.TransmitQueue();
 			}
@@ -97,11 +75,6 @@ namespace Moongate.Network
 		public void Transmit ()
 		{
 			messenger.TransmitQueue();
-		}
-
-		public void Receive (ITransmittable t)
-		{
-			messageReceiver.Receive(null, t);
 		}
 	}
 }

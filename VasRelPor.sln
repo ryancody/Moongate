@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messenger", "Moong
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.StateController", "Moongate.StateController\Moongate.StateController.csproj", "{67B4FADF-1F20-4C11-A0B9-1E9671DB022D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.HandlerFactory", "Moongate.HandlerFactory\Moongate.HandlerFactory.csproj", "{FB03172D-A327-45BE-A686-477F96CFA14D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Handler", "Moongate.HandlerFactory\Moongate.Messaging.Handler.csproj", "{FB03172D-A327-45BE-A686-477F96CFA14D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.TransmittableFactory", "Moongate.TransmittableFactory\Moongate.TransmittableFactory.csproj", "{3A3A890C-0F74-4BC0-8A5F-1260879C7A54}"
 EndProject

@@ -6,14 +6,14 @@ using Telepathy;
 
 namespace Moongate.Messaging.Listener
 {
-	class MessageListener : IMessageListener
+	public class MessageListener : IMessageListener
 	{
 		private readonly ILogger logger;
 		private readonly Common common;
 
-		public static event EventHandler<MessageArgs> Connected;
-		public static event EventHandler<MessageArgs> Disconnected;
-		public static event EventHandler<MessageArgs> DataReceived;
+		public event EventHandler<MessageArgs> Connected;
+		public event EventHandler<MessageArgs> Disconnected;
+		public event EventHandler<MessageArgs> DataReceived;
 
 		public MessageListener (ILogger logger, Common common)
 		{
@@ -38,7 +38,7 @@ namespace Moongate.Messaging.Listener
 							}
 						};
 
-						DataReceived?.Invoke(this, connectedArgs);
+						Connected?.Invoke(this, connectedArgs);
 						break;
 
 					case EventType.Data:
@@ -63,7 +63,7 @@ namespace Moongate.Messaging.Listener
 							}
 						};
 
-						DataReceived?.Invoke(this, disconnectedArgs);
+						Disconnected?.Invoke(this, disconnectedArgs);
 						break;
 
 					default:
