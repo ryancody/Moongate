@@ -5,17 +5,17 @@ using System;
 
 namespace Moongate.Messaging.Handler
 {
-	public class PlayerConnectedHandler : BaseHandler, IMessageHandler
+	public class PlayerConnectedHandler : BaseHandler, ITransmissionHandler
 	{
 		public event EventHandler<PlayerConnectionArgs> PlayerConnected;
 
 		public PlayerConnectedHandler (ILogger logger) : base(logger) { }
 
-		public void Handle (ITransmittable message)
+		public void Handle (ITransmittable t)
 		{
 			var playerConnectionArgs = new PlayerConnectionArgs()
 			{
-				ConnectionId = message.SenderConnectionId.GetValueOrDefault()
+				ConnectionId = t.SenderConnectionId.GetValueOrDefault()
 			};
 
 			PlayerConnected?.Invoke(this, playerConnectionArgs);

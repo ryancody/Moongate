@@ -13,7 +13,7 @@ namespace Moongate.TransmittableProcessor
 			{
 				var logger = s.GetRequiredService<ILogger>();
 				var messageReceiver = s.GetRequiredService<IMessageReceiver>();
-				var handlerFactory = s.GetRequiredService<IHandlerFactory>();
+				var handlerFactory = s.GetRequiredService<IHandlerProvider>();
 
 				return new TransmittableProcessor(logger, messageReceiver, handlerFactory);
 			});

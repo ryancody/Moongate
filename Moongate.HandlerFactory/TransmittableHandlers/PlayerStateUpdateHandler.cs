@@ -6,17 +6,17 @@ using System;
 
 namespace Moongate.Messaging.Handler
 {
-	public class PlayerStateUpdateHandler : BaseHandler, IMessageHandler
+	public class PlayerStateUpdateHandler : BaseHandler, ITransmissionHandler
 	{
 		public static event EventHandler<PlayerStateArgs> PlayerStateUpdated;
 
 		public PlayerStateUpdateHandler (ILogger logger) : base(logger) { }
 
-		public void Handle (ITransmittable message)
+		public void Handle (ITransmittable t)
 		{
 			var playerStateArgs = new PlayerStateArgs()
 			{
-				PlayerState = (PlayerState)message.Payload
+				PlayerState = (PlayerState)t.Payload
 			};
 
 			PlayerStateUpdated?.Invoke(this, playerStateArgs);

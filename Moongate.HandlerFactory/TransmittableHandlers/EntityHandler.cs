@@ -5,15 +5,15 @@ using System;
 
 namespace Moongate.Messaging.Handler
 {
-	public class EntityHandler : BaseHandler, IMessageHandler
+	public class EntityHandler : BaseHandler, ITransmissionHandler
 	{
 		public event EventHandler<EntityArgs> EntityReceived;
 
 		public EntityHandler (ILogger logger) : base(logger) { }
 
-		public void Handle (ITransmittable message)
+		public void Handle (ITransmittable t)
 		{
-			var args = (EntityArgs)message.Payload;
+			var args = (EntityArgs)t.Payload;
 
 			logger.Debug($@"InstantiateEntityHandler
 			 - {args.Entity}");

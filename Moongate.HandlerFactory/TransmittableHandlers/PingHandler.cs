@@ -5,15 +5,15 @@ using System;
 
 namespace Moongate.Messaging.Handler
 {
-	public class PingHandler : BaseHandler, IMessageHandler
+	public class PingHandler : BaseHandler, ITransmissionHandler
 	{
 		public event EventHandler<PingArgs> PingReceived;
 
 		public PingHandler (ILogger logger) : base(logger) { }
 
-		public void Handle (ITransmittable m)
+		public void Handle (ITransmittable t)
 		{
-			var pingArgs = (PingArgs)m.Payload;
+			var pingArgs = (PingArgs)t.Payload;
 
 			pingArgs.Ping = DateTimeOffset.Now.ToUnixTimeMilliseconds() - pingArgs.InitialTimestamp;
 

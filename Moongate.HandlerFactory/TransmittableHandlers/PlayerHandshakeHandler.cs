@@ -5,27 +5,22 @@ using System;
 
 namespace Moongate.Messaging.Handler
 {
-	public class PlayerHandshakeHandler : BaseHandler, IMessageHandler
+	public class PlayerHandshakeHandler : BaseHandler, ITransmissionHandler
 	{
 		public event EventHandler<PlayerHandshakeArgs> PlayerHandshake;
 
 		public PlayerHandshakeHandler (ILogger logger) : base(logger) { }
 
-		public void Handle (ITransmittable m)
+		public void Handle (ITransmittable t)
 		{
 			// unpack payload
-			var playerHandshakeArgs = (PlayerHandshakeArgs)m.Payload;
-			playerHandshakeArgs.ConnectionId = m.SenderConnectionId.GetValueOrDefault();
+			var playerHandshakeArgs = (PlayerHandshakeArgs)t.Payload;
+			playerHandshakeArgs.ConnectionId = t.SenderConnectionId.GetValueOrDefault();
 
 			logger.Debug($@"PlayerHandshakeHandler: 
 			 - {playerHandshakeArgs.Name}");
 
 			PlayerHandshake?.Invoke(this, playerHandshakeArgs);
-		}
-
-		public void Sub (Delegate listener)
-		{
-			PlayerHandshake += (EventHandler<PlayerHandshakeArgs>)listener;
 		}
 	}
 }

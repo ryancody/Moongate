@@ -61,7 +61,7 @@ namespace Moongate.Messaging.Receiver
 		/// <param name="transmittables"></param>
 		void Receive (int? fromConnectionId, IEnumerable<ITransmittable> transmittables)
 		{
-			transmittables.Select(t =>
+			transmittables.ToList().ForEach(t =>
 			{
 				Receive(fromConnectionId, t);
 			});

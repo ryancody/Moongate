@@ -8,11 +8,11 @@ namespace Moongate.Messaging.Receiver
 	{
 		public static void AddHandlerFactory (this IServiceCollection services)
 		{
-			services.AddSingleton<IHandlerFactory, HandlerFactory>(s => 
+			services.AddSingleton<IHandlerProvider, HandlerProvider>(s => 
 			{
 				var logger = s.GetRequiredService<ILogger>();
 
-				return new HandlerFactory(logger);
+				return new HandlerProvider(logger);
 			});
 		}
 	}

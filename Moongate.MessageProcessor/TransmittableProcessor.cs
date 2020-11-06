@@ -11,21 +11,21 @@ namespace Moongate.TransmittableProcessor
 	class TransmittableProcessor : ITransmittableProcessor
 	{
 		private readonly ILogger logger;
-		private readonly IHandlerFactory handlerFactory;
+		private readonly IHandlerProvider handlerFactory;
 		private readonly IMessageReceiver messageReceiver;
 
-		public TransmittableProcessor (ILogger logger, IMessageReceiver messageReceiver, IHandlerFactory handlerFactory)
+		public TransmittableProcessor (ILogger logger, IMessageReceiver messageReceiver, IHandlerProvider handlerFactory)
 		{
 			this.logger = logger;
 			this.handlerFactory = handlerFactory;
 			this.messageReceiver = messageReceiver;
 
-			this.messageReceiver.MessageReceived += OnMessageReceived;
+			this.messageReceiver.TransmissionReceived += OnTransmissionReceived;
 		}
 
-		public void OnMessageReceived (object sender, MessageArgs a) 
+		public void OnTransmissionReceived (object sender, TransmissionArgs a) 
 		{
-			Process(a.Message);
+			Process(a.Transmission);
 		}
 
 		public void Process (ITransmittable message)

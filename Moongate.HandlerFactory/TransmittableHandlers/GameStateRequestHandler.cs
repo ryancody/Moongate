@@ -5,22 +5,22 @@ using System;
 
 namespace Moongate.Messaging.Handler
 {
-	public class GameStateRequestHandler : BaseHandler, IMessageHandler
+	public class GameStateRequestHandler : BaseHandler, ITransmissionHandler
 	{
 		public static event EventHandler<GameStateRequestArgs> GameStateReceived;
 		public static event EventHandler<GameStateRequestArgs> GameStateRequested;
 
 		public GameStateRequestHandler (ILogger logger) : base(logger) { }
 
-		public void Handle (ITransmittable m)
+		public void Handle (ITransmittable t)
 		{
-			if (m.Payload == null)
+			if (t.Payload == null)
 			{
 				logger.Debug("received gamestate request");
 
 				var requestArgs = new GameStateRequestArgs()
 				{
-					SenderGuid = m.SenderGuid
+					SenderGuid = t.SenderGuid
 				};
 
 				GameStateRequested?.Invoke(this, requestArgs);
@@ -29,15 +29,10 @@ namespace Moongate.Messaging.Handler
 			{
 				logger.Debug("received gamestate");
 
-				var gameStateReceievedArgs = (GameStateRequestArgs)m.Payload;
+				var gameStateReceievedArgs = (GameStateRequestArgs)t.Payload;
 
 				GameStateReceived?.Invoke(this, gameStateReceievedArgs);
 			}
-		}
-
-		public void Sub (Delegate listener)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

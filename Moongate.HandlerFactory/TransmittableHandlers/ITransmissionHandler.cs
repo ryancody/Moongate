@@ -2,8 +2,8 @@
 
 namespace Moongate.Messaging.Handler
 {
-	public interface IHandlerFactory
+	public interface ITransmissionHandler
 	{
-		IMessageHandler GetHandler (TransmissionType t);
+		void Handle (ITransmittable t);
 	}
 }
