@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Moongate.Logger;
+using Moongate.Messaging.Listener;
 using Moongate.Utils;
 
 namespace Moongate.Messaging.Receiver
@@ -12,8 +13,9 @@ namespace Moongate.Messaging.Receiver
 			{
 				var logger = s.GetRequiredService<ILogger>();
 				var serializer = s.GetRequiredService<ISerializer>();
+				var messageListener = s.GetRequiredService<IMessageListener>();
 
-				return new MessageReceiver(logger, serializer);
+				return new MessageReceiver(logger, serializer, messageListener);
 			});
 		}
 	}

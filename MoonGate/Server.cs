@@ -1,10 +1,9 @@
 ﻿using Moongate.Logger;
-using Moongate.MessageReceiver;
+using Moongate.Messaging.Listener;
 using Moongate.Messenger;
 using Moongate.Models;
 using Moongate.Models.Events;
 using System;
-using Telepathy;
 using TelepathyServer = Telepathy.Server;
 
 namespace Network
@@ -12,8 +11,8 @@ namespace Network
 	public class Server
 	{
 		readonly TelepathyServer telepathyServer;
-		readonly IMessageReceiver messageReceiver;
-		readonly IMessenger serverMessenger;
+		readonly IMessageListener messageListener;
+		readonly IMessenger messenger;
 		readonly ILogger logger;
 
 		public static event EventHandler<PlayerConnectionArgs> PlayerConnected;
@@ -21,12 +20,12 @@ namespace Network
 
 		public bool Active { get => telepathyServer.Active; }
 
-		public Server (ILogger logger, TelepathyServer telepathyServer, IMessenger messenger, IMessageReceiver messageReceiver)
+		public Server (ILogger logger, TelepathyServer telepathyServer, IMessenger messenger, IMessageListener messageListener)
 		{
 			this.telepathyServer = telepathyServer;
 			this.logger = logger;
-			this.serverMessenger = messenger;
-			this.messageReceiver = messageReceiver;
+			this.messenger = messenger;
+			this.messageListener = messageListener;
 		}
 
 		public void Start (int port)
@@ -45,34 +44,9 @@ namespace Network
 		{
 			try
 			{
-				while (telepathyServer.GetNextMessage(out var msg))
-				{
-					logger.Debug($@"Server received {msg.eventType} message from {msg.connectionId}");
+				messageListener.Listen();
 
-					switch (msg.eventType)
-					{
-						case EventType.Connected:
-							logger.Debug($@"{telepathyServer.GetClientAddress(msg.connectionId)} connected on {msg.connectionId}");
-
-							break;
-
-						case EventType.Data:
-
-							messageReceiver.Receive(msg.connectionId, msg.data);
-							break;
-
-						case EventType.Disconnected:
-							var disconnectArgs = new PlayerConnectionArgs()
-							{
-								ConnectionId = msg.connectionId
-							};
-
-							PlayerDisconnected?.Invoke(this, disconnectArgs);
-							break;
-					}
-				}
-
-				serverMessenger.TransmitQueue();
+				messenger.TransmitQueue();
 			}
 			catch (Exception e)
 			{

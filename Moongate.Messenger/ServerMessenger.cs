@@ -1,6 +1,5 @@
-﻿using Moongate.HandlerFactory;
-using Moongate.HandlerFactory.MessageHandlers;
-using Moongate.Logger;
+﻿using Moongate.Logger;
+using Moongate.Messaging.Handler;
 using Moongate.Models.Events;
 using Moongate.StateController;
 using Moongate.Transmittable.Models;
@@ -27,7 +26,7 @@ namespace Moongate.Messenger
 			TelepathyServer telepathyServer,
 			PlayerStateController playerStateController,
 			ITransmittableFactory transmittableFactory,
-			IHandlerFactory handlerFactory)
+			IHandlerProvider handlerProvider)
 		{
 			this.logger = logger;
 			this.serializer = serializer;
@@ -35,10 +34,10 @@ namespace Moongate.Messenger
 			this.playerStateController = playerStateController;
 			this.transmittableFactory = transmittableFactory;
 
-			((PingHandler)handlerFactory.GetHandler(TransmissionType.Ping)).PingReceived += OnPingReceived;
-			((PlayerHandshakeHandler)handlerFactory.GetHandler(TransmissionType.PlayerHandshake)).PlayerHandshake += OnPlayerHandshake;
-			((PlayerInputHandler)handlerFactory.GetHandler(TransmissionType.PlayerInput)).PlayerInputChanged += OnPlayerInput;
-			((EntityHandler)handlerFactory.GetHandler(TransmissionType.EntityTransmit)).EntityReceived += OnEntityReceived;
+			handlerProvider.PingHandler.PingReceived += OnPingReceived;
+			handlerProvider.PlayerHandshakeHandler.PlayerHandshake += OnPlayerHandshake;
+			handlerProvider.PlayerInputHandler.PlayerInputChanged += OnPlayerInput;
+			handlerProvider.EntityHandler.EntityReceived += OnEntityReceived;
 		}
 
 		private void OnEntityReceived (object sender, EntityArgs e)

@@ -1,6 +1,5 @@
-﻿using Moongate.HandlerFactory;
-using Moongate.HandlerFactory.MessageHandlers;
-using Moongate.Logger;
+﻿using Moongate.Logger;
+using Moongate.Messaging.Handler;
 using Moongate.Models.Events;
 using Moongate.StateController;
 using Moongate.Transmittable.Models;
@@ -11,7 +10,7 @@ namespace Moongate.Network.Events
 	public class EventPublisher : EventPublisherBase
 	{
 		readonly ILogger logger;
-		readonly IHandlerFactory handlerFactory;
+		readonly IHandlerProvider handlerProvider;
 		readonly GameStateController gameStateController;
 
 		public override EventHandler<PingArgs> PingReceived { get; set; }
@@ -19,16 +18,17 @@ namespace Moongate.Network.Events
 		public override EventHandler<EntityArgs> EntityUpdated { get; set; }
 		public override EventHandler<ControlArgs> PlayerInputChanged { get; set; }
 
-		public EventPublisher (ILogger logger, IHandlerFactory handlerFactory, GameStateController gameStateController) 
+		public EventPublisher (ILogger logger, IHandlerProvider handlerProvider, GameStateController gameStateController) 
 		{
 			this.logger = logger;
-			this.handlerFactory = handlerFactory;
+			this.handlerProvider = handlerProvider;
 			this.gameStateController = gameStateController;
 
-			((PingHandler)handlerFactory.GetHandler(TransmissionType.Ping)).PingReceived += OnPingReceived;
+			handlerProvider.PingHandler.PingReceived += OnPingReceived;
+			handlerProvider.PlayerInputHandler.PlayerInputChanged += OnPlayerInputChanged;
 			gameStateController.EntityAdded += OnEntityAdded;
 			gameStateController.EntityUpdated += OnEntityUpdated;
-			((PlayerInputHandler)handlerFactory.GetHandler(TransmissionType.PlayerInput)).PlayerInputChanged += OnPlayerInputChanged;
+
 		}
 
 		public override void OnPlayerInputChanged (object sender, ControlArgs args)

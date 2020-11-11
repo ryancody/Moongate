@@ -1,4 +1,5 @@
 ﻿using Moongate.Logger;
+using Moongate.Messaging.Handler;
 using Moongate.Models.Events;
 using Moongate.Transmittable.Models;
 using Moongate.TransmittableFactory;
@@ -10,24 +11,22 @@ namespace Moongate.StateController
 		private readonly ILogger logger;
 		private readonly PlayerStateController playerStateController;
 		private readonly GameStateController gameStateController;
-		private readonly IHandlerFactory handlerFactory;
 		private readonly ITransmittableFactory transmittableFactory;
 
 		public AgentStateController (ILogger logger, 
 			PlayerStateController playerStateController, 
-			GameStateController gameStateController, 
-			IHandlerFactory handlerFactory, 
+			GameStateController gameStateController,
+			IHandlerProvider handlerProvider, 
 			ITransmittableFactory transmittableFactory)
 		{
 			this.logger = logger;
 			this.playerStateController = playerStateController;
 			this.gameStateController = gameStateController;
-			this.handlerFactory = handlerFactory;
 			this.transmittableFactory = transmittableFactory;
 
-			((PlayerConnectedHandler)handlerFactory.GetHandler(TransmissionType.PlayerConnected)).PlayerConnected += OnPlayerConnected;
-			((PlayerHandshakeHandler)handlerFactory.GetHandler(TransmissionType.PlayerHandshake)).PlayerHandshake += OnPlayerHandshake;
-			((EntityHandler)handlerFactory.GetHandler(TransmissionType.EntityTransmit)).EntityReceived += OnEntityReceived;
+			handlerProvider.PlayerConnectedHandler.PlayerConnected += OnPlayerConnected;
+			handlerProvider.PlayerHandshakeHandler.PlayerHandshake += OnPlayerHandshake;
+			handlerProvider.EntityHandler.EntityReceived += OnEntityReceived;
 		}
 
 		private void OnPlayerConnected (object sender, PlayerConnectionArgs args)

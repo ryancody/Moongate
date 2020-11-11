@@ -71,10 +71,5 @@ namespace Moongate.Network
 		{
 			messenger.QueueTransmission(t);
 		}
-
-		public void Transmit ()
-		{
-			messenger.TransmitQueue();
-		}
 	}
 }
