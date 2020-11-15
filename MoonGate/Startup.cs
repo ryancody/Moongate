@@ -2,12 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Moongate.Logger;
 using Moongate.Messaging.Listener;
+using Moongate.Messaging.Receiver;
+using Moongate.Transmittable.Processor;
 using System;
+using Telepathy;
 using TelepathyClient = Telepathy.Client;
 using TelepathyServer = Telepathy.Server;
-using Telepathy;
-using Moongate.Messaging.Receiver;
-using Moongate.TransmittableProcessor;
 
 namespace Moongate
 {

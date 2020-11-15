@@ -1,8 +1,8 @@
 ﻿using Moongate.Logger;
-using Moongate.Messenger;
+using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
-using Moongate.Transmittable.Models;
-using Moongate.TransmittableFactory;
+using Moongate.Models.Transmittable;
+using Moongate.Transmittable.Factory;
 
 namespace Moongate.Network.Events
 {

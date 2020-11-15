@@ -1,7 +1,7 @@
 ﻿using Moongate.Logger;
 using Moongate.Models.Events;
 using Moongate.State.Models;
-using Moongate.Transmittable.Models;
+using Moongate.Models.Transmittable;
 using System;
 
 namespace Moongate.Messaging.Handler

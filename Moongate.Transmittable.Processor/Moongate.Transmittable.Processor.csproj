@@ -5,10 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Moongate.Listener\Moongate.Messaging.Listener.csproj" />
+    <ProjectReference Include="..\Moongate.Identity.Provider\Moongate.Identity.Provider.csproj" />
+    <ProjectReference Include="..\Moongate.Messaging.Handler\Moongate.Messaging.Handler.csproj" />
     <ProjectReference Include="..\Moongate.Logger\Moongate.Logger.csproj" />
+    <ProjectReference Include="..\Moongate.Messaging.Receiver\Moongate.Messaging.Receiver.csproj" />
     <ProjectReference Include="..\Moongate.Models\Moongate.Models.csproj" />
-    <ProjectReference Include="..\Moongate.Utils\Moongate.Utils.csproj" />
   </ItemGroup>
 
 </Project>

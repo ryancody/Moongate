@@ -1,6 +1,6 @@
-﻿using Moongate.Transmittable.Models;
+﻿using Moongate.Models.Transmittable;
 
-namespace Moongate.TransmittableFactory
+namespace Moongate.Transmittable.Factory
 {
 	public interface ITransmittableFactory
 	{

@@ -1,6 +1,6 @@
-﻿using Moongate.Transmittable.Models;
+﻿using Moongate.Models.Transmittable;
 
-namespace Moongate.Messenger
+namespace Moongate.Messaging.Messenger
 {
 	public interface IMessenger
 	{

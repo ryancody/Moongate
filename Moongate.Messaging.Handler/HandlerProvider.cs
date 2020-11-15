@@ -1,5 +1,5 @@
 ﻿using Moongate.Logger;
-using Moongate.Transmittable.Models;
+using Moongate.Models.Transmittable;
 using System;
 using System.Collections.Generic;
 

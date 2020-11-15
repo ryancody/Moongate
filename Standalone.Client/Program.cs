@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Moongate.Models;
 using Moongate.Models.Events;
-using Moongate.Network;
+using Moongate.Models.Transmittable;
 using Moongate.State.Models;
-using Moongate.Transmittable.Models;
 using System;
 
 namespace Moongate
@@ -57,7 +55,7 @@ namespace Moongate
 								Guid = Guid.NewGuid().ToString(),
 								Id = "test ID",
 								Name = "test Name",
-								Owner = LocalId.Guid,
+								Owner = client.Id.Guid,
 								Position = new Position() { x = 0, y = 0 }
 							};
 							var entityArgs = new EntityArgs()
@@ -68,7 +66,7 @@ namespace Moongate
 							{
 								TransmissionType = TransmissionType.EntityTransmit,
 								Payload = entityArgs,
-								SenderGuid = LocalId.Guid
+								SenderGuid = client.Id.Guid
 							};
 							client.QueueTransmission(entityTransmission);
 							break;

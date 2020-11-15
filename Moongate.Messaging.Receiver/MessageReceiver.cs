@@ -1,7 +1,7 @@
 ﻿using Moongate.Logger;
 using Moongate.Messaging.Listener;
 using Moongate.Models.Events;
-using Moongate.Transmittable.Models;
+using Moongate.Models.Transmittable;
 using Moongate.Utils;
 using System;
 using System.Collections.Generic;
@@ -29,6 +29,11 @@ namespace Moongate.Messaging.Receiver
 			Receive(messageArgs.SenderConnectionId, messageArgs.Payload);
 		}
 
+		public void TriggerTransmissionReceived (TransmissionArgs args)
+		{
+			TransmissionReceived?.Invoke(this, args);
+		}
+
 		/// <summary>
 		/// Queues a single transmittable.
 		/// </summary>
@@ -41,7 +46,8 @@ namespace Moongate.Messaging.Receiver
 			{ 
 				Transmission = transmittable				
 			};
-			TransmissionReceived?.Invoke(this, e);
+
+			TriggerTransmissionReceived(e);
 		}
 
 		/// <summary>

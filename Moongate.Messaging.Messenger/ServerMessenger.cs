@@ -2,14 +2,14 @@
 using Moongate.Messaging.Handler;
 using Moongate.Models.Events;
 using Moongate.StateController;
-using Moongate.Transmittable.Models;
-using Moongate.TransmittableFactory;
+using Moongate.Models.Transmittable;
+using Moongate.Transmittable.Factory;
 using Moongate.Utils;
 using System;
 using System.Collections.Generic;
 using TelepathyServer = Telepathy.Server;
 
-namespace Moongate.Messenger
+namespace Moongate.Messaging.Messenger
 {
 	public class ServerMessenger : IMessenger
 	{

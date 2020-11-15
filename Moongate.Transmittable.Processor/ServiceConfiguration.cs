@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Moongate.Identity.Provider;
 using Moongate.Logger;
 using Moongate.Messaging.Handler;
 using Moongate.Messaging.Receiver;
 
-namespace Moongate.TransmittableProcessor
+namespace Moongate.Transmittable.Processor
 {
 	public static class ServiceConfiguration
 	{
@@ -14,8 +15,9 @@ namespace Moongate.TransmittableProcessor
 				var logger = s.GetRequiredService<ILogger>();
 				var messageReceiver = s.GetRequiredService<IMessageReceiver>();
 				var handlerFactory = s.GetRequiredService<IHandlerProvider>();
+				var identityProvider = s.GetRequiredService<IIdentityProvider>();
 
-				return new TransmittableProcessor(logger, messageReceiver, handlerFactory);
+				return new TransmittableProcessor(logger, messageReceiver, handlerFactory, identityProvider);
 			});
 		}
 	}

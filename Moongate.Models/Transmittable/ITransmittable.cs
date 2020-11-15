@@ -1,4 +1,4 @@
-﻿namespace Moongate.Transmittable.Models
+﻿namespace Moongate.Models.Transmittable
 {
 	public interface ITransmittable
 	{

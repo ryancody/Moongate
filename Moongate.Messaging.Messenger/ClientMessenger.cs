@@ -1,34 +1,41 @@
-﻿using Moongate.Logger;
-using Moongate.Models;
+﻿using Moongate.Identity.Provider;
+using Moongate.Logger;
 using Moongate.Models.Events;
+using Moongate.Models.Transmittable;
 using Moongate.StateController;
-using Moongate.Transmittable.Models;
-using Moongate.TransmittableFactory;
+using Moongate.Transmittable.Factory;
 using Moongate.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TelepathyClient = Telepathy.Client;
 
-namespace Moongate.Messenger
+namespace Moongate.Messaging.Messenger
 {
 	public class ClientMessenger : IMessenger
 	{
-		readonly TelepathyClient client;
-		readonly ILogger logger;
-		readonly ITransmittableFactory transmittableFactory;
-		readonly ISerializer serializer;
-		readonly GameStateController gameStateController;
+		private readonly TelepathyClient client;
+		private readonly ILogger logger;
+		private readonly ITransmittableFactory transmittableFactory;
+		private readonly ISerializer serializer;
+		private readonly GameStateController gameStateController;
+		private readonly IIdentityProvider identityProvider;
 
-		Queue<ITransmittable> transmissionQueue = new Queue<ITransmittable>();
+		private Queue<ITransmittable> transmissionQueue = new Queue<ITransmittable>();
 
-		public ClientMessenger (ILogger logger, TelepathyClient client, ITransmittableFactory transmittableFactory, GameStateController gameStateController, ISerializer serializer)
+		public ClientMessenger (ILogger logger, 
+								TelepathyClient client, 
+								ITransmittableFactory transmittableFactory, 
+								GameStateController gameStateController, 
+								ISerializer serializer,
+								IIdentityProvider identityProvider)
 		{
 			this.logger = logger;
 			this.client = client;
 			this.transmittableFactory = transmittableFactory;
 			this.serializer = serializer;
 			this.gameStateController = gameStateController;
+			this.identityProvider = identityProvider;
 
 			// Client.ConnectedToServer += CoreClient_ConnectedToServer;
 			gameStateController.EntityAdded += OnEntityAdded;
@@ -37,7 +44,7 @@ namespace Moongate.Messenger
 
 		private void OnEntityUpdated (object sender, EntityArgs e)
 		{
-			if (e.Entity.Owner == LocalId.Guid)
+			if (e.Entity.Owner == identityProvider.Id.Guid)
 			{
 				var t = transmittableFactory.Build(TransmissionType.EntityTransmit, e);
 
@@ -47,7 +54,7 @@ namespace Moongate.Messenger
 
 		private void OnEntityAdded (object sender, EntityArgs e)
 		{
-			if (e.Entity.Owner == LocalId.Guid)
+			if (e.Entity.Owner == identityProvider.Id.Guid)
 			{
 				var t = transmittableFactory.Build(TransmissionType.EntityTransmit, e);
 

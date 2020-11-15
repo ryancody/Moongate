@@ -1,4 +1,4 @@
-﻿using Moongate.Transmittable.Models;
+﻿using Moongate.Models.Transmittable;
 
 namespace Moongate.Messaging.Handler
 {

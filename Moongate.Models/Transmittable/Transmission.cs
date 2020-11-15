@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Moongate.Transmittable.Models
+namespace Moongate.Models.Transmittable
 {
 	[Serializable]
 	public class Transmission : ITransmittable
