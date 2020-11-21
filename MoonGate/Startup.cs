@@ -37,10 +37,12 @@ namespace Moongate
 			if (isServer)
 			{
 				services.AddSingleton(typeof(Common), new TelepathyServer());
+				services.AddServer();
 			}
 			else
 			{
 				services.AddSingleton(typeof(Common), new TelepathyClient());
+				services.AddClient();
 			}
 
 			services.AddMessageListener();
@@ -52,8 +54,6 @@ namespace Moongate
 			services.AddHandlerFactory();
 
 			services.AddStateController();
-
-
 		}
 	}
 }

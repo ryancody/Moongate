@@ -23,6 +23,7 @@ namespace Moongate.Transmittable.Factory
 				Payload = payload,
 				SenderGuid = identityProvider.Id.Guid
 			};
+
 			return t;
 		}
 	}

@@ -3,6 +3,7 @@ using Moongate.Logger;
 using Moongate.Messaging.Handler;
 using Moongate.Messaging.Receiver;
 using Moongate.Models.Events;
+using Moongate.Models.Identity;
 using Moongate.Models.Transmittable;
 using Moq;
 using Xunit;
@@ -26,31 +27,80 @@ namespace Moongate.Transmittable.Processor.Test
 											mockIdentityProvider.Object);
 		}
 
+		public Transmission GetTransmission (string guid) =>
+			 new Transmission
+			 {
+				 SenderConnectionId = 0,
+				 SenderGuid = guid,
+				 TransmissionType = TransmissionType.EntityTransmit
+			 };
+
 		[Fact]
-		public void OnTransmissionReceived_Triggered_Success ()
+		public void Process_DoesntProcessMessagesThatAreMyOwn_Successfully ()
 		{
-			var args = new TransmissionArgs
-			{
-				Transmission = new Transmission
+			var transmission = GetTransmission("My Guid");
+
+			mockIdentityProvider.Setup(i => i.Id)
+				.Returns(new Id
 				{
-					TransmissionType = TransmissionType.EntityTransmit
-				}
-			};
-
-			SetupMessageReceiverEvent(args);
-
-			mockMessageReceiver.Raise(m => m.TransmissionReceived += null, args);
-
-			mockHandlerProvider.Setup(h => h.GetHandler(TransmissionType.EntityTransmit))
+					Guid = "My Guid"
+				})
 				.Verifiable();
 
-			mockHandlerProvider.Verify();
+			mockHandlerProvider.Setup(h => h.GetHandler(TransmissionType.EntityTransmit))
+				.Returns(new EntityHandler(mockLogger.Object))
+				.Verifiable();
+
+			transmittableProcessor.Process(transmission);
+
+			mockHandlerProvider.Verify(h => h.GetHandler(TransmissionType.EntityTransmit), Times.Never);
+			mockIdentityProvider.Verify();
 		}
 
-		private void SetupMessageReceiverEvent (TransmissionArgs args)
+		[Fact]
+		public void Process_ProcessesMessagesThatArentMyOwn_Successfully ()
 		{
-			mockMessageReceiver.Setup(m => m.TriggerTransmissionReceived(args))
-								.Raises(i => i.TransmissionReceived += transmittableProcessor.OnTransmissionReceived, null, args);
+			var transmission = GetTransmission("Some Other Guid");
+
+			mockIdentityProvider.Setup(i => i.Id)
+				.Returns(new Id
+				{
+					Guid = "Someone Else's Guid"
+				})
+				.Verifiable();
+
+			transmittableProcessor.Process(transmission);
+
+			mockHandlerProvider.Verify(h => h.GetHandler(TransmissionType.EntityTransmit), Times.Once);
+			mockIdentityProvider.Verify();
 		}
+
+		// TODO: Figure out how to mock event
+		//[Fact]
+		//public void OnTransmissionReceived_Triggered_Success ()
+		//{
+		//	var args = new TransmissionArgs
+		//	{
+		//		Transmission = new Transmission
+		//		{
+		//			TransmissionType = TransmissionType.EntityTransmit
+		//		}
+		//	};
+
+		//	SetupMessageReceiverEvent(args);
+
+		//	mockMessageReceiver.Raise(m => m.TransmissionReceived += null, args);
+
+		//	mockHandlerProvider.Setup(h => h.GetHandler(TransmissionType.EntityTransmit))
+		//		.Verifiable();
+
+		//	mockHandlerProvider.Verify();
+		//}
+
+		//private void SetupMessageReceiverEvent (TransmissionArgs args)
+		//{
+		//	mockMessageReceiver.Setup(m => m.TriggerTransmissionReceived(args))
+		//						.Raises(i => i.TransmissionReceived += transmittableProcessor.OnTransmissionReceived, null, args);
+		//}
 	}
 }

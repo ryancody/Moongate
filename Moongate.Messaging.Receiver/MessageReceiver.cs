@@ -6,7 +6,9 @@ using Moongate.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Moongate.Messaging.Receiver.Test")]
 namespace Moongate.Messaging.Receiver
 {
 	public class MessageReceiver : IMessageReceiver
@@ -15,7 +17,7 @@ namespace Moongate.Messaging.Receiver
 		private readonly ISerializer serializer;
 
 		public EventHandler<TransmissionArgs> TransmissionReceived { get; set; }
-		
+
 		public MessageReceiver (ILogger logger, ISerializer serializer, IMessageListener messageListener)
 		{
 			this.logger = logger;
@@ -29,47 +31,33 @@ namespace Moongate.Messaging.Receiver
 			Receive(messageArgs.SenderConnectionId, messageArgs.Payload);
 		}
 
-		public void TriggerTransmissionReceived (TransmissionArgs args)
+		internal void TriggerTransmissionReceived (TransmissionArgs args)
 		{
 			TransmissionReceived?.Invoke(this, args);
 		}
 
 		/// <summary>
-		/// Queues a single transmittable.
-		/// </summary>
-		/// <param name="transmittable"></param>
-		void Receive (int? fromConnectionId, ITransmittable transmittable)
-		{
-			transmittable.SenderConnectionId = fromConnectionId;
-
-			var e = new TransmissionArgs() 
-			{ 
-				Transmission = transmittable				
-			};
-
-			TriggerTransmissionReceived(e);
-		}
-
-		/// <summary>
-		/// Deserializes a batch of transmittables and sends them to be queued up by Receive.
+		/// Deserializes a batch of transmittables and sends them to TransmittableProcessor.
 		/// </summary>
 		/// <param name="byteArray"></param>
-		void Receive (int? fromConnectionId, byte[] byteArray)
+		internal void Receive (int? fromConnectionId, byte[] byteArray)
 		{
 			var transmittables = serializer.Deserialize<IEnumerable<ITransmittable>>(byteArray);
 
-			Receive(fromConnectionId, transmittables);
-		}
-
-		/// <summary>
-		/// Receives a batch of transmittables and queues them up.  Fires MessageReceived after they are queued.
-		/// </summary>
-		/// <param name="transmittables"></param>
-		void Receive (int? fromConnectionId, IEnumerable<ITransmittable> transmittables)
-		{
 			transmittables.ToList().ForEach(t =>
 			{
-				Receive(fromConnectionId, t);
+				var transmissionArgs = new TransmissionArgs
+				{
+					Transmission = new Transmission
+					{
+						Payload = t.Payload,
+						SenderConnectionId = fromConnectionId,
+						SenderGuid = t.SenderGuid,
+						TransmissionType = t.TransmissionType
+					}
+				};
+
+				TriggerTransmissionReceived(transmissionArgs);
 			});
 		}
 	}

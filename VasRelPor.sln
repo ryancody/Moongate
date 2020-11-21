@@ -35,7 +35,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Handler"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Transmittable.Processor.Test", "Moongate.Transmittable.Processor.Test\Moongate.Transmittable.Processor.Test.csproj", "{FDB29D30-110D-405B-93BA-A629A9BBE657}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Identity.Provider", "Moongate.Identity.Provider\Moongate.Identity.Provider.csproj", "{E0C7C57B-FFFE-422A-BEA6-165BC3F25780}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Identity.Provider", "Moongate.Identity.Provider\Moongate.Identity.Provider.csproj", "{E0C7C57B-FFFE-422A-BEA6-165BC3F25780}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Messaging.Receiver.Test", "Moongate.Messaging.Receiver.Test\Moongate.Messaging.Receiver.Test.csproj", "{63B66AA5-0D98-45F5-96B5-86D5B01C377D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Messaging.Handler.Tests", "Moongate.Messaging.Handler.Tests\Moongate.Messaging.Handler.Tests.csproj", "{D297A601-23BE-417E-A022-D219A3AF5ED7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +115,14 @@ Global
 		{E0C7C57B-FFFE-422A-BEA6-165BC3F25780}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0C7C57B-FFFE-422A-BEA6-165BC3F25780}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0C7C57B-FFFE-422A-BEA6-165BC3F25780}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63B66AA5-0D98-45F5-96B5-86D5B01C377D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63B66AA5-0D98-45F5-96B5-86D5B01C377D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63B66AA5-0D98-45F5-96B5-86D5B01C377D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63B66AA5-0D98-45F5-96B5-86D5B01C377D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D297A601-23BE-417E-A022-D219A3AF5ED7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D297A601-23BE-417E-A022-D219A3AF5ED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D297A601-23BE-417E-A022-D219A3AF5ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D297A601-23BE-417E-A022-D219A3AF5ED7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
