@@ -16,7 +16,7 @@ namespace Moongate.Network.Events
 		public override EventHandler<PingArgs> PingReceived { get; set; }
 		public override EventHandler<EntityArgs> EntityAdded { get; set; }
 		public override EventHandler<EntityArgs> EntityUpdated { get; set; }
-		public override EventHandler<ControlArgs> PlayerInputChanged { get; set; }
+		public override EventHandler<PlayerInputArgs> PlayerInputChanged { get; set; }
 
 		public EventPublisher (ILogger logger, IHandlerProvider handlerProvider, GameStateController gameStateController) 
 		{
@@ -25,13 +25,13 @@ namespace Moongate.Network.Events
 			this.gameStateController = gameStateController;
 
 			handlerProvider.PingHandler.PingReceived += OnPingReceived;
-			handlerProvider.PlayerInputHandler.PlayerInputChanged += OnPlayerInputChanged;
+			handlerProvider.PlayerInputHandler.PlayerInput += OnPlayerInputChanged;
 			gameStateController.EntityAdded += OnEntityAdded;
 			gameStateController.EntityUpdated += OnEntityUpdated;
 
 		}
 
-		public override void OnPlayerInputChanged (object sender, ControlArgs args)
+		public override void OnPlayerInputChanged (object sender, PlayerInputArgs args)
 		{
 			PlayerInputChanged?.Invoke(this, args);
 		}

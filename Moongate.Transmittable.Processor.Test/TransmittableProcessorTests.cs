@@ -2,7 +2,6 @@ using Moongate.Identity.Provider;
 using Moongate.Logger;
 using Moongate.Messaging.Handler;
 using Moongate.Messaging.Receiver;
-using Moongate.Models.Events;
 using Moongate.Models.Identity;
 using Moongate.Models.Transmittable;
 using Moq;

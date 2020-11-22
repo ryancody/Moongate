@@ -7,15 +7,15 @@ namespace Moongate.Messaging.Handler
 {
 	public class PlayerInputHandler : BaseHandler, ITransmissionHandler
 	{
-		public event EventHandler<ControlArgs> PlayerInputChanged;
+		public event EventHandler<PlayerInputArgs> PlayerInput;
 
 		public PlayerInputHandler (ILogger logger) : base(logger) { }
 
 		public void Handle (ITransmittable t)
 		{
-			var playerInputArgs = (ControlArgs)t.Payload;
+			var playerInputArgs = (PlayerInputArgs)t.Payload;
 
-			PlayerInputChanged?.Invoke(this, playerInputArgs);
+			PlayerInput?.Invoke(this, playerInputArgs);
 		}
 	}
 }

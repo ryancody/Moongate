@@ -7,6 +7,7 @@ namespace Moongate.Messaging.Handler
 		ITransmissionHandler GetHandler (TransmissionType t);
 		PlayerConnectedHandler PlayerConnectedHandler { get; }
 		PlayerHandshakeHandler PlayerHandshakeHandler { get; }
+		PlayerDisconnectedHandler PlayerDisconnectedHandler { get; }
 		PlayerInputHandler PlayerInputHandler { get; }
 		GameStateRequestHandler GameStateRequestHandler { get; }
 		EntityHandler EntityHandler { get; }

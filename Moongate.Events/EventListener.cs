@@ -19,7 +19,7 @@ namespace Moongate.Network.Events
 			this.messenger = messenger;
 		}
 
-		public void OnPlayerInputChanged (object sender, ControlArgs e)
+		public void OnPlayerInputChanged (object sender, PlayerInputArgs e)
 		{
 			var t = transmittableFactory.Build(TransmissionType.PlayerInput, e);
 			messenger.QueueTransmission(t);

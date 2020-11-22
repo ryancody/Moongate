@@ -46,12 +46,12 @@ namespace Moongate.Models.Events
 	}
 
 	[Serializable]
-	public class ControlArgs : EventArgs, IEquatable<ControlArgs>
+	public class PlayerInputArgs : EventArgs, IEquatable<PlayerInputArgs>
 	{
 		public string ControllerGuid { get; set; }
 		public Vector Vector { get; set; } = new Vector();
 
-		public bool Equals (ControlArgs other)
+		public bool Equals (PlayerInputArgs other)
 		{
 			if (other == null) throw new NullReferenceException();
 

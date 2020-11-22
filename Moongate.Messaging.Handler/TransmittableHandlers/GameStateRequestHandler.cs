@@ -7,8 +7,8 @@ namespace Moongate.Messaging.Handler
 {
 	public class GameStateRequestHandler : BaseHandler, ITransmissionHandler
 	{
-		public static event EventHandler<GameStateRequestArgs> GameStateReceived;
-		public static event EventHandler<GameStateRequestArgs> GameStateRequested;
+		public event EventHandler<GameStateRequestArgs> GameStateReceived;
+		public event EventHandler<GameStateRequestArgs> GameStateRequested;
 
 		public GameStateRequestHandler (ILogger logger) : base(logger) { }
 

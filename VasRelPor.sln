@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Receiver
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Messenger", "Moongate.Messaging.Messenger\Moongate.Messaging.Messenger.csproj", "{18146876-D995-46EB-8860-63C1FF849262}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.StateController", "Moongate.StateController\Moongate.StateController.csproj", "{67B4FADF-1F20-4C11-A0B9-1E9671DB022D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.State.Controller", "Moongate.State.Controller\Moongate.State.Controller.csproj", "{67B4FADF-1F20-4C11-A0B9-1E9671DB022D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Transmittable.Factory", "Moongate.Transmittable.Factory\Moongate.Transmittable.Factory.csproj", "{3A3A890C-0F74-4BC0-8A5F-1260879C7A54}"
 EndProject
@@ -37,9 +37,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Transmittable.Proc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Identity.Provider", "Moongate.Identity.Provider\Moongate.Identity.Provider.csproj", "{E0C7C57B-FFFE-422A-BEA6-165BC3F25780}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Messaging.Receiver.Test", "Moongate.Messaging.Receiver.Test\Moongate.Messaging.Receiver.Test.csproj", "{63B66AA5-0D98-45F5-96B5-86D5B01C377D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Receiver.Test", "Moongate.Messaging.Receiver.Test\Moongate.Messaging.Receiver.Test.csproj", "{63B66AA5-0D98-45F5-96B5-86D5B01C377D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Messaging.Handler.Tests", "Moongate.Messaging.Handler.Tests\Moongate.Messaging.Handler.Tests.csproj", "{D297A601-23BE-417E-A022-D219A3AF5ED7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Handler.Test", "Moongate.Messaging.Handler.Test\Moongate.Messaging.Handler.Test.csproj", "{9C451551-7532-403B-BE65-997AB0406B1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Events.Listener", "Moongate.Events.Listener\Moongate.Events.Listener.csproj", "{33650FC7-0E07-4A4F-9CC8-EE9CC2066FDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,10 +121,14 @@ Global
 		{63B66AA5-0D98-45F5-96B5-86D5B01C377D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63B66AA5-0D98-45F5-96B5-86D5B01C377D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63B66AA5-0D98-45F5-96B5-86D5B01C377D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D297A601-23BE-417E-A022-D219A3AF5ED7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D297A601-23BE-417E-A022-D219A3AF5ED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D297A601-23BE-417E-A022-D219A3AF5ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D297A601-23BE-417E-A022-D219A3AF5ED7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C451551-7532-403B-BE65-997AB0406B1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C451551-7532-403B-BE65-997AB0406B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C451551-7532-403B-BE65-997AB0406B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C451551-7532-403B-BE65-997AB0406B1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33650FC7-0E07-4A4F-9CC8-EE9CC2066FDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33650FC7-0E07-4A4F-9CC8-EE9CC2066FDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33650FC7-0E07-4A4F-9CC8-EE9CC2066FDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33650FC7-0E07-4A4F-9CC8-EE9CC2066FDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

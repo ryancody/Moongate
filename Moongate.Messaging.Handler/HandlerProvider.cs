@@ -5,21 +5,23 @@ using System.Collections.Generic;
 
 namespace Moongate.Messaging.Handler
 {
-	class HandlerProvider : IHandlerProvider
+	public class HandlerProvider : IHandlerProvider
 	{
 		readonly Dictionary<TransmissionType, ITransmissionHandler> handlers;
 
-		public PlayerConnectedHandler	PlayerConnectedHandler { get; }
-		public PlayerHandshakeHandler	PlayerHandshakeHandler { get; }
-		public PlayerInputHandler		PlayerInputHandler { get; }
-		public GameStateRequestHandler	GameStateRequestHandler { get; }
-		public EntityHandler			EntityHandler { get; }
-		public PingHandler				PingHandler { get; }
+		public PlayerConnectedHandler		PlayerConnectedHandler { get; }
+		public PlayerHandshakeHandler		PlayerHandshakeHandler { get; }
+		public PlayerDisconnectedHandler	PlayerDisconnectedHandler { get; }
+		public PlayerInputHandler			PlayerInputHandler { get; }
+		public GameStateRequestHandler		GameStateRequestHandler { get; }
+		public EntityHandler				EntityHandler { get; }
+		public PingHandler					PingHandler { get; }
 
 		public HandlerProvider (ILogger logger)
 		{
 			PlayerConnectedHandler = new PlayerConnectedHandler(logger);
 			PlayerHandshakeHandler = new PlayerHandshakeHandler(logger);
+			PlayerDisconnectedHandler = new PlayerDisconnectedHandler(logger);
 			PlayerInputHandler = new PlayerInputHandler(logger);
 			GameStateRequestHandler = new GameStateRequestHandler(logger);
 			EntityHandler = new EntityHandler(logger);
@@ -28,6 +30,7 @@ namespace Moongate.Messaging.Handler
 			handlers = new Dictionary<TransmissionType, ITransmissionHandler>
 			{
 				{ TransmissionType.PlayerConnected,		PlayerConnectedHandler },
+				{ TransmissionType.PlayerDisconnected,  PlayerDisconnectedHandler },
 				{ TransmissionType.PlayerHandshake,		PlayerHandshakeHandler },
 				{ TransmissionType.PlayerInput,			PlayerInputHandler },
 				{ TransmissionType.GameStateRequest,	GameStateRequestHandler },

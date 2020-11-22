@@ -36,7 +36,7 @@ namespace Moongate.Messaging.Messenger
 
 			handlerProvider.PingHandler.PingReceived += OnPingReceived;
 			handlerProvider.PlayerHandshakeHandler.PlayerHandshake += OnPlayerHandshake;
-			handlerProvider.PlayerInputHandler.PlayerInputChanged += OnPlayerInput;
+			handlerProvider.PlayerInputHandler.PlayerInput += OnPlayerInput;
 			handlerProvider.EntityHandler.EntityReceived += OnEntityReceived;
 		}
 
@@ -47,7 +47,7 @@ namespace Moongate.Messaging.Messenger
 			QueueTransmission(t);
 		}
 
-		private void OnPlayerInput (object sender, ControlArgs e)
+		private void OnPlayerInput (object sender, PlayerInputArgs e)
 		{
 			try
 			{
