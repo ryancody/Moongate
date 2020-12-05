@@ -6,7 +6,7 @@ using Moongate.Models.Transmittable;
 using Moongate.State.Models;
 using Moongate.Transmittable.Factory;
 
-namespace Moongate.Farspeaker
+namespace Moongate.IO
 {
 	public class Input
 	{
@@ -15,7 +15,7 @@ namespace Moongate.Farspeaker
 		private readonly IMessenger messenger;
 		private readonly IIdentityProvider identityProvider;
 
-		public Input (ILogger logger, ITransmittableFactory transmittableFactory, IMessenger messenger, IIdentityProvider identityProvider)
+		internal Input (ILogger logger, ITransmittableFactory transmittableFactory, IMessenger messenger, IIdentityProvider identityProvider)
 		{
 			this.logger = logger;
 			this.transmittableFactory = transmittableFactory;

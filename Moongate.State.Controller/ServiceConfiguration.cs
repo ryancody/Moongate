@@ -1,23 +1,25 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Moongate.Messaging.Handler;
+using Moongate.State.Controller;
 using Moongate.State.Models;
-using Moongate.StateController;
 
 namespace Moongate.Logger
 {
 	public static class ServiceConfiguration
 	{
-		public static void AddStateController (this IServiceCollection services)
+		public static void AddStateControllers (this IServiceCollection services)
 		{
-			services.AddSingleton<PlayerStateController>(s => 
+			services.AddSingleton(s => 
 			{
 				var logger = s.GetRequiredService<ILogger>();
 				return new PlayerStateController(logger, new PlayerState());
 			});
 
-			services.AddSingleton<GameStateController>(s => 
+			services.AddSingleton(s => 
 			{
 				var logger = s.GetRequiredService<ILogger>();
-				return new GameStateController(logger, new GameState());
+				var handlerProvider = s.GetRequiredService<IHandlerProvider>();
+				return new GameStateController(logger, new GameState(), handlerProvider);
 			});
 		}
 	}

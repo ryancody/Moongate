@@ -26,7 +26,7 @@ namespace Moongate.Messaging.Receiver
 			messageListener.DataReceived += OnDataReceived;
 		}
 
-		public void OnDataReceived (object sender, MessageArgs messageArgs)
+		private void OnDataReceived (object sender, MessageArgs messageArgs)
 		{
 			Receive(messageArgs.SenderConnectionId, messageArgs.Payload);
 		}

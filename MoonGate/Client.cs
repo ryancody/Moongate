@@ -1,8 +1,9 @@
-﻿using Moongate.Identity.Provider;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Moongate.Identity.Provider;
+using Moongate.IO;
 using Moongate.Logger;
-using Moongate.Messaging.Listener;
 using Moongate.Messaging.Messenger;
-using Moongate.Models.Events;
+using Moongate.Messaging.Listener;
 using Moongate.Models.Identity;
 using Moongate.Models.Transmittable;
 using System;
@@ -15,6 +16,7 @@ namespace Moongate
 		public bool Connected { get => telepathyClient.Connected; }
 		public bool Connecting { get => telepathyClient.Connecting; }
 		public Id Id { get { return identityProvider.Id; } }
+		public Farspeaker Farspeaker { get; set; }
 
 		private readonly ILogger logger;
 		private readonly TelepathyClient telepathyClient;
@@ -22,30 +24,28 @@ namespace Moongate
 		private readonly IMessenger messenger;
 		private readonly IIdentityProvider identityProvider;
 
-		public static event EventHandler<PlayerConnectionArgs> ConnectedToServer;
-		public static event EventHandler<PlayerConnectionArgs> DisconnectedFromServer;
+		private readonly DependencyInjection services;
 
-		public Client (ILogger logger,
-						TelepathyClient telepathyClient,
-						IMessageListener messageListener,
-						IMessenger messenger,
-						IIdentityProvider identityProvider)
+		public Client ()
 		{
-			this.logger = logger;
-			this.telepathyClient = telepathyClient;
-			this.messageListener = messageListener;
-			this.messenger = messenger;
-
-			logger.Info($@"Client
-			 - Time: {DateTime.Now}
-			 - Name: {identityProvider.Id.Name}
-			 - GUID: {identityProvider.Id.Guid}");
+			services = new DependencyInjection(false);
+			logger = services.ServiceProvider.GetService<ILogger>();
+			telepathyClient = services.ServiceProvider.GetRequiredService<TelepathyClient>();
+			messageListener = services.ServiceProvider.GetRequiredService<IMessageListener>();
+			messenger = services.ServiceProvider.GetRequiredService<IMessenger>();
+			identityProvider = services.ServiceProvider.GetRequiredService<IIdentityProvider>();
 		}
 
 		public void Connect (string host, int port)
 		{
 			telepathyClient.Connect(host, port);
 			logger.Info("Client connected");
+		}
+
+		public void Disconnect ()
+		{
+			telepathyClient.Disconnect();
+			logger.Info("Client disconnected");
 		}
 
 		public void Run ()
@@ -61,17 +61,6 @@ namespace Moongate
 				logger.Error(e.ToString());
 				Console.WriteLine(e);
 			}
-		}
-
-		public void Ping ()
-		{
-			((ClientMessenger)messenger).Ping();
-		}
-
-		public void Disconnect ()
-		{
-			DisconnectedFromServer?.Invoke(this, null);
-			telepathyClient.Disconnect();
 		}
 
 		public void QueueTransmission (ITransmittable t)

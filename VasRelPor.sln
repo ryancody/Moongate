@@ -23,8 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Transmittable.Fact
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Models", "Moongate.Models\Moongate.Models.csproj", "{27CF3D47-BA8B-4767-937A-D0C5BCCB087D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Events", "Moongate.Events\Moongate.Events.csproj", "{D579123D-69B8-417A-9C7A-010CCB51F2F8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Utils", "Moongate.Utils\Moongate.Utils.csproj", "{19CA8703-C034-42FC-985F-BCB9BCA8D3A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Listener", "Moongate.Messaging.Listener\Moongate.Messaging.Listener.csproj", "{6BCB3D21-528C-4DE6-801F-43902F386F58}"
@@ -41,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Receiver
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Handler.Test", "Moongate.Messaging.Handler.Test\Moongate.Messaging.Handler.Test.csproj", "{9C451551-7532-403B-BE65-997AB0406B1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Events.Listener", "Moongate.Events.Listener\Moongate.Events.Listener.csproj", "{33650FC7-0E07-4A4F-9CC8-EE9CC2066FDD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Events.Reactor", "Moongate.Events.Reactor\Moongate.Events.Reactor.csproj", "{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,10 +87,6 @@ Global
 		{27CF3D47-BA8B-4767-937A-D0C5BCCB087D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27CF3D47-BA8B-4767-937A-D0C5BCCB087D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27CF3D47-BA8B-4767-937A-D0C5BCCB087D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D579123D-69B8-417A-9C7A-010CCB51F2F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D579123D-69B8-417A-9C7A-010CCB51F2F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D579123D-69B8-417A-9C7A-010CCB51F2F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D579123D-69B8-417A-9C7A-010CCB51F2F8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{19CA8703-C034-42FC-985F-BCB9BCA8D3A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{19CA8703-C034-42FC-985F-BCB9BCA8D3A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19CA8703-C034-42FC-985F-BCB9BCA8D3A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -125,10 +119,10 @@ Global
 		{9C451551-7532-403B-BE65-997AB0406B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C451551-7532-403B-BE65-997AB0406B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C451551-7532-403B-BE65-997AB0406B1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{33650FC7-0E07-4A4F-9CC8-EE9CC2066FDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33650FC7-0E07-4A4F-9CC8-EE9CC2066FDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33650FC7-0E07-4A4F-9CC8-EE9CC2066FDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33650FC7-0E07-4A4F-9CC8-EE9CC2066FDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

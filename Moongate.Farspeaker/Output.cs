@@ -3,7 +3,7 @@ using Moongate.Messaging.Handler;
 using Moongate.Models.Events;
 using System;
 
-namespace Moongate.Farspeaker
+namespace Moongate.IO
 {
 	public class Output
 	{
@@ -16,7 +16,7 @@ namespace Moongate.Farspeaker
 		public event EventHandler<EntityArgs> EntityReceived;
 		public event EventHandler<GameStateRequestArgs> GameStateReceived;
 
-		public Output (ILogger logger, IHandlerProvider handlerProvider)
+		internal Output (ILogger logger, IHandlerProvider handlerProvider)
 		{
 			this.logger = logger;
 
@@ -50,7 +50,10 @@ namespace Moongate.Farspeaker
 
 		private void OnPingReceived (object sender, PingArgs e)
 		{
-			PingReceived?.Invoke(this, e);
+			if (e.Ping != null)
+			{ 
+				PingReceived?.Invoke(this, e);
+			}
 		}
 
 	}

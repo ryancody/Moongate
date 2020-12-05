@@ -13,7 +13,6 @@ namespace Moongate.Messaging.Handler
 
 		public void Handle (ITransmittable t)
 		{
-			// unpack payload
 			var playerHandshakeArgs = (PlayerHandshakeArgs)t.Payload;
 			playerHandshakeArgs.ConnectionId = t.SenderConnectionId.GetValueOrDefault();
 

@@ -1,8 +1,9 @@
-﻿using Moongate.Identity.Provider;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Moongate.Identity.Provider;
+using Moongate.IO;
 using Moongate.Logger;
 using Moongate.Messaging.Listener;
 using Moongate.Messaging.Messenger;
-using Moongate.Models.Events;
 using System;
 using TelepathyServer = Telepathy.Server;
 
@@ -16,32 +17,28 @@ namespace Moongate
 		private readonly ILogger logger;
 		private readonly IIdentityProvider identityProvider;
 
-		public static event EventHandler<PlayerConnectionArgs> PlayerConnected;
-		public static event EventHandler<PlayerConnectionArgs> PlayerDisconnected;
+		private readonly DependencyInjection services;
+
+		public Farspeaker Farspeaker { get; set; }
 
 		public bool Active { get => telepathyServer.Active; }
 
-		public Server (ILogger logger, 
-						TelepathyServer telepathyServer, 
-						IMessenger messenger, 
-						IMessageListener messageListener,
-						IIdentityProvider identityProvider)
+		public Server ()
 		{
-			this.telepathyServer = telepathyServer;
-			this.logger = logger;
-			this.messenger = messenger;
-			this.messageListener = messageListener;
-			this.identityProvider = identityProvider;
+			services = new DependencyInjection(true);
+			logger = services.ServiceProvider.GetService<ILogger>();
+			telepathyServer = services.ServiceProvider.GetRequiredService<TelepathyServer>();
+			messenger = services.ServiceProvider.GetRequiredService<IMessenger>();
+			messageListener = services.ServiceProvider.GetRequiredService<IMessageListener>();
+			identityProvider = services.ServiceProvider.GetRequiredService<IIdentityProvider>();
 		}
 
 		public void Start (int port)
 		{
-			Console.WriteLine("SERVER - Hi, I'm " + identityProvider.Id.Name);
-
 			logger.Info($@"Server
 			 - Time: {DateTime.Now}
-			 - Instance Name: {identityProvider.Id.Name}
-			 - GUID: {identityProvider.Id.Guid}");
+			 - Instance Name: {identityProvider.Id?.Name}
+			 - GUID: {identityProvider.Id?.Guid}");
 
 			telepathyServer.Start(port);
 		}

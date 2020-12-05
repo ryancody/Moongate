@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Moongate.Models.Events;
+﻿using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
 using Moongate.State.Models;
 using System;
@@ -8,13 +7,11 @@ namespace Moongate
 {
 	class Program
 	{
-		private static Startup services;
 		private static Client client;
 
 		static void Main (string[] args)
 		{
-			services = new Startup();
-			client = services.ServiceProvider.GetRequiredService<Client>();
+			client = new Client();
 
 			var running = true;
 			ConsoleKeyInfo consoleKeyInfo;
@@ -55,8 +52,7 @@ namespace Moongate
 								Guid = Guid.NewGuid().ToString(),
 								Id = "test ID",
 								Name = "test Name",
-								Owner = client.Id.Guid,
-								Position = new Position() { x = 0, y = 0 }
+								Owner = client.Id.Guid
 							};
 							var entityArgs = new EntityArgs()
 							{
@@ -73,7 +69,7 @@ namespace Moongate
 
 						case 'p':
 							Console.WriteLine("ping server");
-							client.Ping();
+							throw new NotImplementedException("Ping not implemented");
 							break;
 
 						default:

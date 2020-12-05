@@ -1,23 +1,19 @@
 ﻿using Moongate.Logger;
-using Moongate.Models.Events;
+using Moongate.Messaging.Handler;
 using Moongate.State.Models;
-using System;
 
-namespace Moongate.StateController
+namespace Moongate.State.Controller
 {
 	public class GameStateController
 	{
 		readonly ILogger logger;
 
-		public GameState GameState { get; }
+		public GameState GameState { get; set; }
 
-		public EventHandler<EntityArgs> EntityAdded { get; set; }
-		public EventHandler<EntityArgs> EntityUpdated { get; set; }
-
-		public GameStateController (ILogger _logger, GameState _gameState)
+		public GameStateController (ILogger logger, GameState gamestate, IHandlerProvider handlerProvider)
 		{
-			logger = _logger;
-			GameState = _gameState;
+			this.logger = logger;
+			GameState = gamestate;
 		}
 
 		public Entity GetEntity (string guid)
@@ -40,25 +36,11 @@ namespace Moongate.StateController
 		public void AddEntity (Entity e)
 		{
 			GameState.Entities.Add(e.Guid, e);
-
-			var args = new EntityArgs()
-			{
-				Entity = e
-			};
-
-			EntityAdded?.Invoke(this, args);
 		}
 
 		public void UpdateEntity (Entity e)
 		{
 			GameState.Entities[e.Guid] = e;
-
-			var args = new EntityArgs()
-			{
-				Entity = e
-			};
-
-			EntityUpdated?.Invoke(this, args);
 		}
 
 		public bool HasEntity (Entity e)

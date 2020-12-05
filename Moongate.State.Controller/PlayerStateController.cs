@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Moongate.StateController
+namespace Moongate.State.Controller
 {
 	public class PlayerStateController
 	{
@@ -54,7 +54,7 @@ namespace Moongate.StateController
 		/// <param name="connectionId"></param>
 		/// <param name="guid"></param>
 		/// <param name="name"></param>
-		public void AddPlayer (int connectionId, string guid, string name)
+		public void AddOrUpdatePlayer (int connectionId, string guid, string name)
 		{
 			var player = new Player()
 			{

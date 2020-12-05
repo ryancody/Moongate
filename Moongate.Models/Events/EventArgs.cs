@@ -21,7 +21,7 @@ namespace Moongate.Models.Events
 	public class PingArgs : EventArgs
 	{
 		public long InitialTimestamp { get; set; }
-		public long Ping { get; set; }
+		public long? Ping { get; set; }
 		public string SenderGuid { get; set; }
 	}
 
