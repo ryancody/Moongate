@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Moongate.Events.Reactor;
 using Moongate.Identity.Provider;
 using Moongate.IO;
 using Moongate.Logger;
 using Moongate.Messaging.Listener;
 using Moongate.Messaging.Messenger;
 using Moongate.Messaging.Receiver;
+using Moongate.Transmittable.Factory;
 using Moongate.Transmittable.Processor;
 using Moongate.Utils;
 using System;
@@ -33,8 +35,7 @@ namespace Moongate
 		{
 			var services = new ServiceCollection();
 
-			var loggerConfig = new LoggerConfig();
-			services.AddLogger(loggerConfig);
+			services.AddLogger();
 
 			services.AddSerializer();
 
@@ -60,6 +61,8 @@ namespace Moongate
 
 			services.AddTransmittableProcessor();
 
+			services.AddTransmittableFactory();
+
 			services.AddHandlerFactory();
 
 			services.AddMessenger(isServer);
@@ -67,6 +70,8 @@ namespace Moongate
 			services.AddStateControllers();
 
 			services.AddIdentityProvider();
+
+			services.AddEventReactor();
 
 			return services.BuildServiceProvider();
 		}

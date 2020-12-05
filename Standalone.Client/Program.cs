@@ -54,22 +54,13 @@ namespace Moongate
 								Name = "test Name",
 								Owner = client.Id.Guid
 							};
-							var entityArgs = new EntityArgs()
-							{
-								Entity = entity
-							};
-							var entityTransmission = new Transmission()
-							{
-								TransmissionType = TransmissionType.EntityTransmit,
-								Payload = entityArgs,
-								SenderGuid = client.Id.Guid
-							};
-							client.QueueTransmission(entityTransmission);
+
+							client.Farspeaker.Input.TransmitEntity(entity);
 							break;
 
 						case 'p':
 							Console.WriteLine("ping server");
-							throw new NotImplementedException("Ping not implemented");
+							client.Farspeaker.Input.Ping();
 							break;
 
 						default:

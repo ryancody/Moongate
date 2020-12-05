@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Moongate.Models.Identity;
 
 namespace Moongate.Identity.Provider
 {
@@ -6,9 +7,12 @@ namespace Moongate.Identity.Provider
 	{
 		public static void AddIdentityProvider (this IServiceCollection services)
 		{
-			services.AddSingleton<IIdentityProvider>(s => 
+			services.AddSingleton<IIdentityProvider, IdentityProvider>(s =>
 			{
-				return new IdentityProvider();
+				return new IdentityProvider
+				{
+					Id = new Id()
+				};
 			});
 		}
 	}

@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Moongate.Events.Reactor;
 using Moongate.Identity.Provider;
 using Moongate.IO;
 using Moongate.Logger;
-using Moongate.Messaging.Messenger;
 using Moongate.Messaging.Listener;
+using Moongate.Messaging.Messenger;
 using Moongate.Models.Identity;
 using Moongate.Models.Transmittable;
 using System;
@@ -23,6 +24,7 @@ namespace Moongate
 		private readonly IMessageListener messageListener;
 		private readonly IMessenger messenger;
 		private readonly IIdentityProvider identityProvider;
+		private readonly EventReactor eventReactor;
 
 		private readonly DependencyInjection services;
 
@@ -34,18 +36,19 @@ namespace Moongate
 			messageListener = services.ServiceProvider.GetRequiredService<IMessageListener>();
 			messenger = services.ServiceProvider.GetRequiredService<IMessenger>();
 			identityProvider = services.ServiceProvider.GetRequiredService<IIdentityProvider>();
+			eventReactor = services.ServiceProvider.GetRequiredService<EventReactor>();
+
+			identityProvider.Id.IsServer = false;
 		}
 
 		public void Connect (string host, int port)
 		{
 			telepathyClient.Connect(host, port);
-			logger.Info("Client connected");
 		}
 
 		public void Disconnect ()
 		{
 			telepathyClient.Disconnect();
-			logger.Info("Client disconnected");
 		}
 
 		public void Run ()

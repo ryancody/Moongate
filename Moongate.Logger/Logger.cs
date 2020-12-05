@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Moongate.Identity.Provider;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,26 +18,24 @@ namespace Moongate.Logger
 	{
 		private readonly string prefix = "";
 		private readonly string fileName;
-		private List<string> writeBuffer;
+		private IEnumerable<string> writeBuffer;
 		private readonly LoggerLevel[] logFilter;
 
-		public Logger (string p, LoggerLevel[] l)
+		private readonly IIdentityProvider identityProvider;
+
+		public Logger (string p, LoggerLevel[] l, IIdentityProvider identityProvider)
 		{
 			logFilter = l;
 			prefix = p;
 			fileName = BuildFileName();
 			writeBuffer = new List<string>();
-		}
 
-		public Logger (LoggerLevel[] l)
-		{
-			logFilter = l;
-			fileName = BuildFileName();
+			this.identityProvider = identityProvider;
 		}
 
 		string BuildFileName ()
 		{
-			return DateTime.Now.ToString("MM-dd-yyyy-hh-mm-sstt") + "-"/* + LocalId.Guid.Substring(0, 4) + ".txt"*/;
+			return DateTime.Now.ToString("MM-dd-yyyy-hh-mm-sstt") + "-" + identityProvider.Id.Guid.Substring(0, 4) + ".txt";
 		}
 		
 		public void Error (string message)

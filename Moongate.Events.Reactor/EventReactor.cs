@@ -1,11 +1,15 @@
-﻿using Moongate.Logger;
-using Moongate.Messaging;
+﻿using Moongate.Events.Reactor.EventHandlers;
+using Moongate.Identity.Provider;
+using Moongate.Logger;
 using Moongate.Messaging.Handler;
+using Moongate.Messaging.Listener;
+using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
 using Moongate.State.Controller;
 using Moongate.Transmittable.Factory;
 using System;
+using System.Collections.Generic;
 
 namespace Moongate.Events.Reactor
 {
@@ -17,18 +21,27 @@ namespace Moongate.Events.Reactor
 		private readonly ITransmittableFactory transmittableFactory;
 		private readonly IMessenger messenger;
 
+		private readonly ISet<IEventHandler> eventHandlers;
+
 		public EventReactor (ILogger logger, 
 			IHandlerProvider handlerProvider, 
 			GameStateController gameStateController, 
 			PlayerStateController playerStateController,
 			ITransmittableFactory transmittableFactory, 
-			IMessenger messenger)
+			IMessageListener messageListener,
+			IMessenger messenger,
+			IIdentityProvider identityProvider)
 		{
 			this.logger = logger;
 			this.gameStateController = gameStateController;
 			this.playerStateController = playerStateController;
 			this.transmittableFactory = transmittableFactory;
 			this.messenger = messenger;
+
+			eventHandlers = new HashSet<IEventHandler>
+			{
+				new MessageListenerEventHandler(messageListener, messenger, transmittableFactory, identityProvider)
+			};
 
 			handlerProvider.PingHandler.PingReceived += OnPingReceived;
 			handlerProvider.PlayerInputHandler.PlayerInput += OnPlayerInput;
@@ -38,6 +51,7 @@ namespace Moongate.Events.Reactor
 			handlerProvider.EntityHandler.EntityReceived += OnEntityReceived;
 			handlerProvider.GameStateRequestHandler.GameStateReceived += GameStateReceived;
 		}
+
 
 		private void GameStateReceived (object sender, GameStateRequestArgs e)
 		{
@@ -84,11 +98,6 @@ namespace Moongate.Events.Reactor
 
 				messenger.QueueTransmission(transmission);
 			}
-		}
-
-		private void Propogate (ITransmittable transmittable)
-		{ 
-			
 		}
 	}
 }

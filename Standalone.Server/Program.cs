@@ -1,11 +1,10 @@
 ﻿using Moongate;
 
-namespace Network
+namespace Moongate
 {
 	class Program
 	{
         static bool running = true;
-        private static DependencyInjection services;
         static Server server;
 
         static void Main (string[] args)

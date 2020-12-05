@@ -31,6 +31,8 @@ namespace Moongate
 			messenger = services.ServiceProvider.GetRequiredService<IMessenger>();
 			messageListener = services.ServiceProvider.GetRequiredService<IMessageListener>();
 			identityProvider = services.ServiceProvider.GetRequiredService<IIdentityProvider>();
+
+			identityProvider.Id.IsServer = true;
 		}
 
 		public void Start (int port)
