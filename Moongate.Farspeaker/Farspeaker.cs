@@ -18,7 +18,7 @@ namespace Moongate.IO
 							IHandlerProvider handlerProvider)
 		{
 			Input = new Input(logger, transmittableFactory, messenger, identityProvider);
-			Output = new Output(logger, handlerProvider);
+			Output = new Output(logger, handlerProvider, identityProvider);
 		}
 	}
 }

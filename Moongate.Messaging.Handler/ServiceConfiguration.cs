@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Moongate.Identity.Provider;
 using Moongate.Logger;
 using Moongate.Messaging.Handler;
 

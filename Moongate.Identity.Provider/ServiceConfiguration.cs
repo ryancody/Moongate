@@ -5,13 +5,16 @@ namespace Moongate.Identity.Provider
 {
 	public static class ServiceConfiguration
 	{
-		public static void AddIdentityProvider (this IServiceCollection services)
+		public static void AddIdentityProvider (this IServiceCollection services, bool isServer)
 		{
-			services.AddSingleton<IIdentityProvider, IdentityProvider>(s =>
+			services.AddSingleton<IIdentityProvider>(s =>
 			{
 				return new IdentityProvider
 				{
 					Id = new Id()
+					{ 
+						IsServer = isServer
+					}
 				};
 			});
 		}

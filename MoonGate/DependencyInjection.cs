@@ -69,7 +69,7 @@ namespace Moongate
 
 			services.AddStateControllers();
 
-			services.AddIdentityProvider();
+			services.AddIdentityProvider(isServer);
 
 			services.AddEventReactor();
 

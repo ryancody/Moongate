@@ -15,7 +15,7 @@ namespace Moongate.IO
 			{
 				var logger = s.GetRequiredService<ILogger>();
 				var transmittableFactory = s.GetRequiredService<ITransmittableFactory>();
-				var messenger = s.GetRequiredService<ClientMessenger>();
+				var messenger = s.GetRequiredService<IMessenger>();
 				var identityProvider = s.GetRequiredService<IIdentityProvider>();
 				var handlerProvider = s.GetRequiredService<IHandlerProvider>();
 

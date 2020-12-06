@@ -13,16 +13,16 @@ namespace Moongate.Transmittable.Processor
 	public class TransmittableProcessor : ITransmittableProcessor
 	{
 		private readonly ILogger logger;
-		private readonly IHandlerProvider handlerFactory;
+		private readonly IHandlerProvider handlerProvider;
 		private readonly IIdentityProvider identityProvider;
 
 		public TransmittableProcessor (ILogger logger, 
 										IMessageReceiver messageReceiver, 
-										IHandlerProvider handlerFactory, 
+										IHandlerProvider handlerProvider, 
 										IIdentityProvider identityProvider)
 		{
 			this.logger = logger;
-			this.handlerFactory = handlerFactory;
+			this.handlerProvider = handlerProvider;
 			this.identityProvider = identityProvider;
 
 			messageReceiver.TransmissionReceived += OnTransmissionReceived;
@@ -39,7 +39,7 @@ namespace Moongate.Transmittable.Processor
 			{
 				if (message.SenderGuid != identityProvider.Id.Guid)
 				{
-					var handler = handlerFactory.GetHandler(message.TransmissionType);
+					var handler = handlerProvider.GetHandler(message.TransmissionType);
 
 					handler.Handle(message);
 

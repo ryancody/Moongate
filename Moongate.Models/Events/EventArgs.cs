@@ -7,7 +7,7 @@ namespace Moongate.Models.Events
 	[Serializable]
 	public class MessageArgs : EventArgs
 	{
-		public int SenderConnectionId { get; set; }
+		public int FromConnectionId { get; set; }
 		public byte[] Payload { get; set; }
 	}
 
@@ -20,19 +20,13 @@ namespace Moongate.Models.Events
 	[Serializable]
 	public class PingArgs : EventArgs
 	{
+		public string InitiatorGuid { get; set; }
 		public long InitialTimestamp { get; set; }
 		public long? Ping { get; set; }
-		public string SenderGuid { get; set; }
 	}
 
 	[Serializable]
-	public class PlayerConnectionArgs : EventArgs
-	{
-		public int ConnectionId { get; set; }
-	}
-
-	[Serializable]
-	public class PlayerHandshakeArgs : EventArgs
+	public class ClientArgs : EventArgs
 	{
 		public int ConnectionId { get; set; }
 		public string Guid { get; set; }
@@ -46,25 +40,10 @@ namespace Moongate.Models.Events
 	}
 
 	[Serializable]
-	public class PlayerInputArgs : EventArgs, IEquatable<PlayerInputArgs>
+	public class PlayerInputArgs : EventArgs
 	{
 		public string ControllerGuid { get; set; }
 		public Vector Vector { get; set; } = new Vector();
-
-		public bool Equals (PlayerInputArgs other)
-		{
-			if (other == null) throw new NullReferenceException();
-
-			if (ControllerGuid == other.ControllerGuid
-				&& Vector.Equals(other.Vector))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
 	}
 
 	[Serializable]

@@ -28,7 +28,7 @@ namespace Moongate.Messaging.Receiver
 
 		private void OnDataReceived (object sender, MessageArgs messageArgs)
 		{
-			Receive(messageArgs.SenderConnectionId, messageArgs.Payload);
+			Receive(messageArgs.FromConnectionId, messageArgs.Payload);
 		}
 
 		internal void TriggerTransmissionReceived (TransmissionArgs args)

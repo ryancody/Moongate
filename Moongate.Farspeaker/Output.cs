@@ -1,4 +1,5 @@
-﻿using Moongate.Logger;
+﻿using Moongate.Identity.Provider;
+using Moongate.Logger;
 using Moongate.Messaging.Handler;
 using Moongate.Models.Events;
 using System;
@@ -8,17 +9,19 @@ namespace Moongate.IO
 	public class Output
 	{
 		private readonly ILogger logger;
+		private readonly IIdentityProvider identity;
 
 		public event EventHandler<PingArgs> PingReceived;
 		public event EventHandler<PlayerInputArgs> PlayerInput;
-		public event EventHandler<PlayerConnectionArgs> PlayerConnected;
-		public event EventHandler<PlayerConnectionArgs> PlayerDisconnected;
+		public event EventHandler<ClientArgs> PlayerConnected;
+		public event EventHandler<ClientArgs> PlayerDisconnected;
 		public event EventHandler<EntityArgs> EntityReceived;
 		public event EventHandler<GameStateRequestArgs> GameStateReceived;
 
-		internal Output (ILogger logger, IHandlerProvider handlerProvider)
+		internal Output (ILogger logger, IHandlerProvider handlerProvider, IIdentityProvider identity)
 		{
 			this.logger = logger;
+			this.identity = identity;
 
 			handlerProvider.PingHandler.PingReceived += OnPingReceived;
 			handlerProvider.PlayerInputHandler.PlayerInput += OnPlayerInput;
@@ -33,12 +36,12 @@ namespace Moongate.IO
 			EntityReceived?.Invoke(this, e);
 		}
 
-		private void OnPlayerDisconnected (object sender, PlayerConnectionArgs e)
+		private void OnPlayerDisconnected (object sender, ClientArgs e)
 		{
 			PlayerDisconnected?.Invoke(this, e);
 		}
 
-		private void OnPlayerConnected (object sender, PlayerConnectionArgs e)
+		private void OnPlayerConnected (object sender, ClientArgs e)
 		{
 			PlayerConnected?.Invoke(this, e);
 		}
@@ -50,11 +53,14 @@ namespace Moongate.IO
 
 		private void OnPingReceived (object sender, PingArgs e)
 		{
-			if (e.Ping != null)
+			if (e.InitiatorGuid.Equals(identity.Id.Guid))
 			{ 
+				e.Ping = DateTimeOffset.Now.ToUnixTimeMilliseconds() - e.InitialTimestamp;
+
+				Console.WriteLine($"ping: {e.Ping} ms");
+
 				PingReceived?.Invoke(this, e);
 			}
 		}
-
 	}
 }

@@ -28,7 +28,7 @@ namespace Moongate.Messaging.Listener
 
 				var args = new MessageArgs
 				{
-					SenderConnectionId = msg.connectionId,
+					FromConnectionId = msg.connectionId,
 					Payload = msg.data
 				};
 

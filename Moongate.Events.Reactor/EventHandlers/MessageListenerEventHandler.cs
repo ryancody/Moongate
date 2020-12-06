@@ -1,4 +1,5 @@
 ﻿using Moongate.Identity.Provider;
+using Moongate.Logger;
 using Moongate.Messaging.Listener;
 using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
@@ -10,15 +11,18 @@ namespace Moongate.Events.Reactor.EventHandlers
 {
 	public class MessageListenerEventHandler : IEventHandler
 	{
+		private readonly ILogger logger;
 		private readonly IMessenger messenger;
 		private readonly ITransmittableFactory transmittableFactory;
 		private readonly IIdentityProvider identityProvider;
 
-		public MessageListenerEventHandler (IMessageListener messageListener, 
+		public MessageListenerEventHandler (ILogger logger, 
+			IMessageListener messageListener, 
 			IMessenger messenger, 
 			ITransmittableFactory transmittableFactory, 
 			IIdentityProvider identityProvider)
 		{
+			this.logger = logger;
 			this.messenger = messenger;
 			this.transmittableFactory = transmittableFactory;
 			this.identityProvider = identityProvider;
@@ -31,15 +35,18 @@ namespace Moongate.Events.Reactor.EventHandlers
 		{
 			if (identityProvider.Id.IsServer)
 			{
-				Console.WriteLine("player connected");
+				Console.WriteLine($"player [connection id {e.FromConnectionId}] connected, initiating handshake");
+				logger.Info($"player [connection id {e.FromConnectionId}] connected, initiating handshake");
 			}
 			else
 			{
-				var playerHandshakeArgs = new PlayerHandshakeArgs
+				Console.WriteLine($"connected to server");
+				logger.Info($"connected to server");
+
+				var playerHandshakeArgs = new ClientArgs
 				{
-					ConnectionId = e.SenderConnectionId,
-					Guid = identityProvider.Id.Guid,
-					Name = identityProvider.Id.Name
+					Name = identityProvider.Id.Name,
+					Guid = identityProvider.Id.Guid
 				};
 				var transmission = transmittableFactory.Build(TransmissionType.PlayerHandshake, playerHandshakeArgs);
 
@@ -49,7 +56,16 @@ namespace Moongate.Events.Reactor.EventHandlers
 
 		private void MessageListener_Disconnected (object sender, MessageArgs e)
 		{
-			throw new NotImplementedException();
+			if (identityProvider.Id.IsServer)
+			{
+				Console.WriteLine($"player [connection id {e.FromConnectionId}] disconnected");
+				logger.Info($"player [connection id {e.FromConnectionId}] disconnected");
+			}
+			else
+			{
+				Console.WriteLine("disconnected from server");
+				logger.Info("disconnected from server");
+			}
 		}
 	}
 }

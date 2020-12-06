@@ -5,6 +5,7 @@ using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
 using Moongate.State.Models;
 using Moongate.Transmittable.Factory;
+using System;
 
 namespace Moongate.IO
 {
@@ -25,7 +26,12 @@ namespace Moongate.IO
 
 		public void Ping ()
 		{
-			var transmission = transmittableFactory.Build(TransmissionType.Ping, null);
+			var pingArgs = new PingArgs
+			{
+				InitialTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+				InitiatorGuid = identityProvider.Id.Guid
+			};
+			var transmission = transmittableFactory.Build(TransmissionType.Ping, pingArgs);
 
 			messenger.QueueTransmission(transmission);
 		}

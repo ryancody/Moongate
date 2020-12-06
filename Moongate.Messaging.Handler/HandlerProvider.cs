@@ -1,4 +1,5 @@
-﻿using Moongate.Logger;
+﻿using Moongate.Identity.Provider;
+using Moongate.Logger;
 using Moongate.Models.Transmittable;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace Moongate.Messaging.Handler
 			}
 			catch
 			{
-				throw new Exception("Transmission type not found in Handler Provider: " + t);
+				throw new Exception($"Transmission type not found in Handler Provider: {t}");
 			}
 		}
 	}

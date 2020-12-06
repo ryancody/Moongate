@@ -7,19 +7,21 @@ namespace Moongate.Messaging.Handler
 {
 	public class PlayerHandshakeHandler : BaseHandler, ITransmissionHandler
 	{
-		public event EventHandler<PlayerHandshakeArgs> PlayerHandshake;
+		public event EventHandler<ClientArgs> PlayerHandshake;
 
 		public PlayerHandshakeHandler (ILogger logger) : base(logger) { }
 
 		public void Handle (ITransmittable t)
 		{
-			var playerHandshakeArgs = (PlayerHandshakeArgs)t.Payload;
-			playerHandshakeArgs.ConnectionId = t.SenderConnectionId.GetValueOrDefault();
+			var clientArgs = (ClientArgs)t.Payload;
+			clientArgs.ConnectionId = t.SenderConnectionId.GetValueOrDefault();
 
 			logger.Debug($@"PlayerHandshakeHandler: 
-			 - {playerHandshakeArgs.Name}");
+			 - {clientArgs.Name}
+			 - {clientArgs.Guid}
+			 - {clientArgs.ConnectionId}");
 
-			PlayerHandshake?.Invoke(this, playerHandshakeArgs);
+			PlayerHandshake?.Invoke(this, clientArgs);
 		}
 	}
 }

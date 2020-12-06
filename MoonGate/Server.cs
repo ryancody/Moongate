@@ -1,38 +1,21 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Moongate.Identity.Provider;
-using Moongate.IO;
-using Moongate.Logger;
-using Moongate.Messaging.Listener;
-using Moongate.Messaging.Messenger;
 using System;
 using TelepathyServer = Telepathy.Server;
 
 namespace Moongate
 {
-	public class Server
+	public class Server : Agent
 	{
 		private readonly TelepathyServer telepathyServer;
-		private readonly IMessageListener messageListener;
-		private readonly IMessenger messenger;
-		private readonly ILogger logger;
-		private readonly IIdentityProvider identityProvider;
-
-		private readonly DependencyInjection services;
-
-		public Farspeaker Farspeaker { get; set; }
-
 		public bool Active { get => telepathyServer.Active; }
 
-		public Server ()
-		{
-			services = new DependencyInjection(true);
-			logger = services.ServiceProvider.GetService<ILogger>();
-			telepathyServer = services.ServiceProvider.GetRequiredService<TelepathyServer>();
-			messenger = services.ServiceProvider.GetRequiredService<IMessenger>();
-			messageListener = services.ServiceProvider.GetRequiredService<IMessageListener>();
-			identityProvider = services.ServiceProvider.GetRequiredService<IIdentityProvider>();
+		private const bool isServer = true;
 
-			identityProvider.Id.IsServer = true;
+		public Server () : base(isServer)
+		{
+			telepathyServer = services.ServiceProvider.GetRequiredService<TelepathyServer>();
+
+			identityProvider.Id.IsServer = isServer;
 		}
 
 		public void Start (int port)

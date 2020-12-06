@@ -7,18 +7,18 @@ namespace Moongate.Messaging.Handler
 {
 	public class PlayerDisconnectedHandler : BaseHandler, ITransmissionHandler
 	{
-		public event EventHandler<PlayerConnectionArgs> PlayerDisconnected;
+		public event EventHandler<ClientArgs> PlayerDisconnected;
 
 		public PlayerDisconnectedHandler (ILogger logger) : base(logger) { }
 
 		public void Handle (ITransmittable t)
 		{
-			var playerConnectionArgs = new PlayerConnectionArgs()
+			var clientArgs = new ClientArgs
 			{
 				ConnectionId = t.SenderConnectionId.GetValueOrDefault()
 			};
 
-			PlayerDisconnected?.Invoke(this, playerConnectionArgs);
+			PlayerDisconnected?.Invoke(this, clientArgs);
 		}
 	}
 }

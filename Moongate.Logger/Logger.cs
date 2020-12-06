@@ -25,17 +25,18 @@ namespace Moongate.Logger
 
 		public Logger (string p, LoggerLevel[] l, IIdentityProvider identityProvider)
 		{
+			this.identityProvider = identityProvider;
+
 			logFilter = l;
 			prefix = p;
 			fileName = BuildFileName();
 			writeBuffer = new List<string>();
 
-			this.identityProvider = identityProvider;
 		}
 
 		string BuildFileName ()
 		{
-			return DateTime.Now.ToString("MM-dd-yyyy-hh-mm-sstt") + "-" + identityProvider.Id.Guid.Substring(0, 4) + ".txt";
+			return $"{prefix}-{DateTime.Now.ToString($"MM-dd-yyyy-hh-mm-sstt")}-{identityProvider.Id.Guid.Substring(0, 4)}.txt";
 		}
 		
 		public void Error (string message)
