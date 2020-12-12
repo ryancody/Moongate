@@ -1,17 +1,25 @@
-﻿using Moongate.Models.Events;
-using Moongate.Models.Transmittable;
-using Moongate.State.Models;
+﻿using Moongate.State.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Moongate
 {
 	class Program
 	{
 		private static Client client;
+		private static Dictionary<string, Func<string>> keyCommands;
 
 		static void Main (string[] args)
 		{
 			client = new Client();
+			keyCommands = new Dictionary<string, Func<string>>
+			{
+				["c"] = Connect,
+				["d"] = Disconnect,
+				["e"] = CreateEntity,
+				["p"] = Ping,
+				["q"] = Quit
+			};
 
 			var running = true;
 			ConsoleKeyInfo consoleKeyInfo;
@@ -33,59 +41,58 @@ namespace Moongate
 				{
 					consoleKeyInfo = Console.ReadKey(true);
 
-					switch (consoleKeyInfo.KeyChar)
+					if (keyCommands.TryGetValue(consoleKeyInfo.KeyChar.ToString().ToLower(), out var command))
 					{
-						case 'c':
-							Console.WriteLine("Connecting...");
-							client.Connect("localhost", 8888);
-							break;
-
-						case 'd':
-							Console.WriteLine("Disconnecting...");
-							client.Disconnect();
-							break;
-
-						case 'e':
-							Console.WriteLine("creating entity");
-							var entity = new Entity()
-							{
-								Guid = Guid.NewGuid().ToString(),
-								Id = "test ID",
-								Name = "test Name",
-								Owner = client.Id.Guid
-							};
-
-							client.Farspeaker.Input.TransmitEntity(entity);
-							break;
-
-						case 'p':
-							Console.WriteLine("ping server");
-							client.Farspeaker.Input.Ping();
-							break;
-
-						default:
-							Console.WriteLine("unknown command");
-							break;
+						var response = command();
+						Console.WriteLine(response);
 					}
-
-					if (consoleKeyInfo.Key == ConsoleKey.Escape)
+					else
 					{
-						consoleKeyInfo = Console.ReadKey(true);
-
-						Console.WriteLine("press 'q' to quit");
-
-						if (consoleKeyInfo.KeyChar == 'q')
-						{
-							running = false;
-							client.Disconnect();
-						}
+						Console.WriteLine("Unknown command");
 					}
 				}
 
 				client.Run();
 			}
+		}
 
-			Console.WriteLine("Hello World!");
+		private static string Connect ()
+		{
+			client.Connect("localhost", 8888);
+			return "Connected";
+		}
+
+		private static string Disconnect ()
+		{
+			client.Disconnect();
+			return "Disconnected";
+		}
+
+		private static string CreateEntity ()
+		{
+			var entity = new Entity()
+			{
+				Guid = Guid.NewGuid().ToString(),
+				Id = "test ID",
+				Name = "test Name",
+				Owner = client.Id.Guid
+			};
+
+			client.Farspeaker.Input.TransmitEntity(entity);
+
+			return "Sent entity to server";
+		}
+
+		private static string Ping ()
+		{
+			client.Farspeaker.Input.Ping();
+			return "";
+		}
+
+		private static string Quit ()
+		{
+			client.Farspeaker.Input.Ping();
+			return "Quitting...";
 		}
 	}
 }

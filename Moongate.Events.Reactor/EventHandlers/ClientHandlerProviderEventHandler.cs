@@ -55,6 +55,9 @@ namespace Moongate.Events.Reactor.EventHandlers
 
 		private void OnEntityReceived (object sender, EntityArgs e)
 		{
+			Console.WriteLine("Received entity, processing");
+			logger.Debug("Received entity, processing");
+
 			gameStateController.ProcessEntity(e.Entity);
 		}
 

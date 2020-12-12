@@ -53,6 +53,10 @@ namespace Moongate.Events.Reactor.EventHandlers
 		private void OnEntityReceived (object sender, EntityArgs e)
 		{
 			gameStateController.ProcessEntity(e.Entity);
+
+			var transmission = transmittableFactory.Build(TransmissionType.EntityTransmit, e);
+
+			messenger.QueueTransmission(transmission);
 		}
 
 		private void OnPlayerDisconnected (object sender, ClientArgs e)
