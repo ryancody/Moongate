@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Moongate.Events.Reactor;
 using Moongate.Identity.Provider;
 using Moongate.IO;
@@ -19,19 +18,13 @@ namespace Moongate
 	public class DependencyInjection
 	{
 		public IServiceProvider ServiceProvider { get; set; }
-		public IConfiguration Configuration { get; set; }
 
 		public DependencyInjection (bool isServer)
 		{
-			ServiceProvider = ConfigureServices(BuildConfiguration(), isServer);
+			ServiceProvider = ConfigureServices(isServer);
 		}
 
-		private IConfigurationRoot BuildConfiguration ()
-		{
-			return new ConfigurationBuilder().Build();
-		}
-
-		private IServiceProvider ConfigureServices (IConfigurationRoot configuration, bool isServer)
+		private IServiceProvider ConfigureServices (bool isServer)
 		{
 			var services = new ServiceCollection();
 
