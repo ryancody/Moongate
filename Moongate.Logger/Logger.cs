@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Moongate.Logger
 {
@@ -9,7 +8,6 @@ namespace Moongate.Logger
 	{
 		Error,
 		Info,
-		Warning,
 		Debug
 	}
 
@@ -17,20 +15,25 @@ namespace Moongate.Logger
 	{
 		private readonly string prefix = "";
 		private readonly string fileName;
+		private readonly string filePath;
 		private readonly string guid;
-		private IEnumerable<string> writeBuffer;
-		private readonly LoggerLevel[] logFilter;
+		private readonly LoggerLevel logLevel;
 
 
-		public Logger (string prefix, LoggerLevel[] logFilter, string guid = "")
+		public Logger (string prefix, LoggerLevel logLevel, string guid = "")
 		{
-			
 			this.prefix = prefix;
-			this.logFilter = logFilter;
+			this.logLevel = logLevel;
 			this.guid = guid;
 			fileName = BuildFileName();
-			writeBuffer = new List<string>();
 
+			string docPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+			filePath = Path.Combine(docPath, "RpgLogs");
+
+			if (!Directory.Exists(filePath))
+			{
+				Directory.CreateDirectory(filePath);
+			}
 		}
 
 		string BuildFileName ()
@@ -53,28 +56,12 @@ namespace Moongate.Logger
 			Write(message, LoggerLevel.Debug);
 		}
 
-		public void Warning (string message)
-		{
-			Write(message, LoggerLevel.Warning);
-		}
-
 		void Write (string message, LoggerLevel level)
 		{
-			if (!logFilter.Contains(level))
+			if (level <= logLevel)
 			{
-				return;
+				File.AppendAllText(Path.Combine(filePath, fileName), DateTime.Now + " - " + prefix + " " + level.ToString() + " " + " - " + message + "\n");
 			}
-			
-			// Set a variable to the Documents path.
-			string docPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-			string filePath = Path.Combine(docPath, "RpgLogs");
-
-			if (!Directory.Exists(filePath))
-			{
-				Directory.CreateDirectory(filePath);
-			}
-
-			File.AppendAllText(Path.Combine(filePath, fileName), DateTime.Now + " - " + prefix + " " + level.ToString() + " " + " - " + message + "\n");
 		}
 	}
 }

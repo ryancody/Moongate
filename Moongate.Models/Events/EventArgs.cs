@@ -44,6 +44,10 @@ namespace Moongate.Models.Events
 	{
 		public string ControllerGuid { get; set; }
 		public Vector Vector { get; set; } = new Vector();
+
+		public bool Equals (PlayerInputArgs other) =>
+			ControllerGuid.Equals(other.ControllerGuid)
+			&& Vector.Equals(other.Vector);
 	}
 
 	[Serializable]
