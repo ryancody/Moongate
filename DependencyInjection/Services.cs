@@ -18,11 +18,11 @@ namespace DependencyInjection
 				}
 				else
 				{
-					throw new Exception($"Error retrieving service as proper type: {nameof(T)}");
+					throw new Exception($"Error retrieving service as proper type: {typeof(T).Name}");
 				}
 			}
 
-			throw new Exception($"Couldn't find service of type {nameof(T)}");
+			throw new Exception($"Couldn't find service of type {typeof(T).Name}");
 		}
 
 		public void AddService<T>(T service)

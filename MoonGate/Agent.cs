@@ -7,6 +7,7 @@ using Moongate.Messaging.Listener;
 using Moongate.Messaging.Messenger;
 using Moongate.Messaging.Receiver;
 using Moongate.Transmittable.Processor;
+using System;
 
 namespace Moongate
 {
@@ -25,7 +26,6 @@ namespace Moongate
 		public Agent (bool isServer)
 		{
 			dependencyInjection = new DependencyInjection(isServer);
-			dependencyInjection.Services = new Services();
 
 			logger = dependencyInjection.Services.GetService<ILogger>();
 			messageListener = dependencyInjection.Services.GetService<IMessageListener>();
@@ -35,6 +35,21 @@ namespace Moongate
 			eventReactor = dependencyInjection.Services.GetService<EventReactor>();
 			messenger = dependencyInjection.Services.GetService<IMessenger>();
 			identityProvider = dependencyInjection.Services.GetService<IIdentityProvider>();
+		}
+
+		public void Run ()
+		{
+			try
+			{
+				messageListener.Listen();
+
+				messenger.TransmitQueue();
+			}
+			catch (Exception e)
+			{
+				logger.Error(e.ToString());
+				Console.WriteLine(e);
+			}
 		}
 	}
 }

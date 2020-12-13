@@ -27,21 +27,6 @@ namespace Moongate
 			telepathyServer.Start(port);
 		}
 
-		public void Run ()
-		{
-			try
-			{
-				messageListener.Listen();
-
-				messenger.TransmitQueue();
-			}
-			catch (Exception e)
-			{
-				logger.Error(e.ToString());
-				Console.WriteLine(e);
-			}
-		}
-
 		public void Stop ()
 		{
 			Console.WriteLine("Closing Server...");

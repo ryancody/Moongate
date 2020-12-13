@@ -28,9 +28,14 @@ namespace Moongate
 
 		private void ConfigureServices (bool isServer)
 		{
-			Services.AddService<IIdentityProvider>(new IdentityProvider());
-			var identityProvider = Services.GetService<IIdentityProvider>();
-			identityProvider.Id.IsServer = isServer;
+			var identityProvider = new IdentityProvider
+			{
+				Id = new Models.Identity.Id
+				{
+					IsServer = isServer	
+				}
+			};
+			Services.AddService<IIdentityProvider>(identityProvider);
 
 			var clientServer = isServer ? "server" : "client";
 

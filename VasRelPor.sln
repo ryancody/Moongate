@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate", "MoonGate\Moongate.csproj", "{B000ED19-E6E6-42D0-A699-F2B002E3A014}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standalone.Client", "Standalone.Client\Standalone.Client.csproj", "{878DBF01-B7C1-4FA2-AE0D-0C428A81F1EA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standalone.Server", "Standalone.Server\Standalone.Server.csproj", "{BE63F08A-F14C-493A-8711-27F64DEC8B44}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Logger", "Moongate.Logger\Moongate.Logger.csproj", "{BA97B057-0C2F-4237-B782-006D01BA0399}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Transmittable.Processor", "Moongate.Transmittable.Processor\Moongate.Transmittable.Processor.csproj", "{EECDB6B0-4C4A-402C-9B9C-0A189B83D8B5}"
@@ -43,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Events.Reactor", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyInjection", "DependencyInjection\DependencyInjection.csproj", "{D5A53A44-F36A-4D1D-9B90-2959112D7FD5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.App", "Moongate.App\Moongate.App.csproj", "{89F90BE6-E231-4746-863D-2A5D81A121E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,14 +51,6 @@ Global
 		{B000ED19-E6E6-42D0-A699-F2B002E3A014}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B000ED19-E6E6-42D0-A699-F2B002E3A014}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B000ED19-E6E6-42D0-A699-F2B002E3A014}.Release|Any CPU.Build.0 = Release|Any CPU
-		{878DBF01-B7C1-4FA2-AE0D-0C428A81F1EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{878DBF01-B7C1-4FA2-AE0D-0C428A81F1EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{878DBF01-B7C1-4FA2-AE0D-0C428A81F1EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{878DBF01-B7C1-4FA2-AE0D-0C428A81F1EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE63F08A-F14C-493A-8711-27F64DEC8B44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE63F08A-F14C-493A-8711-27F64DEC8B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE63F08A-F14C-493A-8711-27F64DEC8B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE63F08A-F14C-493A-8711-27F64DEC8B44}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BA97B057-0C2F-4237-B782-006D01BA0399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BA97B057-0C2F-4237-B782-006D01BA0399}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA97B057-0C2F-4237-B782-006D01BA0399}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -129,6 +119,10 @@ Global
 		{D5A53A44-F36A-4D1D-9B90-2959112D7FD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5A53A44-F36A-4D1D-9B90-2959112D7FD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5A53A44-F36A-4D1D-9B90-2959112D7FD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89F90BE6-E231-4746-863D-2A5D81A121E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89F90BE6-E231-4746-863D-2A5D81A121E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89F90BE6-E231-4746-863D-2A5D81A121E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89F90BE6-E231-4746-863D-2A5D81A121E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

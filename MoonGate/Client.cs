@@ -32,20 +32,5 @@ namespace Moongate
 		{
 			telepathyClient.Disconnect();
 		}
-
-		public void Run ()
-		{
-			try
-			{
-				messageListener.Listen();
-
-				messenger.TransmitQueue();
-			}
-			catch (Exception e)
-			{
-				logger.Error(e.ToString());
-				Console.WriteLine(e);
-			}
-		}
 	}
 }
