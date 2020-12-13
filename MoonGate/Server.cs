@@ -13,7 +13,7 @@ namespace Moongate
 
 		public Server () : base(isServer)
 		{
-			telepathyServer = services.ServiceProvider.GetRequiredService<TelepathyServer>();
+			telepathyServer = dependencyInjection.Services.GetService<TelepathyServer>();
 
 			identityProvider.Id.IsServer = isServer;
 		}

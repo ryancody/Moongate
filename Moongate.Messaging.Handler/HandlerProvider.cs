@@ -1,5 +1,4 @@
-﻿using Moongate.Identity.Provider;
-using Moongate.Logger;
+﻿using Moongate.Logger;
 using Moongate.Models.Transmittable;
 using System;
 using System.Collections.Generic;

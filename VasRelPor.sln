@@ -39,7 +39,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Receiver
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Handler.Test", "Moongate.Messaging.Handler.Test\Moongate.Messaging.Handler.Test.csproj", "{9C451551-7532-403B-BE65-997AB0406B1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Events.Reactor", "Moongate.Events.Reactor\Moongate.Events.Reactor.csproj", "{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Events.Reactor", "Moongate.Events.Reactor\Moongate.Events.Reactor.csproj", "{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyInjection", "DependencyInjection\DependencyInjection.csproj", "{D5A53A44-F36A-4D1D-9B90-2959112D7FD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +125,10 @@ Global
 		{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5A53A44-F36A-4D1D-9B90-2959112D7FD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5A53A44-F36A-4D1D-9B90-2959112D7FD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5A53A44-F36A-4D1D-9B90-2959112D7FD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5A53A44-F36A-4D1D-9B90-2959112D7FD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

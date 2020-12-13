@@ -5,7 +5,7 @@ using System;
 
 namespace Moongate.Transmittable.Factory
 {
-	class TransmittableFactory : ITransmittableFactory
+	public class TransmittableFactory : ITransmittableFactory
 	{
 		private readonly ILogger logger;
 		private readonly IIdentityProvider identityProvider;

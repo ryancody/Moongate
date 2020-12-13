@@ -1,15 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DependencyInjection;
 using Moongate.Events.Reactor;
 using Moongate.Identity.Provider;
 using Moongate.IO;
 using Moongate.Logger;
+using Moongate.Messaging.Handler;
 using Moongate.Messaging.Listener;
 using Moongate.Messaging.Messenger;
 using Moongate.Messaging.Receiver;
+using Moongate.State.Controller;
+using Moongate.State.Models;
 using Moongate.Transmittable.Factory;
 using Moongate.Transmittable.Processor;
 using Moongate.Utils;
-using System;
 using TelepathyClient = Telepathy.Client;
 using TelepathyServer = Telepathy.Server;
 
@@ -17,56 +19,76 @@ namespace Moongate
 {
 	public class DependencyInjection
 	{
-		public IServiceProvider ServiceProvider { get; set; }
+		public Services Services = new Services();
 
 		public DependencyInjection (bool isServer)
 		{
-			ServiceProvider = ConfigureServices(isServer);
+			ConfigureServices(isServer);
 		}
 
-		private IServiceProvider ConfigureServices (bool isServer)
+		private void ConfigureServices (bool isServer)
 		{
-			var services = new ServiceCollection();
+			Services.AddService<IIdentityProvider>(new IdentityProvider());
+			var identityProvider = Services.GetService<IIdentityProvider>();
+			identityProvider.Id.IsServer = isServer;
 
-			services.AddLogger();
+			var clientServer = isServer ? "server" : "client";
 
-			services.AddSerializer();
+			Services.AddService<ILogger>(new Logger.Logger(clientServer, new LoggerLevel[] { LoggerLevel.Debug }, identityProvider.Id.Guid));
+			var logger = Services.GetService<ILogger>();
+
+			Services.AddService(new Serializer());
+			var serializer = Services.GetService<Serializer>();
+
+			Services.AddService<ITransmittableFactory>(new TransmittableFactory(logger, identityProvider));
+			var transmittableFactory = Services.GetService<ITransmittableFactory>();
+
+			Services.AddService(new PlayerStateController(logger, new PlayerState()));
+			var playerStateController = Services.GetService<PlayerStateController>();
+
+			Services.AddService<IHandlerProvider>(new HandlerProvider(logger));
+			var handlerProvider = Services.GetService<IHandlerProvider>();
+
+			TelepathyClient client;
+			TelepathyServer server;
+			IMessenger messenger;
+			IMessageListener messageListener;
 
 			if (isServer)
 			{
-				services.AddSingleton(s => 
-				{
-					return new TelepathyServer();
-				});
+				Services.AddService(new TelepathyServer());
+				server = Services.GetService<TelepathyServer>();
+
+				Services.AddService<IMessenger>(new ServerMessenger(logger, serializer, server, playerStateController));
+				messenger = Services.GetService<IMessenger>();
+
+				Services.AddService<IMessageListener>(new MessageListener(logger, server));
+				messageListener = Services.GetService<IMessageListener>();
 			}
 			else
 			{
-				services.AddSingleton(s => 
-				{
-					return new TelepathyClient();
-				});
-				services.AddFarspeaker();
+				Services.AddService(new TelepathyClient());
+				client = Services.GetService<TelepathyClient>();
+
+				Services.AddService<IMessenger>(new ClientMessenger(logger, serializer, client));
+				messenger = Services.GetService<IMessenger>();
+
+				Services.AddService(new Farspeaker(logger, transmittableFactory, messenger, identityProvider, handlerProvider));
+
+				Services.AddService<IMessageListener>(new MessageListener(logger, client));
 			}
 
-			services.AddMessageListener(isServer);
+			messageListener = Services.GetService<IMessageListener>();
 
-			services.AddMessageReceiver();
+			Services.AddService<IMessageReceiver>(new MessageReceiver(logger, serializer, messageListener));
+			var messageReceiver = Services.GetService<IMessageReceiver>();
 
-			services.AddTransmittableProcessor();
+			Services.AddService<ITransmittableProcessor>(new TransmittableProcessor(logger, messageReceiver, handlerProvider, identityProvider));
 
-			services.AddTransmittableFactory();
+			Services.AddService(new GameStateController(logger, new GameState(), handlerProvider));
+			var gameStateController = Services.GetService<GameStateController>();
 
-			services.AddHandlerFactory();
-
-			services.AddMessenger(isServer);
-
-			services.AddStateControllers();
-
-			services.AddIdentityProvider(isServer);
-
-			services.AddEventReactor();
-
-			return services.BuildServiceProvider();
+			Services.AddService(new EventReactor(logger, handlerProvider, gameStateController, playerStateController, transmittableFactory, messageListener, messenger, identityProvider));
 		}
 	}
 }

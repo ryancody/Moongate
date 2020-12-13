@@ -18,8 +18,8 @@ namespace Moongate
 
 		public Client () : base(isServer)
 		{
-			telepathyClient = services.ServiceProvider.GetRequiredService<TelepathyClient>();
-			Farspeaker = services.ServiceProvider.GetRequiredService<Farspeaker>();
+			telepathyClient = dependencyInjection.Services.GetService<TelepathyClient>();
+			Farspeaker = dependencyInjection.Services.GetService<Farspeaker>();
 
 			identityProvider.Id.IsServer = isServer;
 		}

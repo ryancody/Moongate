@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DependencyInjection;
 using Moongate.Events.Reactor;
 using Moongate.Identity.Provider;
 using Moongate.Logger;
@@ -12,7 +12,7 @@ namespace Moongate
 {
 	public class Agent
 	{
-		protected readonly DependencyInjection services;
+		protected readonly DependencyInjection dependencyInjection;
 		protected readonly ILogger logger;
 		protected readonly IMessageListener messageListener;
 		protected readonly IMessageReceiver messageReceiver;
@@ -24,16 +24,17 @@ namespace Moongate
 
 		public Agent (bool isServer)
 		{
-			services = new DependencyInjection(isServer);
-			logger = services.ServiceProvider.GetService<ILogger>();
-			messageListener = services.ServiceProvider.GetRequiredService<IMessageListener>();
-			messageReceiver = services.ServiceProvider.GetRequiredService<IMessageReceiver>();
-			transmittableProcessor = services.ServiceProvider.GetRequiredService<ITransmittableProcessor>();
-			handlerProvider = services.ServiceProvider.GetRequiredService<IHandlerProvider>();
-			eventReactor = services.ServiceProvider.GetRequiredService<EventReactor>();
-			messenger = services.ServiceProvider.GetRequiredService<IMessenger>();
-			identityProvider = services.ServiceProvider.GetRequiredService<IIdentityProvider>();
+			dependencyInjection = new DependencyInjection(isServer);
+			dependencyInjection.Services = new Services();
 
+			logger = dependencyInjection.Services.GetService<ILogger>();
+			messageListener = dependencyInjection.Services.GetService<IMessageListener>();
+			messageReceiver = dependencyInjection.Services.GetService<IMessageReceiver>();
+			transmittableProcessor = dependencyInjection.Services.GetService<ITransmittableProcessor>();
+			handlerProvider = dependencyInjection.Services.GetService<IHandlerProvider>();
+			eventReactor = dependencyInjection.Services.GetService<EventReactor>();
+			messenger = dependencyInjection.Services.GetService<IMessenger>();
+			identityProvider = dependencyInjection.Services.GetService<IIdentityProvider>();
 		}
 	}
 }
