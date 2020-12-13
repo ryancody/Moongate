@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Moongate.IO;
+﻿using Moongate.IO;
 using Moongate.Models.Identity;
 using System;
 using TelepathyClient = Telepathy.Client;

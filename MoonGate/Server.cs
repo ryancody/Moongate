@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using TelepathyServer = Telepathy.Server;
 
 namespace Moongate
