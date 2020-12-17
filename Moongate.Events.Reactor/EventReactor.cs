@@ -30,7 +30,7 @@ namespace Moongate.Events.Reactor
 
 			if (identityProvider.Id.IsServer)
 			{
-				eventHandlers.Add(new ServerHandlerProviderEventHandler(logger, handlerProvider, messenger, transmittableFactory, identityProvider, gameStateController, playerStateController));
+				eventHandlers.Add(new ServerHandlerProviderEventHandler(logger, handlerProvider, messenger, transmittableFactory, gameStateController, playerStateController));
 			}
 			else
 			{

@@ -6,13 +6,18 @@ using Moongate.Messaging.Handler;
 using Moongate.Messaging.Listener;
 using Moongate.Messaging.Messenger;
 using Moongate.Messaging.Receiver;
+using Moongate.State.Controller;
+using Moongate.State.Models;
 using Moongate.Transmittable.Processor;
 using System;
+using System.Collections.Generic;
 
 namespace Moongate
 {
 	public class Agent
 	{
+		public List<Player> GetConnectedPlayers { get { return playerStateController.GetPlayers(); } }
+
 		protected readonly DependencyInjection dependencyInjection;
 		protected readonly ILogger logger;
 		protected readonly IMessageListener messageListener;
@@ -22,6 +27,7 @@ namespace Moongate
 		protected readonly EventReactor eventReactor;
 		protected readonly IMessenger messenger;
 		protected readonly IIdentityProvider identityProvider;
+		protected readonly PlayerStateController playerStateController;
 
 		public Agent (bool isServer)
 		{
@@ -35,6 +41,7 @@ namespace Moongate
 			eventReactor = dependencyInjection.Services.GetService<EventReactor>();
 			messenger = dependencyInjection.Services.GetService<IMessenger>();
 			identityProvider = dependencyInjection.Services.GetService<IIdentityProvider>();
+			playerStateController = dependencyInjection.Services.GetService<PlayerStateController>();
 		}
 
 		public void Run ()

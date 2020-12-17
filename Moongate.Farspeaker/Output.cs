@@ -12,11 +12,10 @@ namespace Moongate.IO
 		private readonly IIdentityProvider identity;
 
 		public event EventHandler<PingArgs> PingReceived;
-		public event EventHandler<PlayerInputArgs> PlayerInput;
 		public event EventHandler<ClientArgs> PlayerConnected;
 		public event EventHandler<ClientArgs> PlayerDisconnected;
-		public event EventHandler<EntityArgs> EntityReceived;
 		public event EventHandler<GameStateRequestArgs> GameStateReceived;
+		public event EventHandler<NetEventArgs> NetEventReceived;
 
 		internal Output (ILogger logger, IHandlerProvider handlerProvider, IIdentityProvider identity)
 		{
@@ -24,16 +23,10 @@ namespace Moongate.IO
 			this.identity = identity;
 
 			handlerProvider.PingHandler.PingReceived += OnPingReceived;
-			handlerProvider.PlayerInputHandler.PlayerInput += OnPlayerInput;
 			handlerProvider.PlayerConnectedHandler.PlayerConnected += OnPlayerConnected;
 			handlerProvider.PlayerDisconnectedHandler.PlayerDisconnected += OnPlayerDisconnected;
-			handlerProvider.EntityHandler.EntityReceived += OnEntityReceived;
 			handlerProvider.GameStateRequestHandler.GameStateReceived += GameStateReceived;
-		}
-
-		private void OnEntityReceived (object sender, EntityArgs e)
-		{
-			EntityReceived?.Invoke(this, e);
+			handlerProvider.NetEventHandler.NetEventReceived += OnNetEvent;
 		}
 
 		private void OnPlayerDisconnected (object sender, ClientArgs e)
@@ -46,11 +39,6 @@ namespace Moongate.IO
 			PlayerConnected?.Invoke(this, e);
 		}
 
-		private void OnPlayerInput (object sender, PlayerInputArgs e)
-		{
-			PlayerInput?.Invoke(this, e);
-		}
-
 		private void OnPingReceived (object sender, PingArgs e)
 		{
 			if (e.InitiatorGuid.Equals(identity.Id.Guid))
@@ -61,6 +49,11 @@ namespace Moongate.IO
 
 				PingReceived?.Invoke(this, e);
 			}
+		}
+
+		private void OnNetEvent (object sender, NetEventArgs e)
+		{
+			NetEventReceived?.Invoke(this, e);
 		}
 	}
 }

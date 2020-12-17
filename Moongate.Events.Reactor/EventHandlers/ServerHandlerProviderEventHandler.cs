@@ -6,7 +6,6 @@ using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
 using Moongate.State.Controller;
 using Moongate.Transmittable.Factory;
-using System;
 
 namespace Moongate.Events.Reactor.EventHandlers
 {
@@ -15,7 +14,6 @@ namespace Moongate.Events.Reactor.EventHandlers
 		private readonly ILogger logger;
 		private readonly IMessenger messenger;
 		private readonly ITransmittableFactory transmittableFactory;
-		private readonly IIdentityProvider identityProvider;
 		private readonly GameStateController gameStateController;
 		private readonly PlayerStateController playerStateController;
 
@@ -23,23 +21,20 @@ namespace Moongate.Events.Reactor.EventHandlers
 			IHandlerProvider handlerProvider, 
 			IMessenger messenger, 
 			ITransmittableFactory transmittableFactory, 
-			IIdentityProvider identityProvider,
 			GameStateController gameStateController,
 			PlayerStateController playerStateController)
 		{
 			this.logger = logger;
 			this.messenger = messenger;
 			this.transmittableFactory = transmittableFactory;
-			this.identityProvider = identityProvider;
 			this.gameStateController = gameStateController;
 			this.playerStateController = playerStateController;
 
 			handlerProvider.PingHandler.PingReceived += OnPingReceived;
-			handlerProvider.PlayerInputHandler.PlayerInput += OnPlayerInput;
 			handlerProvider.PlayerHandshakeHandler.PlayerHandshake += OnPlayerHandshake;
 			handlerProvider.PlayerDisconnectedHandler.PlayerDisconnected += OnPlayerDisconnected;
-			handlerProvider.EntityHandler.EntityReceived += OnEntityReceived;
 			handlerProvider.GameStateRequestHandler.GameStateReceived += GameStateReceived;
+			handlerProvider.NetEventHandler.NetEventReceived += OnNetEvent;
 		}
 
 		private void GameStateReceived (object sender, GameStateRequestArgs e)
@@ -48,15 +43,6 @@ namespace Moongate.Events.Reactor.EventHandlers
 			{
 				gameStateController.GameState = e.GameState;
 			}
-		}
-
-		private void OnEntityReceived (object sender, EntityArgs e)
-		{
-			gameStateController.ProcessEntity(e.Entity);
-
-			var transmission = transmittableFactory.Build(TransmissionType.EntityTransmit, e);
-
-			messenger.QueueTransmission(transmission);
 		}
 
 		private void OnPlayerDisconnected (object sender, ClientArgs e)
@@ -74,23 +60,26 @@ namespace Moongate.Events.Reactor.EventHandlers
 		/// <param name="e"></param>
 		private void OnPlayerHandshake (object sender, ClientArgs e)
 		{
-			var transmission = transmittableFactory.Build(TransmissionType.PlayerConnected, e);
-
-			messenger.QueueTransmission(transmission);
-
 			playerStateController.AddOrUpdatePlayer(e.ConnectionId, e.Guid, e.Name);
-		}
 
-		private void OnPlayerInput (object sender, PlayerInputArgs e)
-		{
-			var transmission = transmittableFactory.Build(TransmissionType.PlayerInput, e);
+			playerStateController.GetPlayers().ForEach(p => 
+			{
+				var transmission = transmittableFactory.Build(TransmissionType.PlayerConnected, e);
 
-			messenger.QueueTransmission(transmission);
+				messenger.QueueTransmission(transmission);
+			});
 		}
 
 		private void OnPingReceived (object sender, PingArgs e)
 		{
 			var transmission = transmittableFactory.Build(TransmissionType.Ping, e);
+
+			messenger.QueueTransmission(transmission);
+		}
+
+		private void OnNetEvent (object sender, NetEventArgs e)
+		{
+			var transmission = transmittableFactory.Build(TransmissionType.NetEvent, e);
 
 			messenger.QueueTransmission(transmission);
 		}

@@ -36,36 +36,6 @@ namespace Moongate.IO
 			messenger.QueueTransmission(transmission);
 		}
 
-		public void PlayerInput (float x, float y, float magnitude)
-		{
-			var playerInput = new PlayerInputArgs
-			{
-				ControllerGuid = identityProvider.Id.Guid,
-				Vector = new Vector
-				{
-					x = x,
-					y = y,
-					Magnitude = magnitude
-				}
-			};
-
-			var transmission = transmittableFactory.Build(TransmissionType.PlayerInput, playerInput);
-
-			messenger.QueueTransmission(transmission);
-		}
-
-		public void TransmitEntity (Entity entity)
-		{
-			var entityArgs = new EntityArgs
-			{
-				Entity = entity
-			};
-
-			var transmission = transmittableFactory.Build(TransmissionType.EntityTransmit, entityArgs);
-
-			messenger.QueueTransmission(transmission);
-		}
-
 		public void RequestGameState ()
 		{
 			var gameStateArgs = new GameStateRequestArgs
@@ -74,6 +44,13 @@ namespace Moongate.IO
 			};
 
 			var transmission = transmittableFactory.Build(TransmissionType.GameStateRequest, gameStateArgs);
+
+			messenger.QueueTransmission(transmission);
+		}
+
+		public void SendNetEvent (NetEventArgs e)
+		{
+			var transmission = transmittableFactory.Build(TransmissionType.NetEvent, e);
 
 			messenger.QueueTransmission(transmission);
 		}

@@ -40,17 +40,6 @@ namespace Moongate.Models.Events
 	}
 
 	[Serializable]
-	public class PlayerInputArgs : EventArgs
-	{
-		public string ControllerGuid { get; set; }
-		public Vector Vector { get; set; } = new Vector();
-
-		public bool Equals (PlayerInputArgs other) =>
-			ControllerGuid.Equals(other.ControllerGuid)
-			&& Vector.Equals(other.Vector);
-	}
-
-	[Serializable]
 	public class GameStateRequestArgs : EventArgs
 	{
 		public string SenderGuid { get; set; }
@@ -61,5 +50,13 @@ namespace Moongate.Models.Events
 	public class PlayerStateArgs : EventArgs
 	{
 		public PlayerState PlayerState { get; set; }
+	}
+
+	[Serializable]
+	public class NetEventArgs : EventArgs
+	{ 
+		public string SenderGuid { get; set; }
+		public string EventType { get; set; }
+		public object Payload { get; set; }
 	}
 }

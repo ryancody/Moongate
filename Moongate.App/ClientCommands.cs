@@ -1,4 +1,5 @@
-﻿using Moongate.State.Models;
+﻿using Moongate.Models.Events;
+using Moongate.State.Models;
 using System;
 using System.Collections.Generic;
 
@@ -29,9 +30,34 @@ namespace Moongate.App
 			{
 				["c"] = Connect,
 				["d"] = Disconnect,
-				["e"] = CreateEntity,
-				["p"] = Ping
+				["p"] = Ping,
+				["l"] = ListPlayers,
+				["n"] = SendNetEvent,
+				["r"] = RapidFireNetEvents
 			};
+		}
+
+		private void SendNetEvent ()
+		{
+			Console.WriteLine("sending net event...");
+			client.Farspeaker.Input.SendNetEvent(null);
+		}
+
+		private void RapidFireNetEvents ()
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				var p = new { Sup = "nup", Nup = "Sup", Mup = "blah blah blah blah blah blah" };
+
+				var e = new NetEventArgs
+				{
+					EventType = "test",
+					SenderGuid = Guid.NewGuid().ToString(),
+					Payload = p
+				};
+				Console.WriteLine("sending net event...");
+				client.Farspeaker.Input.SendNetEvent(null);
+			}
 		}
 
 		private void Connect ()
@@ -46,22 +72,15 @@ namespace Moongate.App
 			client.Disconnect();
 		}
 
-		private void CreateEntity ()
-		{
-			var entity = new Entity()
-			{
-				Guid = Guid.NewGuid().ToString(),
-				Id = "test ID",
-				Name = "test Name",
-				Owner = client.Id.Guid
-			};
-
-			client.Farspeaker.Input.TransmitEntity(entity);
-		}
-
 		private void Ping ()
 		{
 			client.Farspeaker.Input.Ping();
+		}
+
+		private void ListPlayers ()
+		{
+			Console.WriteLine("Players Connected");
+			client.GetConnectedPlayers.ForEach(p => Console.WriteLine($"\n - {p.Name}"));
 		}
 	}
 }

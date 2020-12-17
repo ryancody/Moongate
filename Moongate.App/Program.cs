@@ -96,6 +96,8 @@ namespace Moongate.App
 
 			var server = agent as Server;
 
+			keyCommands = new Dictionary<string, Action>();
+
 			GetPort();
 
 			server.Start(port);

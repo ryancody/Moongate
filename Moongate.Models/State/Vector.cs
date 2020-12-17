@@ -3,15 +3,19 @@
 namespace Moongate.State.Models
 {
 	[Serializable]
-	public class Vector : IEquatable<Vector>
+	public class Vector : IEquatable<object>
 	{
 		public float x { get; set; }
 		public float y { get; set; }
-		public float Magnitude { get; set; }
 
-		public bool Equals (Vector other) =>
-			x == other.x
-			&& y == other.y
-			&& Magnitude == other.Magnitude;
+		public override bool Equals (object obj) =>
+			obj != null
+			&& obj is Vector other
+			&& x.Equals(other.x)
+			&& y.Equals(other.y);
+
+		public override int GetHashCode () => base.GetHashCode();
+
+		public static Vector Zero = new Vector();
 	}
 }

@@ -9,16 +9,16 @@ namespace Moongate.State.Models
 		public float y { get; set; }
 		public float z { get; set; }
 
-		public Position (float xVal, float yVal, float zVal) {
-			x = xVal;
-			y = yVal;
-			z = zVal;
+		public Position (float x, float y, float z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
 		}
 
-		public Position (float xVal, float yVal)
+		public Position (float x, float y)
 		{
-			x = xVal;
-			y = yVal;
+			this.x = x;
+			this.y = y;
 			z = 0;
 		}
 

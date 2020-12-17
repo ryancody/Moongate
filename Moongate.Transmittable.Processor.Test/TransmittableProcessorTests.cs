@@ -31,7 +31,7 @@ namespace Moongate.Transmittable.Processor.Test
 			 {
 				 SenderConnectionId = 0,
 				 SenderGuid = guid,
-				 TransmissionType = TransmissionType.EntityTransmit
+				 TransmissionType = TransmissionType.NetEvent
 			 };
 
 		[Fact]
@@ -46,13 +46,13 @@ namespace Moongate.Transmittable.Processor.Test
 				})
 				.Verifiable();
 
-			mockHandlerProvider.Setup(h => h.GetHandler(TransmissionType.EntityTransmit))
+			mockHandlerProvider.Setup(h => h.GetHandler(TransmissionType.NetEvent))
 				.Returns(new EntityHandler(mockLogger.Object))
 				.Verifiable();
 
 			transmittableProcessor.Process(transmission);
 
-			mockHandlerProvider.Verify(h => h.GetHandler(TransmissionType.EntityTransmit), Times.Never);
+			mockHandlerProvider.Verify(h => h.GetHandler(TransmissionType.NetEvent), Times.Never);
 			mockIdentityProvider.Verify();
 		}
 
@@ -70,7 +70,7 @@ namespace Moongate.Transmittable.Processor.Test
 
 			transmittableProcessor.Process(transmission);
 
-			mockHandlerProvider.Verify(h => h.GetHandler(TransmissionType.EntityTransmit), Times.Once);
+			mockHandlerProvider.Verify(h => h.GetHandler(TransmissionType.NetEvent), Times.Once);
 			mockIdentityProvider.Verify();
 		}
 
