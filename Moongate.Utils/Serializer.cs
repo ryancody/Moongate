@@ -1,33 +1,39 @@
 ﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+
 
 namespace Moongate.Utils
 {
 	public class Serializer : ISerializer
 	{
-        // Convert an object to a byte array
-        public byte[] Serialize (object obj)
-        {
-            if (obj == null)
-                return null;
+		public byte[] Serialize<T> (T obj)
+		{
+			try
+			{
+				using (var stream = new MemoryStream())
+				{
+					ProtoBuf.Serializer.Serialize<T>(stream, obj);
+					return stream.ToArray();
+				}
+			}
+			catch
+			{
+				throw;
+			}
+		}
 
-            BinaryFormatter bf = new BinaryFormatter();
-            MemoryStream ms = new MemoryStream();
-            bf.Serialize(ms, obj);
-
-            return ms.ToArray();
-        }
-
-		// Convert a byte array to an Object
-		public T Deserialize<T> (byte[] arrBytes)
-        {
-            MemoryStream memStream = new MemoryStream();
-            BinaryFormatter binForm = new BinaryFormatter();
-            memStream.Write(arrBytes, 0, arrBytes.Length);
-            memStream.Seek(0, SeekOrigin.Begin);
-            T obj = (T)binForm.Deserialize(memStream);
-
-            return obj;
-        }
-    }
+		public T Deserialize<T> (byte[] bytes)
+		{
+			try
+			{
+				using (var stream = new MemoryStream())
+				{
+					return ProtoBuf.Serializer.Deserialize<T>(stream);
+				}
+			}
+			catch
+			{
+				throw;
+			}
+		}
+	}
 }

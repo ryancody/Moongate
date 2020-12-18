@@ -2,7 +2,7 @@
 {
 	public interface ISerializer
 	{
-		byte[] Serialize (object o);
+		byte[] Serialize<T> (T o);
 		T Deserialize<T> (byte[] b);
 	}
 }
