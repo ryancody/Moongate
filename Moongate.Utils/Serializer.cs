@@ -1,6 +1,5 @@
 ﻿using System.IO;
 
-
 namespace Moongate.Utils
 {
 	public class Serializer : ISerializer
