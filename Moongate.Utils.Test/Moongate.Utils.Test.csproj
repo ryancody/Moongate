@@ -19,4 +19,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Moongate.Models\Moongate.Models.csproj" />
+    <ProjectReference Include="..\Moongate.Utils\Moongate.Utils.csproj" />
+  </ItemGroup>
+
 </Project>

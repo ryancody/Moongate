@@ -5,7 +5,8 @@ using ProtoBuf;
 
 namespace Moongate.Models.Events
 {
-	[ProtoContract, ProtoInclude(100, typeof(MessageArgs))]
+	[ProtoContract]
+	[ProtoInclude(100, typeof(MessageArgs))]
 	[ProtoInclude(101, typeof(TransmissionArgs))]
 	[ProtoInclude(102, typeof(PingArgs))]
 	[ProtoInclude(103, typeof(ClientArgs))]

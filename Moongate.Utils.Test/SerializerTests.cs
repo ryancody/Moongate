@@ -8,10 +8,6 @@ namespace Moongate.Utils.Tests
 {
 	public class SerializerTests
 	{
-		public void Setup ()
-		{
-		}
-
 		[Fact]
 		public void Serialize ()
 		{
