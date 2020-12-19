@@ -3,7 +3,6 @@ using Moongate.Logger;
 using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
-using Moongate.State.Models;
 using Moongate.Transmittable.Factory;
 using System;
 
@@ -31,26 +30,14 @@ namespace Moongate.IO
 				InitialTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
 				InitiatorGuid = identityProvider.Id.Guid
 			};
-			var transmission = transmittableFactory.Build(TransmissionType.Ping, pingArgs);
-
-			messenger.QueueTransmission(transmission);
-		}
-
-		public void RequestGameState ()
-		{
-			var gameStateArgs = new GameStateRequestArgs
-			{
-				SenderGuid = identityProvider.Id.Guid
-			};
-
-			var transmission = transmittableFactory.Build(TransmissionType.GameStateRequest, gameStateArgs);
+			var transmission = transmittableFactory.Build(null, TransmissionType.Ping, pingArgs);
 
 			messenger.QueueTransmission(transmission);
 		}
 
 		public void SendNetEvent (NetEventArgs e)
 		{
-			var transmission = transmittableFactory.Build(TransmissionType.NetEvent, e);
+			var transmission = transmittableFactory.Build(null, TransmissionType.NetEvent, e);
 
 			messenger.QueueTransmission(transmission);
 		}

@@ -31,7 +31,7 @@ namespace Moongate.State.Controller
 			else
 			{
 				logger.Error($@"player guid {guid} not found!");
-				throw new Exception("Player guid key not found!");
+				throw new Exception($"Player guid {guid} not found!");
 			}
 		}
 
@@ -44,7 +44,7 @@ namespace Moongate.State.Controller
 			else
 			{
 				logger.Error($@"player connectionId {connectionId} not found!");
-				throw new Exception("Player connectionId key not found!");
+				throw new Exception($"Player connectionId {connectionId} not found!");
 			}
 		}
 

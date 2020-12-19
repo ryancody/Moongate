@@ -12,29 +12,25 @@ namespace Moongate.Events.Reactor
 {
 	public class EventReactor
 	{
-		private readonly ISet<IEventHandler> eventHandlers;
+		private readonly ISet<IEventHandler> eventHandlers = new HashSet<IEventHandler>();
 
 		public EventReactor (ILogger logger, 
-			IHandlerProvider handlerProvider, 
-			GameStateController gameStateController, 
+			IHandlerProvider handlerProvider,
 			PlayerStateController playerStateController,
 			ITransmittableFactory transmittableFactory, 
 			IMessageListener messageListener,
 			IMessenger messenger,
 			IIdentityProvider identityProvider)
 		{
-			eventHandlers = new HashSet<IEventHandler>
-			{
-				new MessageListenerEventHandler(logger, messageListener, messenger, transmittableFactory, identityProvider)
-			};
-
 			if (identityProvider.Id.IsServer)
 			{
-				eventHandlers.Add(new ServerHandlerProviderEventHandler(logger, handlerProvider, messenger, transmittableFactory, gameStateController, playerStateController));
+				eventHandlers.Add(new ServerHandlerProviderEventHandler(logger, handlerProvider, messenger, transmittableFactory, playerStateController));
+				eventHandlers.Add(new ServerMessageListenerEventHandler(logger, messageListener, transmittableFactory, messenger, playerStateController));
 			}
 			else
 			{
-				eventHandlers.Add(new ClientHandlerProviderEventHandler(logger, handlerProvider, messenger, transmittableFactory, identityProvider, gameStateController, playerStateController));
+				eventHandlers.Add(new ClientHandlerProviderEventHandler(logger, handlerProvider, identityProvider, playerStateController));
+				eventHandlers.Add(new ClientMessageListenerEventHandler(logger, messageListener, messenger, transmittableFactory, identityProvider));
 			}
 		}
 	}

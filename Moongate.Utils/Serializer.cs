@@ -24,7 +24,7 @@ namespace Moongate.Utils
 		{
 			try
 			{
-				using (var stream = new MemoryStream())
+				using (var stream = new MemoryStream(bytes))
 				{
 					return ProtoBuf.Serializer.Deserialize<T>(stream);
 				}

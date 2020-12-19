@@ -1,11 +1,11 @@
-﻿using Moongate.Identity.Provider;
-using Moongate.Logger;
+﻿using Moongate.Logger;
 using Moongate.Messaging.Handler;
 using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
 using Moongate.State.Controller;
 using Moongate.Transmittable.Factory;
+using System;
 
 namespace Moongate.Events.Reactor.EventHandlers
 {
@@ -14,40 +14,22 @@ namespace Moongate.Events.Reactor.EventHandlers
 		private readonly ILogger logger;
 		private readonly IMessenger messenger;
 		private readonly ITransmittableFactory transmittableFactory;
-		private readonly GameStateController gameStateController;
 		private readonly PlayerStateController playerStateController;
 
-		public ServerHandlerProviderEventHandler (ILogger logger, 
-			IHandlerProvider handlerProvider, 
-			IMessenger messenger, 
-			ITransmittableFactory transmittableFactory, 
-			GameStateController gameStateController,
+		public ServerHandlerProviderEventHandler (ILogger logger,
+			IHandlerProvider handlerProvider,
+			IMessenger messenger,
+			ITransmittableFactory transmittableFactory,
 			PlayerStateController playerStateController)
 		{
 			this.logger = logger;
 			this.messenger = messenger;
 			this.transmittableFactory = transmittableFactory;
-			this.gameStateController = gameStateController;
 			this.playerStateController = playerStateController;
 
 			handlerProvider.PingHandler.PingReceived += OnPingReceived;
 			handlerProvider.PlayerHandshakeHandler.PlayerHandshake += OnPlayerHandshake;
-			handlerProvider.PlayerDisconnectedHandler.PlayerDisconnected += OnPlayerDisconnected;
-			handlerProvider.GameStateRequestHandler.GameStateReceived += GameStateReceived;
 			handlerProvider.NetEventHandler.NetEventReceived += OnNetEvent;
-		}
-
-		private void GameStateReceived (object sender, GameStateRequestArgs e)
-		{
-			if (e.GameState != null)
-			{
-				gameStateController.GameState = e.GameState;
-			}
-		}
-
-		private void OnPlayerDisconnected (object sender, ClientArgs e)
-		{
-			playerStateController.RemovePlayer(e.ConnectionId);
 		}
 
 		/// <summary>
@@ -57,29 +39,41 @@ namespace Moongate.Events.Reactor.EventHandlers
 		/// Only server should receieve player handshake event.
 		/// </summary>
 		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnPlayerHandshake (object sender, ClientArgs e)
+		/// <param name="newPlayer"></param>
+		private void OnPlayerHandshake (object sender, ClientArgs newPlayer)
 		{
-			playerStateController.AddOrUpdatePlayer(e.ConnectionId, e.Guid, e.Name);
-
-			playerStateController.GetPlayers().ForEach(p => 
+			playerStateController.GetPlayers().ForEach(p =>
 			{
-				var transmission = transmittableFactory.Build(TransmissionType.PlayerConnected, e);
+				var player = new ClientArgs
+				{
+					ConnectionId = p.ConnectionId,
+					Guid = p.Guid,
+					Name = p.Name
+				};
 
-				messenger.QueueTransmission(transmission);
+				var playerStateUpdate = transmittableFactory.Build(newPlayer.ConnectionId, TransmissionType.PlayerConnected, player);
+				messenger.QueueTransmission(playerStateUpdate);
 			});
+
+			playerStateController.AddOrUpdatePlayer(newPlayer.ConnectionId, newPlayer.Guid, newPlayer.Name);
+
+			var transmission = transmittableFactory.Build(null, TransmissionType.PlayerConnected, newPlayer);
+			messenger.QueueTransmission(transmission);
+
+			Console.WriteLine($"player connected: {newPlayer.Name} - {newPlayer.Guid}");
+			logger.Info($"player connected: {newPlayer.Name} - {newPlayer.Guid}");
 		}
 
 		private void OnPingReceived (object sender, PingArgs e)
 		{
-			var transmission = transmittableFactory.Build(TransmissionType.Ping, e);
+			var transmission = transmittableFactory.Build(null, TransmissionType.Ping, e);
 
 			messenger.QueueTransmission(transmission);
 		}
 
 		private void OnNetEvent (object sender, NetEventArgs e)
 		{
-			var transmission = transmittableFactory.Build(TransmissionType.NetEvent, e);
+			var transmission = transmittableFactory.Build(null, TransmissionType.NetEvent, e);
 
 			messenger.QueueTransmission(transmission);
 		}

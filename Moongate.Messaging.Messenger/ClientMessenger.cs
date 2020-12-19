@@ -2,6 +2,7 @@
 using Moongate.Models.Transmittable;
 using Moongate.State.Controller;
 using Moongate.Utils;
+using System;
 using System.Collections.Generic;
 using TelepathyClient = Telepathy.Client;
 
@@ -33,9 +34,18 @@ namespace Moongate.Messaging.Messenger
 		{
 			if (TransmissionQueue.Count > 0)
 			{
-				var serializedQueue = serializer.Serialize(TransmissionQueue);
+				try
+				{
+					var serializedQueue = serializer.Serialize(TransmissionQueue);
 
-				telepathyClient.Send(serializedQueue);
+					telepathyClient.Send(serializedQueue);
+				}
+				catch (Exception e)
+				{
+					logger.Error($"Failed to serialize and send transmission queue: {e.Message}");
+					Console.WriteLine($"Failed to serialize and send transmission queue: {e.Message}");
+				}
+
 				TransmissionQueue.Clear();
 			}
 		}

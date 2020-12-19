@@ -20,7 +20,6 @@ namespace Moongate.Messaging.Handler.Tests
 		[InlineData(TransmissionType.PlayerConnected, typeof(PlayerConnectedHandler))]
 		[InlineData(TransmissionType.PlayerHandshake, typeof(PlayerHandshakeHandler))]
 		[InlineData(TransmissionType.PlayerDisconnected, typeof(PlayerDisconnectedHandler))]
-		[InlineData(TransmissionType.GameStateRequest, typeof(GameStateRequestHandler))]
 		[InlineData(TransmissionType.Ping, typeof(PingHandler))]
 		public void GetHandler_IsPassedHandlerType_ReturnsProperHandler (TransmissionType transmissionType, Type transmissionHandler)
 		{

@@ -90,10 +90,7 @@ namespace Moongate
 
 			Services.AddService<ITransmittableProcessor>(new TransmittableProcessor(logger, messageReceiver, handlerProvider, identityProvider));
 
-			Services.AddService(new GameStateController(logger, new GameState(), handlerProvider));
-			var gameStateController = Services.GetService<GameStateController>();
-
-			Services.AddService(new EventReactor(logger, handlerProvider, gameStateController, playerStateController, transmittableFactory, messageListener, messenger, identityProvider));
+			Services.AddService(new EventReactor(logger, handlerProvider, playerStateController, transmittableFactory, messageListener, messenger, identityProvider));
 		}
 	}
 }

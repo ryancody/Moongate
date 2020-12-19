@@ -12,8 +12,6 @@ namespace Moongate.Messaging.Handler
 		public PlayerConnectedHandler		PlayerConnectedHandler { get; }
 		public PlayerHandshakeHandler		PlayerHandshakeHandler { get; }
 		public PlayerDisconnectedHandler	PlayerDisconnectedHandler { get; }
-		public GameStateRequestHandler		GameStateRequestHandler { get; }
-		public EntityHandler				EntityHandler { get; }
 		public PingHandler					PingHandler { get; }
 		public NetEventHandler				NetEventHandler{ get; }
 
@@ -22,8 +20,6 @@ namespace Moongate.Messaging.Handler
 			PlayerConnectedHandler = new PlayerConnectedHandler(logger);
 			PlayerHandshakeHandler = new PlayerHandshakeHandler(logger);
 			PlayerDisconnectedHandler = new PlayerDisconnectedHandler(logger);
-			GameStateRequestHandler = new GameStateRequestHandler(logger);
-			EntityHandler = new EntityHandler(logger);
 			PingHandler = new PingHandler(logger);
 			NetEventHandler = new NetEventHandler(logger);
 
@@ -32,7 +28,6 @@ namespace Moongate.Messaging.Handler
 				{ TransmissionType.PlayerConnected,		PlayerConnectedHandler },
 				{ TransmissionType.PlayerDisconnected,  PlayerDisconnectedHandler },
 				{ TransmissionType.PlayerHandshake,		PlayerHandshakeHandler },
-				{ TransmissionType.GameStateRequest,	GameStateRequestHandler },
 				{ TransmissionType.Ping,				PingHandler },
 				{ TransmissionType.NetEvent,			NetEventHandler }
 			};

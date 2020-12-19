@@ -14,7 +14,6 @@ namespace Moongate.IO
 		public event EventHandler<PingArgs> PingReceived;
 		public event EventHandler<ClientArgs> PlayerConnected;
 		public event EventHandler<ClientArgs> PlayerDisconnected;
-		public event EventHandler<GameStateRequestArgs> GameStateReceived;
 		public event EventHandler<NetEventArgs> NetEventReceived;
 
 		internal Output (ILogger logger, IHandlerProvider handlerProvider, IIdentityProvider identity)
@@ -25,7 +24,6 @@ namespace Moongate.IO
 			handlerProvider.PingHandler.PingReceived += OnPingReceived;
 			handlerProvider.PlayerConnectedHandler.PlayerConnected += OnPlayerConnected;
 			handlerProvider.PlayerDisconnectedHandler.PlayerDisconnected += OnPlayerDisconnected;
-			handlerProvider.GameStateRequestHandler.GameStateReceived += GameStateReceived;
 			handlerProvider.NetEventHandler.NetEventReceived += OnNetEvent;
 		}
 

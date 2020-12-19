@@ -47,7 +47,7 @@ namespace Moongate.App
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				var p = new { Sup = "nup", Nup = "Sup", Mup = "blah blah blah blah blah blah" };
+				var p = new byte[64];
 
 				var e = new NetEventArgs
 				{
@@ -74,6 +74,7 @@ namespace Moongate.App
 
 		private void Ping ()
 		{
+			Console.WriteLine("Pinging server...");
 			client.Farspeaker.Input.Ping();
 		}
 

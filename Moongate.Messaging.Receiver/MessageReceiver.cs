@@ -42,18 +42,16 @@ namespace Moongate.Messaging.Receiver
 		/// <param name="byteArray"></param>
 		internal void Receive (int? fromConnectionId, byte[] byteArray)
 		{
-			IEnumerable<ITransmittable> transmittables = null;
+			IEnumerable<ITransmittable> transmittables = new List<ITransmittable>();
 
 			try
 			{
-
 				transmittables = serializer.Deserialize<IEnumerable<ITransmittable>>(byteArray);
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine(e);
 			}
-
 
 			transmittables.ToList().ForEach(t =>
 			{

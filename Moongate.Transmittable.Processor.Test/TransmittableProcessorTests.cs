@@ -47,7 +47,7 @@ namespace Moongate.Transmittable.Processor.Test
 				.Verifiable();
 
 			mockHandlerProvider.Setup(h => h.GetHandler(TransmissionType.NetEvent))
-				.Returns(new EntityHandler(mockLogger.Object))
+				.Returns(new PingHandler(mockLogger.Object))
 				.Verifiable();
 
 			transmittableProcessor.Process(transmission);
