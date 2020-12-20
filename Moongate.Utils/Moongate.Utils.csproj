@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="protobuf-net" Version="3.0.73" />
+    <PackageReference Include="GroBuf" Version="1.6.1" />
   </ItemGroup>
 
 </Project>

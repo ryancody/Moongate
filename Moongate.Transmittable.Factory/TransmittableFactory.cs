@@ -17,7 +17,7 @@ namespace Moongate.Transmittable.Factory
 			this.identityProvider = identityProvider;
 		}
 
-		public ITransmittable Build (int? toConnectionId, TransmissionType messageType, IEventArgs payload)
+		public ITransmittable Build (int? toConnectionId, TransmissionType messageType, BaseEventArgs payload)
 		{
 			var t = new Transmission()
 			{

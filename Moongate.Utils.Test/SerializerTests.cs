@@ -1,55 +1,48 @@
+using GroBuf;
+using GroBuf.DataMembersExtracters;
+using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
-using Moongate.State.Models;
 using System.Collections.Generic;
-using System.IO;
 using Xunit;
 
 namespace Moongate.Utils.Tests
 {
 	public class SerializerTests
 	{
-		[Fact]
-		public void Serialize ()
+		private readonly GroBuf.Serializer serializer;
+
+		public SerializerTests ()
 		{
-			var serializer = new Serializer();
-			var expected = new List<Transmission>
-			{
-				new Transmission
-				{
-					  SenderGuid = "abc"
-				}
-			};
-
-			var serialized = serializer.Serialize(expected);
-
-			List<Transmission> actual;
-			using (var stream = new MemoryStream(serialized))
-			{
-				actual = ProtoBuf.Serializer.Deserialize<List<Transmission>>(stream);
-			}
-
-			Assert.Equal(expected.Count, actual.Count);
+			serializer = new GroBuf.Serializer(new AllFieldsExtractor(), options: GroBufOptions.WriteEmptyObjects);
 		}
 
 		[Fact]
-		public void Deserialize ()
+		public void Serialize ()
 		{
-			var serializer = new Serializer();
-			var expected = new Vector
-			{
-				x = 2,
-				y = 3
-			};
+			var expected = new Queue<Transmission>();
+			expected.Enqueue(
+				new Transmission
+				{
+					Payload = new PingArgs
+					{
+						 InitialTimestamp = 1,
+						  InitiatorGuid = "a",
+						   Ping = 2
+					},
+					SenderGuid = "b",
+					TransmissionType = TransmissionType.PlayerConnected
+				});
 
-			byte[] serialized;
-			using (var stream = new MemoryStream())
+			var serialized = serializer.Serialize(expected);
+
+			var actual = serializer.Deserialize<Queue<Transmission>>(serialized);
+
+			if (actual.Peek().Payload is PingArgs p)
 			{
-				ProtoBuf.Serializer.Serialize(stream, expected);
-				serialized = stream.ToArray();
+				var t = p;
 			}
-			var deserialized = serializer.Deserialize<Vector>(serialized);
 
-			Assert.Equal(expected.x, deserialized.x);
+			Assert.Equal(expected.Count, actual.Count);
 		}
 	}
 }

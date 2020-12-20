@@ -38,10 +38,9 @@ namespace Moongate.Messaging.Messenger
 
 		public void TransmitQueue ()
 		{
-			if (TransmissionQueue.Count <= 0)
-			{
-				return;
-			}
+			if (TransmissionQueue.Count <= 0 
+				|| playerStateController.GetPlayers().Count <= 0) 
+					return;
 
 			try
 			{
