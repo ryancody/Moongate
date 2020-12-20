@@ -41,9 +41,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyInjection", "Depe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.App", "Moongate.App\Moongate.App.csproj", "{89F90BE6-E231-4746-863D-2A5D81A121E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Messaging.Messenger.Test", "Moongate.Messaging.Messenger.Test\Moongate.Messaging.Messenger.Test.csproj", "{953FB21F-BAE5-48EB-AD23-811D977C521B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Messenger.Test", "Moongate.Messaging.Messenger.Test\Moongate.Messaging.Messenger.Test.csproj", "{953FB21F-BAE5-48EB-AD23-811D977C521B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moongate.Utils.Test", "Moongate.Utils.Test\Moongate.Utils.Test.csproj", "{78D89B71-A9D3-48CE-BF3D-B3918BA9457A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Utils.Test", "Moongate.Utils.Test\Moongate.Utils.Test.csproj", "{78D89B71-A9D3-48CE-BF3D-B3918BA9457A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
