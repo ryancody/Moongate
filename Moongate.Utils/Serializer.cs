@@ -1,22 +1,24 @@
-﻿using GroBuf;
-using GroBuf.DataMembersExtracters;
+﻿using Moongate.Models.Transmittable;
+using System.IO;
 
 namespace Moongate.Utils
 {
 	public class Serializer : ISerializer
 	{
-		GroBuf.Serializer grobufSerializer;
-
 		public Serializer ()
 		{
-			grobufSerializer = new GroBuf.Serializer(new AllFieldsExtractor(), options: GroBufOptions.WriteEmptyObjects);
+			ProtoBuf.Serializer.PrepareSerializer<ITransmittable>();
 		}
 
 		public byte[] Serialize<T> (T obj)
 		{
 			try
 			{
-				return grobufSerializer.Serialize<T>(obj);
+				using (var stream = new MemoryStream())
+				{
+					ProtoBuf.Serializer.Serialize<T>(stream, obj);
+					return stream.ToArray();
+				}
 			}
 			catch
 			{
@@ -28,7 +30,10 @@ namespace Moongate.Utils
 		{
 			try
 			{
-				return grobufSerializer.Deserialize<T>(bytes);
+				using (var stream = new MemoryStream(bytes))
+				{
+					return ProtoBuf.Serializer.Deserialize<T>(stream);
+				}
 			}
 			catch
 			{

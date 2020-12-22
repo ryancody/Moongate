@@ -1,19 +1,17 @@
-using GroBuf;
-using GroBuf.DataMembersExtracters;
 using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Moongate.Utils.Tests
 {
 	public class SerializerTests
 	{
-		private readonly GroBuf.Serializer serializer;
-
+		private readonly Serializer serializer;
 		public SerializerTests ()
 		{
-			serializer = new GroBuf.Serializer(new AllFieldsExtractor(), options: GroBufOptions.WriteEmptyObjects);
+			serializer = new Serializer();
 		}
 
 		[Fact]
@@ -37,12 +35,16 @@ namespace Moongate.Utils.Tests
 
 			var actual = serializer.Deserialize<Queue<Transmission>>(serialized);
 
-			if (actual.Peek().Payload is PingArgs p)
+			if (actual.ToList().First().Payload is PingArgs p
+				&& expected.ToList().First().Payload is PingArgs pExpected)
 			{
-				var t = p;
+				Assert.Equal(pExpected.InitialTimestamp, p.InitialTimestamp);
 			}
 
 			Assert.Equal(expected.Count, actual.Count);
+			Assert.Equal(expected.ToList().First().SenderGuid, actual.ToList().First().SenderGuid);
+			Assert.Equal(expected.ToList().First().TransmissionType, actual.ToList().First().TransmissionType);
+			Assert.Equal(expected.ToList().First().Payload.GetType(), actual.ToList().First().Payload.GetType());
 		}
 	}
 }

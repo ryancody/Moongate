@@ -1,10 +1,14 @@
-﻿using System;
+﻿using ProtoBuf;
+using System;
 
 namespace Moongate.State.Models
 {
+	[ProtoContract]
 	public class Vector : IEquatable<object>
 	{
+		[ProtoMember(1)]
 		public float x { get; set; }
+		[ProtoMember(2)]
 		public float y { get; set; }
 
 		public override bool Equals (object obj) =>

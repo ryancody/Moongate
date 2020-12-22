@@ -2,7 +2,6 @@
 
 namespace Moongate.State.Models
 {
-	[Serializable]
 	public class Player
 	{
 		public string Guid { get; set; }
