@@ -42,6 +42,8 @@ namespace Moongate.Events.Reactor.EventHandlers
 		/// <param name="newPlayer"></param>
 		private void OnPlayerHandshake (object sender, ClientArgs newPlayer)
 		{
+			playerStateController.AddOrUpdatePlayer(newPlayer.ConnectionId, newPlayer.Guid, newPlayer.Name);
+
 			playerStateController.GetPlayers().ForEach(p =>
 			{
 				var player = new ClientArgs
@@ -54,8 +56,6 @@ namespace Moongate.Events.Reactor.EventHandlers
 				var playerStateUpdate = transmittableFactory.Build(newPlayer.ConnectionId, TransmissionType.PlayerConnected, player);
 				messenger.QueueTransmission(playerStateUpdate);
 			});
-
-			playerStateController.AddOrUpdatePlayer(newPlayer.ConnectionId, newPlayer.Guid, newPlayer.Name);
 
 			var transmission = transmittableFactory.Build(null, TransmissionType.PlayerConnected, newPlayer);
 			messenger.QueueTransmission(transmission);

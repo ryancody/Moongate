@@ -11,6 +11,17 @@ namespace Moongate.State.Models
 		[ProtoMember(2)]
 		public float y { get; set; }
 
+		public Vector (float x, float y)
+		{
+			this.x = x;
+			this.y = y;
+		}
+		public Vector ()
+		{
+			x = 0;
+			y = 0;
+		}
+
 		public override bool Equals (object obj) =>
 			obj != null
 			&& obj is Vector other

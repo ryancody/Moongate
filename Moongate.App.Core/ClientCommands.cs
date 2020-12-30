@@ -40,7 +40,7 @@ namespace Moongate.App
 		private void SendNetEvent ()
 		{
 			Console.WriteLine("sending net event...");
-			client.Farspeaker.Input.SendNetEvent(null);
+			client.Farspeaker.SendNetEvent(null);
 		}
 
 		private void RapidFireNetEvents ()
@@ -56,7 +56,7 @@ namespace Moongate.App
 					Payload = p
 				};
 				Console.WriteLine("sending net event...");
-				client.Farspeaker.Input.SendNetEvent(null);
+				client.Farspeaker.SendNetEvent(e);
 			}
 		}
 
@@ -75,13 +75,13 @@ namespace Moongate.App
 		private void Ping ()
 		{
 			Console.WriteLine("Pinging server...");
-			client.Farspeaker.Input.Ping();
+			client.Farspeaker.Ping();
 		}
 
 		private void ListPlayers ()
 		{
 			Console.WriteLine("Players Connected");
-			client.GetConnectedPlayers.ForEach(p => Console.WriteLine($"\n - {p.Name}"));
+			client.ConnectedPlayers.ForEach(p => Console.WriteLine($"\n - {p.Name}"));
 		}
 	}
 }

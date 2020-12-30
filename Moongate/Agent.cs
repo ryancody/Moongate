@@ -16,7 +16,7 @@ namespace Moongate
 {
 	public class Agent
 	{
-		public List<Player> GetConnectedPlayers { get { return playerStateController.GetPlayers(); } }
+		public List<Player> ConnectedPlayers { get { return playerStateController.GetPlayers(); } }
 
 		protected readonly DependencyInjection dependencyInjection;
 		protected readonly ILogger logger;
@@ -42,6 +42,12 @@ namespace Moongate
 			messenger = dependencyInjection.Services.GetService<IMessenger>();
 			identityProvider = dependencyInjection.Services.GetService<IIdentityProvider>();
 			playerStateController = dependencyInjection.Services.GetService<PlayerStateController>();
+
+			var role = isServer ? "Server" : "Client";
+			logger.Info($@"{role}
+			 - Time: {DateTime.Now}
+			 - Instance Name: {identityProvider.Id?.Name}
+			 - GUID: {identityProvider.Id?.Guid}");
 		}
 
 		public void Run ()

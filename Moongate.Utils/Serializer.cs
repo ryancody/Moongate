@@ -10,6 +10,11 @@ namespace Moongate.Utils
 			ProtoBuf.Serializer.PrepareSerializer<ITransmittable>();
 		}
 
+		public void PrepareType<T> ()
+		{
+			ProtoBuf.Serializer.PrepareSerializer<T>();
+		}
+
 		public byte[] Serialize<T> (T obj)
 		{
 			try

@@ -39,7 +39,7 @@ namespace Moongate
 
 			var clientServer = isServer ? "server" : "client";
 
-			Services.AddService<ILogger>(new Logger.Logger(clientServer, LoggerLevel.Error, identityProvider.Id.Guid));
+			Services.AddService<ILogger>(new Logger.Logger(clientServer, LoggerLevel.Info, identityProvider.Id.Guid));
 			var logger = Services.GetService<ILogger>();
 
 			Services.AddService(new Serializer());

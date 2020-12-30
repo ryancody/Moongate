@@ -19,11 +19,6 @@ namespace Moongate
 
 		public void Start (int port)
 		{
-			logger.Info($@"Server
-			 - Time: {DateTime.Now}
-			 - Instance Name: {identityProvider.Id?.Name}
-			 - GUID: {identityProvider.Id?.Guid}");
-
 			telepathyServer.Start(port);
 		}
 
