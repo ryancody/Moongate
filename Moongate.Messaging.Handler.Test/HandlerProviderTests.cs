@@ -1,6 +1,4 @@
-using Moongate.Logger;
 using Moongate.Models.Transmittable;
-using Moq;
 using System;
 using Xunit;
 
@@ -9,11 +7,10 @@ namespace Moongate.Messaging.Handler.Tests
 	public class MessagingHandlerTests
 	{
 		private readonly IHandlerProvider handlerProvider;
-		private readonly Mock<ILogger> mockLogger = new Mock<ILogger>();
 
 		public MessagingHandlerTests ()
 		{
-			handlerProvider = new HandlerProvider(mockLogger.Object);
+
 		}
 
 		[Theory]

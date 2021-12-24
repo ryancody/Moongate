@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
+using Telepathy;
 using TelepathyServer = Telepathy.Server;
 
 namespace Moongate
@@ -12,14 +15,14 @@ namespace Moongate
 
 		public Server () : base(isServer)
 		{
-			telepathyServer = dependencyInjection.Services.GetService<TelepathyServer>();
+			telepathyServer = (TelepathyServer)dependencyInjection.ServiceProvider.GetRequiredService<Common>();
 
 			identityProvider.Id.IsServer = isServer;
 		}
 
 		public void Start (int port)
 		{
-			logger.Info($@"Server
+			logger.LogInformation($@"Server
 			 - Time: {DateTime.Now}
 			 - Instance Name: {identityProvider.Id?.Name}
 			 - GUID: {identityProvider.Id?.Guid}");

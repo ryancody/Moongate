@@ -1,5 +1,5 @@
-﻿using Moongate.Identity.Provider;
-using Moongate.Logger;
+﻿using Microsoft.Extensions.Logging;
+using Moongate.Identity.Provider;
 using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
@@ -11,12 +11,12 @@ namespace Moongate.IO
 {
 	public class Input
 	{
-		private readonly ILogger logger;
+		private readonly ILogger<Input> logger;
 		private readonly ITransmittableFactory transmittableFactory;
 		private readonly IMessenger messenger;
 		private readonly IIdentityProvider identityProvider;
 
-		internal Input (ILogger logger, ITransmittableFactory transmittableFactory, IMessenger messenger, IIdentityProvider identityProvider)
+		public Input (ILogger<Input> logger, ITransmittableFactory transmittableFactory, IMessenger messenger, IIdentityProvider identityProvider)
 		{
 			this.logger = logger;
 			this.transmittableFactory = transmittableFactory;

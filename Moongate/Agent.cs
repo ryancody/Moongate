@@ -1,7 +1,7 @@
-﻿using DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Moongate.Events.Reactor;
 using Moongate.Identity.Provider;
-using Moongate.Logger;
 using Moongate.Messaging.Handler;
 using Moongate.Messaging.Listener;
 using Moongate.Messaging.Messenger;
@@ -14,7 +14,7 @@ namespace Moongate
 	public class Agent
 	{
 		protected readonly DependencyInjection dependencyInjection;
-		protected readonly ILogger logger;
+		protected readonly ILogger<Agent> logger;
 		protected readonly IMessageListener messageListener;
 		protected readonly IMessageReceiver messageReceiver;
 		protected readonly ITransmittableProcessor transmittableProcessor;
@@ -23,18 +23,18 @@ namespace Moongate
 		protected readonly IMessenger messenger;
 		protected readonly IIdentityProvider identityProvider;
 
-		public Agent (bool isServer)
+		internal Agent (bool isServer)
 		{
 			dependencyInjection = new DependencyInjection(isServer);
 
-			logger = dependencyInjection.Services.GetService<ILogger>();
-			messageListener = dependencyInjection.Services.GetService<IMessageListener>();
-			messageReceiver = dependencyInjection.Services.GetService<IMessageReceiver>();
-			transmittableProcessor = dependencyInjection.Services.GetService<ITransmittableProcessor>();
-			handlerProvider = dependencyInjection.Services.GetService<IHandlerProvider>();
-			eventReactor = dependencyInjection.Services.GetService<EventReactor>();
-			messenger = dependencyInjection.Services.GetService<IMessenger>();
-			identityProvider = dependencyInjection.Services.GetService<IIdentityProvider>();
+			logger = dependencyInjection.ServiceProvider.GetRequiredService<ILogger<Agent>>();
+			messageListener = dependencyInjection.ServiceProvider.GetRequiredService<IMessageListener>();
+			messageReceiver = dependencyInjection.ServiceProvider.GetRequiredService<IMessageReceiver>();
+			transmittableProcessor = dependencyInjection.ServiceProvider.GetRequiredService<ITransmittableProcessor>();
+			handlerProvider = dependencyInjection.ServiceProvider.GetRequiredService<IHandlerProvider>();
+			eventReactor = dependencyInjection.ServiceProvider.GetRequiredService<EventReactor>();
+			messenger = dependencyInjection.ServiceProvider.GetRequiredService<IMessenger>();
+			identityProvider = dependencyInjection.ServiceProvider.GetRequiredService<IIdentityProvider>();
 		}
 
 		public void Run ()
@@ -47,7 +47,7 @@ namespace Moongate
 			}
 			catch (Exception e)
 			{
-				logger.Error(e.ToString());
+				logger.LogError(e.ToString());
 				Console.WriteLine(e);
 			}
 		}

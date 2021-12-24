@@ -1,5 +1,4 @@
-﻿using Moongate.Logger;
-using Moongate.Models.Events;
+﻿using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
 using System;
 
@@ -9,7 +8,7 @@ namespace Moongate.Messaging.Handler
 	{
 		public event EventHandler<PlayerInputArgs> PlayerInput;
 
-		public PlayerInputHandler (ILogger logger) : base(logger) { }
+		public PlayerInputHandler () : base() { }
 
 		public void Handle (ITransmittable t)
 		{

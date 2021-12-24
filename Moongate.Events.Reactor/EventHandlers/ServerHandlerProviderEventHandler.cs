@@ -1,36 +1,29 @@
 ﻿using Moongate.Identity.Provider;
-using Moongate.Logger;
 using Moongate.Messaging.Handler;
 using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
 using Moongate.State.Controller;
 using Moongate.Transmittable.Factory;
-using System;
 
 namespace Moongate.Events.Reactor.EventHandlers
 {
 	public class ServerHandlerProviderEventHandler : IEventHandler
 	{
-		private readonly ILogger logger;
 		private readonly IMessenger messenger;
 		private readonly ITransmittableFactory transmittableFactory;
-		private readonly IIdentityProvider identityProvider;
 		private readonly GameStateController gameStateController;
 		private readonly PlayerStateController playerStateController;
 
-		public ServerHandlerProviderEventHandler (ILogger logger, 
-			IHandlerProvider handlerProvider, 
+		public ServerHandlerProviderEventHandler (IHandlerProvider handlerProvider, 
 			IMessenger messenger, 
 			ITransmittableFactory transmittableFactory, 
 			IIdentityProvider identityProvider,
 			GameStateController gameStateController,
 			PlayerStateController playerStateController)
 		{
-			this.logger = logger;
 			this.messenger = messenger;
 			this.transmittableFactory = transmittableFactory;
-			this.identityProvider = identityProvider;
 			this.gameStateController = gameStateController;
 			this.playerStateController = playerStateController;
 

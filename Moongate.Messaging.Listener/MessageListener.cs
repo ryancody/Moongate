@@ -1,4 +1,4 @@
-﻿using Moongate.Logger;
+﻿using Microsoft.Extensions.Logging;
 using Moongate.Models.Events;
 using System;
 using Telepathy;
@@ -7,14 +7,14 @@ namespace Moongate.Messaging.Listener
 {
 	public class MessageListener : IMessageListener
 	{
-		private readonly ILogger logger;
+		private readonly ILogger<MessageListener> logger;
 		private readonly Common common;
 
 		public event EventHandler<MessageArgs> Connected;
 		public event EventHandler<MessageArgs> Disconnected;
 		public event EventHandler<MessageArgs> DataReceived;
 
-		public MessageListener (ILogger logger, Common common)
+		public MessageListener (ILogger<MessageListener> logger, Common common)
 		{
 			this.logger = logger;
 			this.common = common;
@@ -24,7 +24,7 @@ namespace Moongate.Messaging.Listener
 		{
 			while (common.GetNextMessage(out var msg))
 			{
-				logger.Debug($@"Telepathy.Common received {msg.eventType} message");
+				logger.LogDebug($@"Telepathy.Common received {msg.eventType} message");
 
 				var args = new MessageArgs
 				{
@@ -47,7 +47,7 @@ namespace Moongate.Messaging.Listener
 						break;
 
 					default:
-						logger.Error($"Error listening to Telepathy message type: {msg.eventType}");
+						logger.LogError($"Error listening to Telepathy message type: {msg.eventType}");
 						break;
 				}
 			}

@@ -1,5 +1,5 @@
-﻿using Moongate.Identity.Provider;
-using Moongate.Logger;
+﻿using Microsoft.Extensions.Logging;
+using Moongate.Identity.Provider;
 using Moongate.Messaging.Handler;
 using Moongate.Models.Events;
 using System;
@@ -8,7 +8,7 @@ namespace Moongate.IO
 {
 	public class Output
 	{
-		private readonly ILogger logger;
+		private readonly ILogger<Output> logger;
 		private readonly IIdentityProvider identity;
 
 		public event EventHandler<PingArgs> PingReceived;
@@ -18,7 +18,7 @@ namespace Moongate.IO
 		public event EventHandler<EntityArgs> EntityReceived;
 		public event EventHandler<GameStateRequestArgs> GameStateReceived;
 
-		internal Output (ILogger logger, IHandlerProvider handlerProvider, IIdentityProvider identity)
+		public Output (ILogger<Output> logger, IHandlerProvider handlerProvider, IIdentityProvider identity)
 		{
 			this.logger = logger;
 			this.identity = identity;

@@ -5,14 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DependencyInjection\DependencyInjection.csproj" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
 
     <ProjectReference Include="..\Moongate.Events.Reactor\Moongate.Events.Reactor.csproj" />
     <ProjectReference Include="..\Moongate.Farspeaker\Moongate.Farspeaker.csproj" />
     <ProjectReference Include="..\Moongate.Identity.Provider\Moongate.Identity.Provider.csproj" />
     <ProjectReference Include="..\Moongate.Messaging.Handler\Moongate.Messaging.Handler.csproj" />
     <ProjectReference Include="..\Moongate.Messaging.Listener\Moongate.Messaging.Listener.csproj" />
-    <ProjectReference Include="..\Moongate.Logger\Moongate.Logger.csproj" />
     <ProjectReference Include="..\Moongate.Messaging.Messenger\Moongate.Messaging.Messenger.csproj" />
     <ProjectReference Include="..\Moongate.Messaging.Receiver\Moongate.Messaging.Receiver.csproj" />
     <ProjectReference Include="..\Moongate.Transmittable.Processor\Moongate.Transmittable.Processor.csproj" />

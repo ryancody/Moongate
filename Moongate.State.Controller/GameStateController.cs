@@ -1,18 +1,15 @@
-﻿using Moongate.Logger;
-using Moongate.Messaging.Handler;
+﻿using Moongate.Messaging.Handler;
 using Moongate.State.Models;
 
 namespace Moongate.State.Controller
 {
 	public class GameStateController
 	{
-		readonly ILogger logger;
 
 		public GameState GameState { get; set; }
 
-		public GameStateController (ILogger logger, GameState gamestate, IHandlerProvider handlerProvider)
+		public GameStateController (GameState gamestate, IHandlerProvider handlerProvider)
 		{
-			this.logger = logger;
 			GameState = gamestate;
 		}
 

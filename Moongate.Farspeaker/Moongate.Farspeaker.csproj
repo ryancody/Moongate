@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Moongate.Identity.Provider\Moongate.Identity.Provider.csproj" />
-    <ProjectReference Include="..\Moongate.Logger\Moongate.Logger.csproj" />
     <ProjectReference Include="..\Moongate.Messaging.Messenger\Moongate.Messaging.Messenger.csproj" />
     <ProjectReference Include="..\Moongate.Models\Moongate.Models.csproj" />
     <ProjectReference Include="..\Moongate.Transmittable.Factory\Moongate.Transmittable.Factory.csproj" />

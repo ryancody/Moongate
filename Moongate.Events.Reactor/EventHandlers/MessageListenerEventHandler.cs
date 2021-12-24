@@ -1,5 +1,5 @@
-﻿using Moongate.Identity.Provider;
-using Moongate.Logger;
+﻿using Microsoft.Extensions.Logging;
+using Moongate.Identity.Provider;
 using Moongate.Messaging.Listener;
 using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
@@ -11,12 +11,12 @@ namespace Moongate.Events.Reactor.EventHandlers
 {
 	public class MessageListenerEventHandler : IEventHandler
 	{
-		private readonly ILogger logger;
+		private readonly ILogger<MessageListenerEventHandler> logger;
 		private readonly IMessenger messenger;
 		private readonly ITransmittableFactory transmittableFactory;
 		private readonly IIdentityProvider identityProvider;
 
-		public MessageListenerEventHandler (ILogger logger, 
+		public MessageListenerEventHandler (ILogger<MessageListenerEventHandler> logger, 
 			IMessageListener messageListener, 
 			IMessenger messenger, 
 			ITransmittableFactory transmittableFactory, 
@@ -36,12 +36,12 @@ namespace Moongate.Events.Reactor.EventHandlers
 			if (identityProvider.Id.IsServer)
 			{
 				Console.WriteLine($"player [connection id {e.FromConnectionId}] connected, initiating handshake");
-				logger.Info($"player [connection id {e.FromConnectionId}] connected, initiating handshake");
+				logger.LogInformation($"player [connection id {e.FromConnectionId}] connected, initiating handshake");
 			}
 			else
 			{
 				Console.WriteLine($"connected to server");
-				logger.Info($"connected to server");
+				logger.LogInformation($"connected to server");
 
 				var playerHandshakeArgs = new ClientArgs
 				{
@@ -59,12 +59,12 @@ namespace Moongate.Events.Reactor.EventHandlers
 			if (identityProvider.Id.IsServer)
 			{
 				Console.WriteLine($"player [connection id {e.FromConnectionId}] disconnected");
-				logger.Info($"player [connection id {e.FromConnectionId}] disconnected");
+				logger.LogInformation($"player [connection id {e.FromConnectionId}] disconnected");
 			}
 			else
 			{
 				Console.WriteLine("disconnected from server");
-				logger.Info("disconnected from server");
+				logger.LogInformation("disconnected from server");
 			}
 		}
 	}

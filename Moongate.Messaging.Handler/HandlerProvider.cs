@@ -1,5 +1,4 @@
-﻿using Moongate.Logger;
-using Moongate.Models.Transmittable;
+﻿using Moongate.Models.Transmittable;
 using System;
 using System.Collections.Generic;
 
@@ -17,15 +16,21 @@ namespace Moongate.Messaging.Handler
 		public EntityHandler				EntityHandler { get; }
 		public PingHandler					PingHandler { get; }
 
-		public HandlerProvider (ILogger logger)
+		public HandlerProvider (PlayerConnectedHandler playerConnectedHandler,
+								PlayerHandshakeHandler playerHandshakeHandler,
+								PlayerDisconnectedHandler playerDisconnectedHandler,
+								PlayerInputHandler playerInputHandler,
+								GameStateRequestHandler gameStateRequestHandler,
+								EntityHandler entityHandler,
+								PingHandler pingHandler)
 		{
-			PlayerConnectedHandler = new PlayerConnectedHandler(logger);
-			PlayerHandshakeHandler = new PlayerHandshakeHandler(logger);
-			PlayerDisconnectedHandler = new PlayerDisconnectedHandler(logger);
-			PlayerInputHandler = new PlayerInputHandler(logger);
-			GameStateRequestHandler = new GameStateRequestHandler(logger);
-			EntityHandler = new EntityHandler(logger);
-			PingHandler = new PingHandler(logger);
+			PlayerConnectedHandler = playerConnectedHandler;
+			PlayerHandshakeHandler = playerHandshakeHandler;
+			PlayerDisconnectedHandler = playerDisconnectedHandler;
+			PlayerInputHandler = playerInputHandler;
+			GameStateRequestHandler = gameStateRequestHandler;
+			EntityHandler = entityHandler;
+			PingHandler = pingHandler;
 
 			handlers = new Dictionary<TransmissionType, ITransmissionHandler>
 			{

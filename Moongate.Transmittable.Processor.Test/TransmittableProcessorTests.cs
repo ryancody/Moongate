@@ -1,5 +1,5 @@
+using Microsoft.Extensions.Logging;
 using Moongate.Identity.Provider;
-using Moongate.Logger;
 using Moongate.Messaging.Handler;
 using Moongate.Messaging.Receiver;
 using Moongate.Models.Identity;
@@ -13,7 +13,8 @@ namespace Moongate.Transmittable.Processor.Test
 	{
 		private readonly TransmittableProcessor transmittableProcessor;
 
-		private readonly Mock<ILogger> mockLogger = new Mock<ILogger>();
+		private readonly Mock<ILogger<TransmittableProcessor>> mockLogger = new Mock<ILogger<TransmittableProcessor>>();
+		private readonly Mock<ILogger<EntityHandler>> mockLoggerEntityHandler = new Mock<ILogger<EntityHandler>>();
 		private readonly Mock<IMessageReceiver> mockMessageReceiver = new Mock<IMessageReceiver>();
 		private readonly Mock<IHandlerProvider> mockHandlerProvider = new Mock<IHandlerProvider>();
 		private readonly Mock<IIdentityProvider> mockIdentityProvider = new Mock<IIdentityProvider>();
@@ -47,7 +48,7 @@ namespace Moongate.Transmittable.Processor.Test
 				.Verifiable();
 
 			mockHandlerProvider.Setup(h => h.GetHandler(TransmissionType.EntityTransmit))
-				.Returns(new EntityHandler(mockLogger.Object))
+				.Returns(new EntityHandler(mockLoggerEntityHandler.Object))
 				.Verifiable();
 
 			transmittableProcessor.Process(transmission);

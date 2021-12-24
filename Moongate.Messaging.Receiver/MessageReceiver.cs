@@ -1,5 +1,4 @@
-﻿using Moongate.Logger;
-using Moongate.Messaging.Listener;
+﻿using Moongate.Messaging.Listener;
 using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
 using Moongate.Utils;
@@ -13,14 +12,12 @@ namespace Moongate.Messaging.Receiver
 {
 	public class MessageReceiver : IMessageReceiver
 	{
-		private readonly ILogger logger;
 		private readonly ISerializer serializer;
 
 		public EventHandler<TransmissionArgs> TransmissionReceived { get; set; }
 
-		public MessageReceiver (ILogger logger, ISerializer serializer, IMessageListener messageListener)
+		public MessageReceiver (ISerializer serializer, IMessageListener messageListener)
 		{
-			this.logger = logger;
 			this.serializer = serializer;
 
 			messageListener.DataReceived += OnDataReceived;

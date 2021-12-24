@@ -1,29 +1,26 @@
-﻿using Moongate.Logger;
-using Moongate.Models.Transmittable;
+﻿using Moongate.Models.Transmittable;
 using Moongate.State.Controller;
 using Moongate.Utils;
 using System.Collections.Generic;
+using Telepathy;
 using TelepathyServer = Telepathy.Server;
 
 namespace Moongate.Messaging.Messenger
 {
 	public class ServerMessenger : IMessenger
 	{
-		private readonly ILogger logger;
 		private readonly ISerializer serializer;
 		private readonly TelepathyServer telepathyServer;
 		private readonly PlayerStateController playerStateController;
 		
 		private Queue<ITransmittable> TransmissionQueue { get; set; } = new Queue<ITransmittable>();
 
-		public ServerMessenger (ILogger logger,
-			ISerializer serializer,
-			TelepathyServer telepathyServer,
+		public ServerMessenger (ISerializer serializer,
+			Common telepathyServer,
 			PlayerStateController playerStateController)
 		{
-			this.logger = logger;
 			this.serializer = serializer;
-			this.telepathyServer = telepathyServer;
+			this.telepathyServer = (TelepathyServer)telepathyServer;
 			this.playerStateController = playerStateController;
 		}
 

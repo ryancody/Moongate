@@ -1,7 +1,6 @@
-﻿using Moongate.Logger;
-using Moongate.Models.Events;
-using Moongate.State.Models;
+﻿using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
+using Moongate.State.Models;
 using System;
 
 namespace Moongate.Messaging.Handler
@@ -10,7 +9,7 @@ namespace Moongate.Messaging.Handler
 	{
 		public static event EventHandler<PlayerStateArgs> PlayerStateUpdated;
 
-		public PlayerStateUpdateHandler (ILogger logger) : base(logger) { }
+		public PlayerStateUpdateHandler () : base() { }
 
 		public void Handle (ITransmittable t)
 		{
