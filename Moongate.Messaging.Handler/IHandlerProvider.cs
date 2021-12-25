@@ -8,9 +8,7 @@ namespace Moongate.Messaging.Handler
 		PlayerConnectedHandler PlayerConnectedHandler { get; }
 		PlayerHandshakeHandler PlayerHandshakeHandler { get; }
 		PlayerDisconnectedHandler PlayerDisconnectedHandler { get; }
-		PlayerInputHandler PlayerInputHandler { get; }
-		GameStateRequestHandler GameStateRequestHandler { get; }
-		EntityHandler EntityHandler { get; }
 		PingHandler PingHandler { get; }
+		NetEventHandler NetEventHandler { get; }
 	}
 }

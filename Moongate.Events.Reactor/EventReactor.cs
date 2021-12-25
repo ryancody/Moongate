@@ -5,7 +5,7 @@ namespace Moongate.Events.Reactor
 {
 	public class EventReactor
 	{
-		private readonly ISet<IEventHandler> eventHandlers;
+		private readonly ISet<IEventHandler> eventHandlers = new HashSet<IEventHandler>();
 
 		public EventReactor (MessageListenerEventHandler messageListenerEventHandler, IEventHandler eventHandler)
 		{

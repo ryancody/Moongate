@@ -11,10 +11,8 @@ namespace Moongate.Messaging.Handler
 		public PlayerConnectedHandler		PlayerConnectedHandler { get; }
 		public PlayerHandshakeHandler		PlayerHandshakeHandler { get; }
 		public PlayerDisconnectedHandler	PlayerDisconnectedHandler { get; }
-		public PlayerInputHandler			PlayerInputHandler { get; }
-		public GameStateRequestHandler		GameStateRequestHandler { get; }
-		public EntityHandler				EntityHandler { get; }
 		public PingHandler					PingHandler { get; }
+		public NetEventHandler				NetEventHandler{ get; }
 
 		public HandlerProvider (PlayerConnectedHandler playerConnectedHandler,
 								PlayerHandshakeHandler playerHandshakeHandler,
@@ -27,20 +25,16 @@ namespace Moongate.Messaging.Handler
 			PlayerConnectedHandler = playerConnectedHandler;
 			PlayerHandshakeHandler = playerHandshakeHandler;
 			PlayerDisconnectedHandler = playerDisconnectedHandler;
-			PlayerInputHandler = playerInputHandler;
-			GameStateRequestHandler = gameStateRequestHandler;
-			EntityHandler = entityHandler;
 			PingHandler = pingHandler;
+			NetEventHandler = NetEventHandler;
 
 			handlers = new Dictionary<TransmissionType, ITransmissionHandler>
 			{
 				{ TransmissionType.PlayerConnected,		PlayerConnectedHandler },
 				{ TransmissionType.PlayerDisconnected,  PlayerDisconnectedHandler },
 				{ TransmissionType.PlayerHandshake,		PlayerHandshakeHandler },
-				{ TransmissionType.PlayerInput,			PlayerInputHandler },
-				{ TransmissionType.GameStateRequest,	GameStateRequestHandler },
-				{ TransmissionType.EntityTransmit,		EntityHandler },
-				{ TransmissionType.Ping,				PingHandler }
+				{ TransmissionType.Ping,				PingHandler },
+				{ TransmissionType.NetEvent,			NetEventHandler }
 			};
 		}
 

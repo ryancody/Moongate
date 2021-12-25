@@ -1,65 +1,62 @@
-﻿using Moongate.State.Models;
-using Moongate.Models.Transmittable;
-using System;
+﻿using Moongate.Models.Transmittable;
+using ProtoBuf;
 
 namespace Moongate.Models.Events
 {
-	[Serializable]
-	public class MessageArgs : EventArgs
+	[ProtoContract]
+	[ProtoInclude(100, typeof(MessageArgs))]
+	[ProtoInclude(101, typeof(TransmissionArgs))]
+	[ProtoInclude(102, typeof(PingArgs))]
+	[ProtoInclude(103, typeof(ClientArgs))]
+	[ProtoInclude(104, typeof(NetEventArgs))]
+	public interface IEventArgs { }
+
+	[ProtoContract]
+	public class MessageArgs : IEventArgs
 	{
+		[ProtoMember(1)]
 		public int FromConnectionId { get; set; }
+		[ProtoMember(2)]
 		public byte[] Payload { get; set; }
 	}
 
-	[Serializable]
-	public class TransmissionArgs : EventArgs
+	[ProtoContract]
+	public class TransmissionArgs : IEventArgs
 	{
-		public ITransmittable Transmission { get; set; }	
+		[ProtoMember(1)]
+		public Transmission Transmission { get; set; }
 	}
 
-	[Serializable]
-	public class PingArgs : EventArgs
+	[ProtoContract]
+	public class PingArgs : IEventArgs
 	{
+		[ProtoMember(1)]
 		public string InitiatorGuid { get; set; }
+		[ProtoMember(2)]
 		public long InitialTimestamp { get; set; }
+		[ProtoMember(3)]
 		public long? Ping { get; set; }
 	}
 
-	[Serializable]
-	public class ClientArgs : EventArgs
+	[ProtoContract]
+	public class ClientArgs : IEventArgs
 	{
+		[ProtoMember(1)]
 		public int ConnectionId { get; set; }
+		[ProtoMember(2)]
 		public string Guid { get; set; }
+		[ProtoMember(3)]
 		public string Name { get; set; }
 	}
 
-	[Serializable]
-	public class EntityArgs : EventArgs
+	[ProtoContract]
+	public class NetEventArgs : IEventArgs
 	{
-		public Entity Entity { get; set; }
-	}
-
-	[Serializable]
-	public class PlayerInputArgs : EventArgs
-	{
-		public string ControllerGuid { get; set; }
-		public Vector Vector { get; set; } = new Vector();
-
-		public bool Equals (PlayerInputArgs other) =>
-			ControllerGuid.Equals(other.ControllerGuid)
-			&& Vector.Equals(other.Vector);
-	}
-
-	[Serializable]
-	public class GameStateRequestArgs : EventArgs
-	{
+		[ProtoMember(1)]
 		public string SenderGuid { get; set; }
-		public GameState GameState { get; set; }
-	}
-
-	[Serializable]
-	public class PlayerStateArgs : EventArgs
-	{
-		public PlayerState PlayerState { get; set; }
+		[ProtoMember(2)]
+		public string EventType { get; set; }
+		[ProtoMember(3)]
+		public byte[] Payload { get; set; }
 	}
 }

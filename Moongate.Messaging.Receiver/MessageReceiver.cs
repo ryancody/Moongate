@@ -39,10 +39,21 @@ namespace Moongate.Messaging.Receiver
 		/// <param name="byteArray"></param>
 		internal void Receive (int? fromConnectionId, byte[] byteArray)
 		{
-			var transmittables = serializer.Deserialize<IEnumerable<ITransmittable>>(byteArray);
+			Queue<Transmission> incomingQueue = new Queue<Transmission>();
 
-			transmittables.ToList().ForEach(t =>
+			try
 			{
+				incomingQueue = serializer.Deserialize<Queue<Transmission>>(byteArray);
+			}
+			catch (Exception e)
+			{
+				logger.Error("Failed to deserialize Transmission");
+				Console.WriteLine(e);
+			}
+
+			while (incomingQueue.Count() > 0)
+			{
+				var t = incomingQueue.Dequeue();
 				var transmissionArgs = new TransmissionArgs
 				{
 					Transmission = new Transmission
@@ -55,7 +66,7 @@ namespace Moongate.Messaging.Receiver
 				};
 
 				TriggerTransmissionReceived(transmissionArgs);
-			});
+			}
 		}
 	}
 }

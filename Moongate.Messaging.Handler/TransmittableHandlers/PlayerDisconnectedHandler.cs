@@ -12,10 +12,7 @@ namespace Moongate.Messaging.Handler
 
 		public void Handle (ITransmittable t)
 		{
-			var clientArgs = new ClientArgs
-			{
-				ConnectionId = t.SenderConnectionId.GetValueOrDefault()
-			};
+			var clientArgs = (ClientArgs)t.Payload;
 
 			PlayerDisconnected?.Invoke(this, clientArgs);
 		}

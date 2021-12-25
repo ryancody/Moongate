@@ -11,45 +11,19 @@ namespace Moongate.Events.Reactor.EventHandlers
 	{
 		private readonly ILogger<ClientHandlerProviderEventHandler> logger;
 		private readonly IIdentityProvider identityProvider;
-		private readonly GameStateController gameStateController;
 		private readonly PlayerStateController playerStateController;
 
 		public ClientHandlerProviderEventHandler (ILogger<ClientHandlerProviderEventHandler> logger, 
 			IHandlerProvider handlerProvider, 
 			IIdentityProvider identityProvider,
-			GameStateController gameStateController,
 			PlayerStateController playerStateController)
 		{
 			this.logger = logger;
 			this.identityProvider = identityProvider;
-			this.gameStateController = gameStateController;
 			this.playerStateController = playerStateController;
 
 			handlerProvider.PlayerConnectedHandler.PlayerConnected += OnPlayerConnected;
 			handlerProvider.PlayerDisconnectedHandler.PlayerDisconnected += OnPlayerDisconnected;
-			handlerProvider.EntityHandler.EntityReceived += OnEntityReceived;
-			handlerProvider.GameStateRequestHandler.GameStateReceived += OnGameStateReceived;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnGameStateReceived (object sender, GameStateRequestArgs e)
-		{
-			if (e.GameState != null)
-			{
-				gameStateController.GameState = e.GameState;
-			}
-		}
-
-		private void OnEntityReceived (object sender, EntityArgs e)
-		{
-			Console.WriteLine("Received entity, processing");
-			logger.LogDebug("Received entity, processing");
-
-			gameStateController.ProcessEntity(e.Entity);
 		}
 
 		private void OnPlayerDisconnected (object sender, ClientArgs e)
