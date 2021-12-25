@@ -11,12 +11,12 @@ namespace Moongate.Events.Reactor.EventHandlers
 {
 	public class ClientMessageListenerEventHandler : IEventHandler
 	{
-		private readonly ILogger<MessageListenerEventHandler> logger;
+		private readonly ILogger<ClientMessageListenerEventHandler> logger;
 		private readonly IMessenger messenger;
 		private readonly ITransmittableFactory transmittableFactory;
 		private readonly IIdentityProvider identityProvider;
 
-		public MessageListenerEventHandler (ILogger<MessageListenerEventHandler> logger, 
+		public ClientMessageListenerEventHandler(ILogger<ClientMessageListenerEventHandler> logger, 
 			IMessageListener messageListener, 
 			IMessenger messenger, 
 			ITransmittableFactory transmittableFactory, 
@@ -34,14 +34,14 @@ namespace Moongate.Events.Reactor.EventHandlers
 		private void MessageListener_Connected (object sender, MessageArgs e)
 		{
 			Console.WriteLine($"connected to server");
-			logger.Info($"connected to server");
+			logger.LogInformation($"connected to server");
 
 			var playerHandshakeArgs = new ClientArgs
 			{
 				Name = identityProvider.Id.Name,
 				Guid = identityProvider.Id.Guid
 			};
-			var transmission = transmittableFactory.Build(null, TransmissionType.PlayerHandshake, playerHandshakeArgs);
+			var transmission = transmittableFactory.Build(TransmissionType.PlayerHandshake, playerHandshakeArgs);
 
 			messenger.QueueTransmission(transmission);
 		}
@@ -49,7 +49,7 @@ namespace Moongate.Events.Reactor.EventHandlers
 		private void MessageListener_Disconnected (object sender, MessageArgs e)
 		{
 			Console.WriteLine("disconnected from server");
-			logger.Info("disconnected from server");
+			logger.LogInformation("disconnected from server");
 		}
 	}
 }

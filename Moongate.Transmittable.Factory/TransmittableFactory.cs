@@ -1,6 +1,6 @@
 ﻿using Moongate.Identity.Provider;
+using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
-using System;
 
 namespace Moongate.Transmittable.Factory
 {
@@ -13,7 +13,7 @@ namespace Moongate.Transmittable.Factory
 			this.identityProvider = identityProvider;
 		}
 
-		public ITransmittable Build (TransmissionType messageType, EventArgs payload)
+		public ITransmittable Build (TransmissionType messageType, IEventArgs payload)
 		{
 			var t = new Transmission()
 			{

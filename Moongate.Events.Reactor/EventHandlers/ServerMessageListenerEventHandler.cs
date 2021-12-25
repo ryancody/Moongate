@@ -1,4 +1,4 @@
-﻿using Moongate.Logger;
+﻿using Microsoft.Extensions.Logging;
 using Moongate.Messaging.Listener;
 using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
@@ -11,12 +11,12 @@ namespace Moongate.Events.Reactor.EventHandlers
 {
 	public class ServerMessageListenerEventHandler : IEventHandler
 	{
-		private readonly ILogger logger;
+		private readonly ILogger<ServerMessageListenerEventHandler> logger;
 		private readonly ITransmittableFactory transmittableFactory;
 		private readonly IMessenger messenger;
 		private readonly PlayerStateController playerStateController;
 
-		public ServerMessageListenerEventHandler (ILogger logger,
+		public ServerMessageListenerEventHandler (ILogger<ServerMessageListenerEventHandler> logger,
 			IMessageListener messageListener,
 			ITransmittableFactory transmittableFactory,
 			IMessenger messenger,
@@ -34,13 +34,13 @@ namespace Moongate.Events.Reactor.EventHandlers
 		private void MessageListener_Connected (object sender, MessageArgs e)
 		{
 			Console.WriteLine($"player [connection id {e.FromConnectionId}] connected, initiating handshake");
-			logger.Info($"player [connection id {e.FromConnectionId}] connected, initiating handshake");
+			logger.LogInformation($"player [connection id {e.FromConnectionId}] connected, initiating handshake");
 		}
 
 		private void MessageListener_Disconnected (object sender, MessageArgs e)
 		{
 			Console.WriteLine($"player [connection id {e.FromConnectionId}] disconnected");
-			logger.Info($"player [connection id {e.FromConnectionId}] disconnected");
+			logger.LogInformation($"player [connection id {e.FromConnectionId}] disconnected");
 
 			
 			var disconnectedClient = new ClientArgs
@@ -52,7 +52,7 @@ namespace Moongate.Events.Reactor.EventHandlers
 
 			playerStateController.RemovePlayer(e.FromConnectionId);
 
-			var playerStateUpdate = transmittableFactory.Build(null, TransmissionType.PlayerDisconnected, disconnectedClient);
+			var playerStateUpdate = transmittableFactory.Build(TransmissionType.PlayerDisconnected, disconnectedClient);
 			messenger.QueueTransmission(playerStateUpdate);
 		}
 	}
