@@ -6,8 +6,6 @@ namespace Moongate.IO
 	{
 		public static void AddFarspeakerService(this IServiceCollection services)
 		{
-			services.AddSingleton<Input>();
-			services.AddSingleton<Output>();
 			services.AddSingleton<Farspeaker>();
 		}
 	}

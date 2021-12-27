@@ -11,13 +11,6 @@ namespace Moongate.State.Controller
 		{
 			services.AddSingleton(s =>
 			{
-				var gameState = new GameState();
-				var handlerProvider = s.GetRequiredService<IHandlerProvider>();
-				return new GameStateController(gameState, handlerProvider);
-			});
-
-			services.AddSingleton(s =>
-			{
 				var logger = s.GetRequiredService<ILogger<PlayerStateController>>();
 				var playerState = new PlayerState();
 				return new PlayerStateController(logger, playerState);

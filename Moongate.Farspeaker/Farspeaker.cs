@@ -1,5 +1,5 @@
-﻿using Moongate.Identity.Provider;
-using Moongate.Logger;
+﻿using Microsoft.Extensions.Logging;
+using Moongate.Identity.Provider;
 using Moongate.Messaging.Handler;
 using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
@@ -9,9 +9,9 @@ using System;
 
 namespace Moongate.IO
 {
-	public class Farspeaker
+    public class Farspeaker
 	{
-		private readonly ILogger logger;
+		private readonly ILogger<Farspeaker> logger;
 		private readonly ITransmittableFactory transmittableFactory;
 		private readonly IMessenger messenger;
 		private readonly IIdentityProvider identityProvider;
@@ -21,7 +21,7 @@ namespace Moongate.IO
 		public event EventHandler<ClientArgs> PlayerDisconnected;
 		public event EventHandler<NetEventArgs> NetEventReceived;
 
-		public Farspeaker (ILogger logger,
+		public Farspeaker (ILogger<Farspeaker> logger,
 							ITransmittableFactory transmittableFactory,
 							IMessenger messenger,
 							IIdentityProvider identityProvider,
@@ -46,14 +46,14 @@ namespace Moongate.IO
 				InitialTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
 				InitiatorGuid = identityProvider.Id.Guid
 			};
-			var transmission = transmittableFactory.Build(null, TransmissionType.Ping, pingArgs);
+			var transmission = transmittableFactory.Build(TransmissionType.Ping, pingArgs);
 
 			messenger.QueueTransmission(transmission);
 		}
 
 		public void SendNetEvent (NetEventArgs e)
 		{
-			var transmission = transmittableFactory.Build(null, TransmissionType.NetEvent, e);
+			var transmission = transmittableFactory.Build(TransmissionType.NetEvent, e);
 
 			messenger.QueueTransmission(transmission);
 		}

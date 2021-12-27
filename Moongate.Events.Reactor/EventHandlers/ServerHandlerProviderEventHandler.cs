@@ -10,12 +10,11 @@ using System;
 
 namespace Moongate.Events.Reactor.EventHandlers
 {
-	public class ServerHandlerProviderEventHandler : IEventHandler
+	public class ServerHandlerProviderEventHandler : IHandlerProviderEventHandler
 	{
 		private readonly ILogger<ServerMessageListenerEventHandler> logger;
 		private readonly IMessenger messenger;
 		private readonly ITransmittableFactory transmittableFactory;
-		private readonly GameStateController gameStateController;
 		private readonly PlayerStateController playerStateController;
 
 		public ServerHandlerProviderEventHandler (
@@ -24,13 +23,11 @@ namespace Moongate.Events.Reactor.EventHandlers
 			IMessenger messenger, 
 			ITransmittableFactory transmittableFactory, 
 			IIdentityProvider identityProvider,
-			GameStateController gameStateController,
 			PlayerStateController playerStateController)
 		{
 			this.logger = logger;
 			this.messenger = messenger;
 			this.transmittableFactory = transmittableFactory;
-			this.gameStateController = gameStateController;
 			this.playerStateController = playerStateController;
 
 			handlerProvider.PingHandler.PingReceived += OnPingReceived;

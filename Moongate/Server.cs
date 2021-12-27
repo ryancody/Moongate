@@ -9,9 +9,10 @@ namespace Moongate
 	public class Server : Agent
 	{
 		private readonly TelepathyServer telepathyServer;
+		private const bool isServer = true;
+		
 		public bool Active { get => telepathyServer.Active; }
 
-		private const bool isServer = true;
 
 		public Server () : base(isServer)
 		{

@@ -17,16 +17,14 @@ namespace Moongate.Messaging.Handler
 		public HandlerProvider (PlayerConnectedHandler playerConnectedHandler,
 								PlayerHandshakeHandler playerHandshakeHandler,
 								PlayerDisconnectedHandler playerDisconnectedHandler,
-								PlayerInputHandler playerInputHandler,
-								GameStateRequestHandler gameStateRequestHandler,
-								EntityHandler entityHandler,
-								PingHandler pingHandler)
+								PingHandler pingHandler,
+								NetEventHandler netEventHandler)
 		{
 			PlayerConnectedHandler = playerConnectedHandler;
 			PlayerHandshakeHandler = playerHandshakeHandler;
 			PlayerDisconnectedHandler = playerDisconnectedHandler;
 			PingHandler = pingHandler;
-			NetEventHandler = NetEventHandler;
+			NetEventHandler = netEventHandler;
 
 			handlers = new Dictionary<TransmissionType, ITransmissionHandler>
 			{

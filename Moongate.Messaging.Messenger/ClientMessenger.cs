@@ -1,4 +1,5 @@
-﻿using Moongate.Models.Transmittable;
+﻿using Microsoft.Extensions.Logging;
+using Moongate.Models.Transmittable;
 using Moongate.Utils;
 using System;
 using System.Collections.Generic;
@@ -9,14 +10,17 @@ namespace Moongate.Messaging.Messenger
 {
 	public class ClientMessenger : IMessenger
 	{
+		private readonly ILogger<ClientMessenger> logger;
 		private readonly ISerializer serializer;
 		private readonly TelepathyClient telepathyClient;
 
 		private Queue<ITransmittable> TransmissionQueue { get; set; } = new Queue<ITransmittable>();
 
-		public ClientMessenger (ISerializer serializer,
+		public ClientMessenger (ILogger<ClientMessenger> logger,
+			ISerializer serializer,
 			Common telepathyClient)
 		{
+			this.logger = logger;
 			this.serializer = serializer;
 			this.telepathyClient = (TelepathyClient)telepathyClient;
 		}
@@ -38,7 +42,7 @@ namespace Moongate.Messaging.Messenger
 				}
 				catch (Exception e)
 				{
-					logger.Error($"Failed to serialize and send transmission queue: {e.Message}");
+					logger.LogError($"Failed to serialize and send transmission queue: {e.Message}");
 					Console.WriteLine($"Failed to serialize and send transmission queue: {e.Message}");
 				}
 

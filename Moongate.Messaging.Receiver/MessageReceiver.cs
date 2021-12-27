@@ -1,4 +1,5 @@
-﻿using Moongate.Messaging.Listener;
+﻿using Microsoft.Extensions.Logging;
+using Moongate.Messaging.Listener;
 using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
 using Moongate.Utils;
@@ -12,12 +13,14 @@ namespace Moongate.Messaging.Receiver
 {
 	public class MessageReceiver : IMessageReceiver
 	{
+		private readonly ILogger<MessageReceiver> logger;
 		private readonly ISerializer serializer;
 
 		public EventHandler<TransmissionArgs> TransmissionReceived { get; set; }
 
-		public MessageReceiver (ISerializer serializer, IMessageListener messageListener)
+		public MessageReceiver (ILogger<MessageReceiver> logger, ISerializer serializer, IMessageListener messageListener)
 		{
+			this.logger = logger;
 			this.serializer = serializer;
 
 			messageListener.DataReceived += OnDataReceived;
@@ -47,7 +50,7 @@ namespace Moongate.Messaging.Receiver
 			}
 			catch (Exception e)
 			{
-				logger.Error("Failed to deserialize Transmission");
+				logger.LogError("Failed to deserialize Transmission");
 				Console.WriteLine(e);
 			}
 

@@ -14,7 +14,7 @@ namespace Moongate.Transmittable.Processor.Test
 		private readonly TransmittableProcessor transmittableProcessor;
 
 		private readonly Mock<ILogger<TransmittableProcessor>> mockLogger = new Mock<ILogger<TransmittableProcessor>>();
-		private readonly Mock<ILogger<EntityHandler>> mockLoggerEntityHandler = new Mock<ILogger<EntityHandler>>();
+		private readonly Mock<ILogger<NetEventHandler>> mockLoggerNetEventHandler = new Mock<ILogger<NetEventHandler>>();
 		private readonly Mock<IMessageReceiver> mockMessageReceiver = new Mock<IMessageReceiver>();
 		private readonly Mock<IHandlerProvider> mockHandlerProvider = new Mock<IHandlerProvider>();
 		private readonly Mock<IIdentityProvider> mockIdentityProvider = new Mock<IIdentityProvider>();
@@ -47,8 +47,8 @@ namespace Moongate.Transmittable.Processor.Test
 				})
 				.Verifiable();
 
-			mockHandlerProvider.Setup(h => h.GetHandler(TransmissionType.EntityTransmit))
-				.Returns(new EntityHandler(mockLoggerEntityHandler.Object))
+			mockHandlerProvider.Setup(h => h.GetHandler(TransmissionType.NetEvent))
+				.Returns(new NetEventHandler(mockLoggerNetEventHandler.Object))
 				.Verifiable();
 
 			transmittableProcessor.Process(transmission);

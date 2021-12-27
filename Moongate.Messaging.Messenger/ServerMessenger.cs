@@ -7,22 +7,26 @@ using Telepathy;
 using System.Linq;
 using TelepathyServer = Telepathy.Server;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Moongate.Messaging.Messenger.Test")]
 namespace Moongate.Messaging.Messenger
 {
 	public class ServerMessenger : IMessenger
 	{
+		private readonly ILogger<ServerMessenger> logger;
 		private readonly ISerializer serializer;
 		private readonly TelepathyServer telepathyServer;
 		private readonly PlayerStateController playerStateController;
 
 		private Queue<ITransmittable> TransmissionQueue { get; set; } = new Queue<ITransmittable>();
 
-		public ServerMessenger (ISerializer serializer,
+		public ServerMessenger (ILogger<ServerMessenger> logger,
+			ISerializer serializer,
 			Common telepathyServer,
 			PlayerStateController playerStateController)
 		{
+			this.logger = logger;
 			this.serializer = serializer;
 			this.telepathyServer = (TelepathyServer)telepathyServer;
 			this.playerStateController = playerStateController;
@@ -58,7 +62,7 @@ namespace Moongate.Messaging.Messenger
 			}
 			catch (Exception e)
 			{
-				logger.Error($"Failed to send transmission queue: {e.Message}");
+				logger.LogError($"Failed to send transmission queue: {e.Message}");
 				Console.WriteLine($"Failed to send transmission queue: {e.Message}");
 			}
 

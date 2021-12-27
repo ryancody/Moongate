@@ -1,6 +1,6 @@
 ﻿namespace Moongate.Events.Reactor.EventHandlers
 {
-    public interface IEventHandler
+    public interface IMessageListenerEventHandler : IEventHandler
     {
     }
 }

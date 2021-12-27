@@ -13,12 +13,13 @@ namespace Moongate.Messaging.Receiver.Test
 	{
 		private readonly MessageReceiver messageReceiver;
 
+		private readonly Mock<ILogger<MessageReceiver>> logger = new Mock<ILogger<MessageReceiver>>();
 		private readonly Mock<ISerializer> mockSerializer = new Mock<ISerializer>();
 		private readonly Mock<IMessageListener> mockMessageListener = new Mock<IMessageListener>();
 
 		public MessageReceiverTests ()
 		{
-			messageReceiver = new MessageReceiver(mockSerializer.Object, mockMessageListener.Object);
+			messageReceiver = new MessageReceiver(logger.Object, mockSerializer.Object, mockMessageListener.Object);
 		}
 
 		[Fact]

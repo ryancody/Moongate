@@ -9,13 +9,19 @@ namespace Moongate.Events.Reactor
 		{
 			if (isServer)
 			{
-				services.AddSingleton<IEventHandler, ServerHandlerProviderEventHandler>();
+				services.AddSingleton<IHandlerProviderEventHandler, ServerHandlerProviderEventHandler>();
+				services.AddSingleton<IMessageListenerEventHandler, ServerMessageListenerEventHandler>();
 			}
 			else {
-				services.AddSingleton<IEventHandler, ClientHandlerProviderEventHandler>();
+				services.AddSingleton<IHandlerProviderEventHandler, ClientHandlerProviderEventHandler>();
+				services.AddSingleton<IMessageListenerEventHandler, ClientMessageListenerEventHandler>();
 			}
-			services.AddSingleton<MessageListenerEventHandler>();
-			services.AddSingleton<EventReactor>();
+			services.AddSingleton<EventReactor>(s => 
+			{
+				var messageListenerEventHandler = s.GetRequiredService<IMessageListenerEventHandler>();
+				var handlerProviderEventHandler = s.GetRequiredService<IHandlerProviderEventHandler>();
+				return new EventReactor(messageListenerEventHandler, handlerProviderEventHandler);
+			});
 		}
 	}
 }

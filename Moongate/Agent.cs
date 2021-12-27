@@ -33,7 +33,6 @@ namespace Moongate
 		{
 			dependencyInjection = new DependencyInjection(isServer);
 
-<<<<<<< HEAD
 			logger = dependencyInjection.ServiceProvider.GetRequiredService<ILogger<Agent>>();
 			messageListener = dependencyInjection.ServiceProvider.GetRequiredService<IMessageListener>();
 			messageReceiver = dependencyInjection.ServiceProvider.GetRequiredService<IMessageReceiver>();
@@ -42,23 +41,13 @@ namespace Moongate
 			eventReactor = dependencyInjection.ServiceProvider.GetRequiredService<EventReactor>();
 			messenger = dependencyInjection.ServiceProvider.GetRequiredService<IMessenger>();
 			identityProvider = dependencyInjection.ServiceProvider.GetRequiredService<IIdentityProvider>();
-=======
-			logger = dependencyInjection.Services.GetService<ILogger>();
-			messageListener = dependencyInjection.Services.GetService<IMessageListener>();
-			messageReceiver = dependencyInjection.Services.GetService<IMessageReceiver>();
-			transmittableProcessor = dependencyInjection.Services.GetService<ITransmittableProcessor>();
-			handlerProvider = dependencyInjection.Services.GetService<IHandlerProvider>();
-			eventReactor = dependencyInjection.Services.GetService<EventReactor>();
-			messenger = dependencyInjection.Services.GetService<IMessenger>();
-			identityProvider = dependencyInjection.Services.GetService<IIdentityProvider>();
-			playerStateController = dependencyInjection.Services.GetService<PlayerStateController>();
+			playerStateController = dependencyInjection.ServiceProvider.GetRequiredService<PlayerStateController>();
 
 			var role = isServer ? "Server" : "Client";
-			logger.Info($@"{role}
+			logger.LogInformation($@"{role}
 			 - Time: {DateTime.Now}
 			 - Instance Name: {identityProvider.Id?.Name}
 			 - GUID: {identityProvider.Id?.Guid}");
->>>>>>> protobuf
 		}
 
 		public void Run ()

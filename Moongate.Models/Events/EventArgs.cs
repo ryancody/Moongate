@@ -53,10 +53,8 @@ namespace Moongate.Models.Events
 	public class NetEventArgs : IEventArgs
 	{
 		[ProtoMember(1)]
-		public string SenderGuid { get; set; }
-		[ProtoMember(2)]
 		public string EventType { get; set; }
-		[ProtoMember(3)]
+		[ProtoMember(2)]
 		public byte[] Payload { get; set; }
 	}
 }

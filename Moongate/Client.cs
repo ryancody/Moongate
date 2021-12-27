@@ -8,13 +8,13 @@ namespace Moongate
 {
 	public class Client : Agent
 	{
+		private const bool isServer = false;
+		private readonly TelepathyClient telepathyClient;
+
 		public bool Connected { get => telepathyClient.Connected; }
 		public bool Connecting { get => telepathyClient.Connecting; }
 		public Id Id { get { return identityProvider.Id; } }
 		public Farspeaker Farspeaker { get; set; }
-
-		private const bool isServer = false;
-		private readonly TelepathyClient telepathyClient;
 
 		public Client () : base(isServer)
 		{

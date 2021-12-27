@@ -7,7 +7,7 @@ using System;
 
 namespace Moongate.Events.Reactor.EventHandlers
 {
-	public class ClientHandlerProviderEventHandler : IEventHandler
+	public class ClientHandlerProviderEventHandler : IHandlerProviderEventHandler
 	{
 		private readonly ILogger<ClientHandlerProviderEventHandler> logger;
 		private readonly IIdentityProvider identityProvider;

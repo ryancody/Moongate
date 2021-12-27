@@ -9,7 +9,7 @@ using System;
 
 namespace Moongate.Events.Reactor.EventHandlers
 {
-	public class ClientMessageListenerEventHandler : IEventHandler
+	public class ClientMessageListenerEventHandler : IMessageListenerEventHandler
 	{
 		private readonly ILogger<ClientMessageListenerEventHandler> logger;
 		private readonly IMessenger messenger;

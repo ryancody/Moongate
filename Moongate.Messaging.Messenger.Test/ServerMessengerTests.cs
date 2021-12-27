@@ -1,4 +1,4 @@
-using Moongate.Logger;
+using Microsoft.Extensions.Logging;
 using Moongate.Models.Transmittable;
 using Moongate.State.Controller;
 using Moongate.State.Models;
@@ -10,11 +10,11 @@ using Xunit;
 
 namespace Moongate.Messaging.Messenger.Tests
 {
-	public class ServerMessengerTests
+    public class ServerMessengerTests
 	{
 		private readonly ServerMessenger serverMessenger;
 
-		private readonly Mock<ILogger> mockLogger = new Mock<ILogger>();
+		private readonly Mock<ILogger<ServerMessenger>> mockLogger = new Mock<ILogger<ServerMessenger>>();
 		private readonly Mock<ISerializer> mockSerializer = new Mock<ISerializer>();
 		private readonly Mock<Telepathy.Server> mockTelepathyServer = new Mock<Telepathy.Server>();
 		private readonly Mock<PlayerStateController> mockPlayerStateController;

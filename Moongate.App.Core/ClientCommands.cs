@@ -2,6 +2,7 @@
 using Moongate.State.Models;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Moongate.App
 {
@@ -40,7 +41,14 @@ namespace Moongate.App
 		private void SendNetEvent ()
 		{
 			Console.WriteLine("sending net event...");
-			client.Farspeaker.SendNetEvent(null);
+
+			var e = new NetEventArgs
+			{
+				EventType = "test",
+				Payload = Encoding.ASCII.GetBytes("test payload")
+			};
+
+			client.Farspeaker.SendNetEvent(e);
 		}
 
 		private void RapidFireNetEvents ()
@@ -52,7 +60,6 @@ namespace Moongate.App
 				var e = new NetEventArgs
 				{
 					EventType = "test",
-					SenderGuid = Guid.NewGuid().ToString(),
 					Payload = p
 				};
 				Console.WriteLine("sending net event...");
