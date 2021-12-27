@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{03B8210C-AE1A-4A8A-9005-F992F8DE6212}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ConsoleApp1</RootNamespace>
+    <AssemblyName>ConsoleApp1</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="protobuf-net, Version=3.0.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.3.0.73\lib\net461\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.Core.3.0.73\lib\net461\protobuf-net.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.7.1\lib\net461\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telepathy, Version=1.0.341.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Telepathy.1.0.341\lib\net471\Telepathy.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DependencyInjection\DependencyInjection.csproj">
+      <Project>{d5a53a44-f36a-4d1d-9b90-2959112d7fd5}</Project>
+      <Name>DependencyInjection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Events.Reactor\Moongate.Events.Reactor.csproj">
+      <Project>{2b8b5fc5-d8de-4deb-8f4d-26ff61785f2e}</Project>
+      <Name>Moongate.Events.Reactor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Farspeaker\Moongate.Farspeaker.csproj">
+      <Project>{0b16f246-8713-428e-84f4-c2427753352e}</Project>
+      <Name>Moongate.Farspeaker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Identity.Provider\Moongate.Identity.Provider.csproj">
+      <Project>{e0c7c57b-fffe-422a-bea6-165bc3f25780}</Project>
+      <Name>Moongate.Identity.Provider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Logger\Moongate.Logger.csproj">
+      <Project>{ba97b057-0c2f-4237-b782-006d01ba0399}</Project>
+      <Name>Moongate.Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Messaging.Handler\Moongate.Messaging.Handler.csproj">
+      <Project>{b664d639-7a39-4f29-a27a-f6230f9964b2}</Project>
+      <Name>Moongate.Messaging.Handler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Messaging.Listener\Moongate.Messaging.Listener.csproj">
+      <Project>{6bcb3d21-528c-4de6-801f-43902f386f58}</Project>
+      <Name>Moongate.Messaging.Listener</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Messaging.Messenger\Moongate.Messaging.Messenger.csproj">
+      <Project>{18146876-d995-46eb-8860-63c1ff849262}</Project>
+      <Name>Moongate.Messaging.Messenger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Messaging.Receiver\Moongate.Messaging.Receiver.csproj">
+      <Project>{e1ac66c8-5725-478b-a020-081ad92a6b81}</Project>
+      <Name>Moongate.Messaging.Receiver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Models\Moongate.Models.csproj">
+      <Project>{27cf3d47-ba8b-4767-937a-d0c5bccb087d}</Project>
+      <Name>Moongate.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.State.Controller\Moongate.State.Controller.csproj">
+      <Project>{67b4fadf-1f20-4c11-a0b9-1e9671db022d}</Project>
+      <Name>Moongate.State.Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Transmittable.Factory\Moongate.Transmittable.Factory.csproj">
+      <Project>{3a3a890c-0f74-4bc0-8a5f-1260879c7a54}</Project>
+      <Name>Moongate.Transmittable.Factory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Transmittable.Processor\Moongate.Transmittable.Processor.csproj">
+      <Project>{eecdb6b0-4c4a-402c-9b9c-0a189b83d8b5}</Project>
+      <Name>Moongate.Transmittable.Processor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate.Utils\Moongate.Utils.csproj">
+      <Project>{19ca8703-c034-42fc-985f-bcb9bca8d3a3}</Project>
+      <Name>Moongate.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moongate\Moongate.csproj">
+      <Project>{b000ed19-e6e6-42d0-a699-f2b002e3a014}</Project>
+      <Name>Moongate</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,4 +1,4 @@
-﻿using Moongate.Logger;
+﻿using Microsoft.Extensions.Logging;
 using Moongate.Messaging.Listener;
 using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
@@ -13,12 +13,12 @@ namespace Moongate.Messaging.Receiver
 {
 	public class MessageReceiver : IMessageReceiver
 	{
-		private readonly ILogger logger;
+		private readonly ILogger<MessageReceiver> logger;
 		private readonly ISerializer serializer;
 
 		public EventHandler<TransmissionArgs> TransmissionReceived { get; set; }
 
-		public MessageReceiver (ILogger logger, ISerializer serializer, IMessageListener messageListener)
+		public MessageReceiver (ILogger<MessageReceiver> logger, ISerializer serializer, IMessageListener messageListener)
 		{
 			this.logger = logger;
 			this.serializer = serializer;
@@ -42,10 +42,21 @@ namespace Moongate.Messaging.Receiver
 		/// <param name="byteArray"></param>
 		internal void Receive (int? fromConnectionId, byte[] byteArray)
 		{
-			var transmittables = serializer.Deserialize<IEnumerable<ITransmittable>>(byteArray);
+			Queue<Transmission> incomingQueue = new Queue<Transmission>();
 
-			transmittables.ToList().ForEach(t =>
+			try
 			{
+				incomingQueue = serializer.Deserialize<Queue<Transmission>>(byteArray);
+			}
+			catch (Exception e)
+			{
+				logger.LogError("Failed to deserialize Transmission");
+				Console.WriteLine(e);
+			}
+
+			while (incomingQueue.Count() > 0)
+			{
+				var t = incomingQueue.Dequeue();
 				var transmissionArgs = new TransmissionArgs
 				{
 					Transmission = new Transmission
@@ -58,7 +69,7 @@ namespace Moongate.Messaging.Receiver
 				};
 
 				TriggerTransmissionReceived(transmissionArgs);
-			});
+			}
 		}
 	}
 }

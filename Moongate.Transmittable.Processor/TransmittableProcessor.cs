@@ -1,5 +1,5 @@
-﻿using Moongate.Identity.Provider;
-using Moongate.Logger;
+﻿using Microsoft.Extensions.Logging;
+using Moongate.Identity.Provider;
 using Moongate.Messaging.Handler;
 using Moongate.Messaging.Receiver;
 using Moongate.Models.Events;
@@ -12,11 +12,11 @@ namespace Moongate.Transmittable.Processor
 {
 	public class TransmittableProcessor : ITransmittableProcessor
 	{
-		private readonly ILogger logger;
+		private readonly ILogger<TransmittableProcessor> logger;
 		private readonly IHandlerProvider handlerProvider;
 		private readonly IIdentityProvider identityProvider;
 
-		public TransmittableProcessor (ILogger logger, 
+		public TransmittableProcessor (ILogger<TransmittableProcessor> logger, 
 										IMessageReceiver messageReceiver, 
 										IHandlerProvider handlerProvider, 
 										IIdentityProvider identityProvider)
@@ -43,14 +43,14 @@ namespace Moongate.Transmittable.Processor
 
 					handler.Handle(message);
 
-					logger.Debug($@"Message handled:
+					logger.LogDebug($@"Message handled:
 						- {message.SenderGuid}
 						- {message.TransmissionType}");
 				}
 			}
 			catch (Exception e)
 			{
-				logger.Error(e.ToString());
+				logger.LogError(e.ToString());
 				Console.WriteLine(e);
 			}
 		}

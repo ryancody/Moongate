@@ -6,12 +6,11 @@
 		PlayerConnected,
 		PlayerHandshake,
 		PlayerDisconnected,
-		PlayerInput,
-				
-		EntityTransmit,
-		
+						
 		GameStateRequest,
 		PlayersRequest,
+
+		NetEvent,
 
 		Default,
 		COUNT

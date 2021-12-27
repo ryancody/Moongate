@@ -1,5 +1,4 @@
 ﻿using Moongate.Models.Identity;
-using System;
 
 namespace Moongate.Identity.Provider
 {

@@ -1,5 +1,5 @@
-﻿using Moongate.Identity.Provider;
-using Moongate.Logger;
+using Microsoft.Extensions.Logging;
+using Moongate.Identity.Provider;
 using Moongate.Messaging.Handler;
 using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
@@ -10,58 +10,29 @@ using System;
 
 namespace Moongate.Events.Reactor.EventHandlers
 {
-	public class ServerHandlerProviderEventHandler : IEventHandler
+	public class ServerHandlerProviderEventHandler : IHandlerProviderEventHandler
 	{
-		private readonly ILogger logger;
+		private readonly ILogger<ServerMessageListenerEventHandler> logger;
 		private readonly IMessenger messenger;
 		private readonly ITransmittableFactory transmittableFactory;
-		private readonly IIdentityProvider identityProvider;
-		private readonly GameStateController gameStateController;
 		private readonly PlayerStateController playerStateController;
 
-		public ServerHandlerProviderEventHandler (ILogger logger, 
+		public ServerHandlerProviderEventHandler (
+			ILogger<ServerMessageListenerEventHandler> logger,
 			IHandlerProvider handlerProvider, 
 			IMessenger messenger, 
 			ITransmittableFactory transmittableFactory, 
 			IIdentityProvider identityProvider,
-			GameStateController gameStateController,
 			PlayerStateController playerStateController)
 		{
 			this.logger = logger;
 			this.messenger = messenger;
 			this.transmittableFactory = transmittableFactory;
-			this.identityProvider = identityProvider;
-			this.gameStateController = gameStateController;
 			this.playerStateController = playerStateController;
 
 			handlerProvider.PingHandler.PingReceived += OnPingReceived;
-			handlerProvider.PlayerInputHandler.PlayerInput += OnPlayerInput;
 			handlerProvider.PlayerHandshakeHandler.PlayerHandshake += OnPlayerHandshake;
-			handlerProvider.PlayerDisconnectedHandler.PlayerDisconnected += OnPlayerDisconnected;
-			handlerProvider.EntityHandler.EntityReceived += OnEntityReceived;
-			handlerProvider.GameStateRequestHandler.GameStateReceived += GameStateReceived;
-		}
-
-		private void GameStateReceived (object sender, GameStateRequestArgs e)
-		{
-			if (e.GameState != null)
-			{
-				gameStateController.GameState = e.GameState;
-			}
-		}
-
-		private void OnEntityReceived (object sender, EntityArgs e)
-		{
-			gameStateController.ProcessEntity(e.Entity);
-
-			var transmission = transmittableFactory.Build(TransmissionType.EntityTransmit, e);
-
-			messenger.QueueTransmission(transmission);
-		}
-
-		private void OnPlayerDisconnected (object sender, ClientArgs e)
-		{
-			playerStateController.RemovePlayer(e.ConnectionId);
+			handlerProvider.NetEventHandler.NetEventReceived += OnNetEvent;
 		}
 
 		/// <summary>
@@ -71,26 +42,41 @@ namespace Moongate.Events.Reactor.EventHandlers
 		/// Only server should receieve player handshake event.
 		/// </summary>
 		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnPlayerHandshake (object sender, ClientArgs e)
+		/// <param name="newPlayer"></param>
+		private void OnPlayerHandshake (object sender, ClientArgs newPlayer)
 		{
-			var transmission = transmittableFactory.Build(TransmissionType.PlayerConnected, e);
+			playerStateController.AddOrUpdatePlayer(newPlayer.ConnectionId, newPlayer.Guid, newPlayer.Name);
 
+			playerStateController.GetPlayers().ForEach(p =>
+			{
+				var player = new ClientArgs
+				{
+					ConnectionId = p.ConnectionId,
+					Guid = p.Guid,
+					Name = p.Name
+				};
+
+				var playerStateUpdate = transmittableFactory.Build(TransmissionType.PlayerConnected, player);
+				messenger.QueueTransmission(playerStateUpdate);
+			});
+
+			var transmission = transmittableFactory.Build(TransmissionType.PlayerConnected, newPlayer);
 			messenger.QueueTransmission(transmission);
 
-			playerStateController.AddOrUpdatePlayer(e.ConnectionId, e.Guid, e.Name);
-		}
-
-		private void OnPlayerInput (object sender, PlayerInputArgs e)
-		{
-			var transmission = transmittableFactory.Build(TransmissionType.PlayerInput, e);
-
-			messenger.QueueTransmission(transmission);
+			Console.WriteLine($"player connected: {newPlayer.Name} - {newPlayer.Guid}");
+			logger.LogInformation($"player connected: {newPlayer.Name} - {newPlayer.Guid}");
 		}
 
 		private void OnPingReceived (object sender, PingArgs e)
 		{
 			var transmission = transmittableFactory.Build(TransmissionType.Ping, e);
+
+			messenger.QueueTransmission(transmission);
+		}
+
+		private void OnNetEvent (object sender, NetEventArgs e)
+		{
+			var transmission = transmittableFactory.Build(TransmissionType.NetEvent, e);
 
 			messenger.QueueTransmission(transmission);
 		}

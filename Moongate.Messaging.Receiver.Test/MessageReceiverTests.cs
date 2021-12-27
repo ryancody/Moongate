@@ -1,11 +1,10 @@
-using Moongate.Logger;
+using Microsoft.Extensions.Logging;
 using Moongate.Messaging.Listener;
 using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
 using Moongate.Utils;
 using Moq;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Moongate.Messaging.Receiver.Test
@@ -14,13 +13,13 @@ namespace Moongate.Messaging.Receiver.Test
 	{
 		private readonly MessageReceiver messageReceiver;
 
-		private readonly Mock<ILogger> mockLogger = new Mock<ILogger>();
+		private readonly Mock<ILogger<MessageReceiver>> logger = new Mock<ILogger<MessageReceiver>>();
 		private readonly Mock<ISerializer> mockSerializer = new Mock<ISerializer>();
 		private readonly Mock<IMessageListener> mockMessageListener = new Mock<IMessageListener>();
 
 		public MessageReceiverTests ()
 		{
-			messageReceiver = new MessageReceiver(mockLogger.Object, mockSerializer.Object, mockMessageListener.Object);
+			messageReceiver = new MessageReceiver(logger.Object, mockSerializer.Object, mockMessageListener.Object);
 		}
 
 		[Fact]

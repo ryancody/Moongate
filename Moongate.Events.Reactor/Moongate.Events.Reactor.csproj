@@ -5,7 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Moongate.Logger\Moongate.Logger.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Moongate.Messaging.Handler\Moongate.Messaging.Handler.csproj" />
     <ProjectReference Include="..\Moongate.Messaging.Listener\Moongate.Messaging.Listener.csproj" />
     <ProjectReference Include="..\Moongate.Messaging.Messenger\Moongate.Messaging.Messenger.csproj" />

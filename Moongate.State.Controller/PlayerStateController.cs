@@ -1,4 +1,4 @@
-﻿using Moongate.Logger;
+﻿using Microsoft.Extensions.Logging;
 using Moongate.State.Models;
 using System;
 using System.Collections.Generic;
@@ -8,10 +8,10 @@ namespace Moongate.State.Controller
 {
 	public class PlayerStateController
 	{
-		private readonly ILogger logger;
+		private readonly ILogger<PlayerStateController> logger;
 		private readonly PlayerState playerState;
 
-		public PlayerStateController (ILogger logger, PlayerState playerState)
+		public PlayerStateController (ILogger<PlayerStateController> logger, PlayerState playerState)
 		{
 			this.logger = logger;
 			this.playerState = playerState;
@@ -30,7 +30,7 @@ namespace Moongate.State.Controller
 			}
 			else
 			{
-				logger.Error($@"player guid {guid} not found!");
+				logger.LogError($@"player guid {guid} not found!");
 				throw new Exception("Player guid key not found!");
 			}
 		}
@@ -43,7 +43,7 @@ namespace Moongate.State.Controller
 			}
 			else
 			{
-				logger.Error($@"player connectionId {connectionId} not found!");
+				logger.LogError($@"player connectionId {connectionId} not found!");
 				throw new Exception("Player connectionId key not found!");
 			}
 		}

@@ -1,5 +1,4 @@
-﻿using Moongate.Logger;
-using Moongate.Models.Transmittable;
+﻿using Moongate.Models.Transmittable;
 using System;
 using System.Collections.Generic;
 
@@ -12,30 +11,28 @@ namespace Moongate.Messaging.Handler
 		public PlayerConnectedHandler		PlayerConnectedHandler { get; }
 		public PlayerHandshakeHandler		PlayerHandshakeHandler { get; }
 		public PlayerDisconnectedHandler	PlayerDisconnectedHandler { get; }
-		public PlayerInputHandler			PlayerInputHandler { get; }
-		public GameStateRequestHandler		GameStateRequestHandler { get; }
-		public EntityHandler				EntityHandler { get; }
 		public PingHandler					PingHandler { get; }
+		public NetEventHandler				NetEventHandler{ get; }
 
-		public HandlerProvider (ILogger logger)
+		public HandlerProvider (PlayerConnectedHandler playerConnectedHandler,
+								PlayerHandshakeHandler playerHandshakeHandler,
+								PlayerDisconnectedHandler playerDisconnectedHandler,
+								PingHandler pingHandler,
+								NetEventHandler netEventHandler)
 		{
-			PlayerConnectedHandler = new PlayerConnectedHandler(logger);
-			PlayerHandshakeHandler = new PlayerHandshakeHandler(logger);
-			PlayerDisconnectedHandler = new PlayerDisconnectedHandler(logger);
-			PlayerInputHandler = new PlayerInputHandler(logger);
-			GameStateRequestHandler = new GameStateRequestHandler(logger);
-			EntityHandler = new EntityHandler(logger);
-			PingHandler = new PingHandler(logger);
+			PlayerConnectedHandler = playerConnectedHandler;
+			PlayerHandshakeHandler = playerHandshakeHandler;
+			PlayerDisconnectedHandler = playerDisconnectedHandler;
+			PingHandler = pingHandler;
+			NetEventHandler = netEventHandler;
 
 			handlers = new Dictionary<TransmissionType, ITransmissionHandler>
 			{
 				{ TransmissionType.PlayerConnected,		PlayerConnectedHandler },
 				{ TransmissionType.PlayerDisconnected,  PlayerDisconnectedHandler },
 				{ TransmissionType.PlayerHandshake,		PlayerHandshakeHandler },
-				{ TransmissionType.PlayerInput,			PlayerInputHandler },
-				{ TransmissionType.GameStateRequest,	GameStateRequestHandler },
-				{ TransmissionType.EntityTransmit,		EntityHandler },
-				{ TransmissionType.Ping,				PingHandler }
+				{ TransmissionType.Ping,				PingHandler },
+				{ TransmissionType.NetEvent,			NetEventHandler }
 			};
 		}
 

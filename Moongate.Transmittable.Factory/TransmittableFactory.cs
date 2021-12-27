@@ -1,22 +1,19 @@
 ﻿using Moongate.Identity.Provider;
-using Moongate.Logger;
+using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
-using System;
 
 namespace Moongate.Transmittable.Factory
 {
 	public class TransmittableFactory : ITransmittableFactory
 	{
-		private readonly ILogger logger;
 		private readonly IIdentityProvider identityProvider;
 
-		public TransmittableFactory (ILogger _logger, IIdentityProvider identityProvider)
+		public TransmittableFactory (IIdentityProvider identityProvider)
 		{
-			logger = _logger;
 			this.identityProvider = identityProvider;
 		}
 
-		public ITransmittable Build (TransmissionType messageType, EventArgs payload)
+		public ITransmittable Build (TransmissionType messageType, IEventArgs payload)
 		{
 			var t = new Transmission()
 			{
