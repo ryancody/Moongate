@@ -77,13 +77,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DependencyInjection\DependencyInjection.csproj">
-      <Project>{d5a53a44-f36a-4d1d-9b90-2959112d7fd5}</Project>
-      <Name>DependencyInjection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Moongate.Events.Reactor\Moongate.Events.Reactor.csproj">
+    <ProjectReference Include="..\Moongate.Events\Moongate.Events.csproj">
       <Project>{2b8b5fc5-d8de-4deb-8f4d-26ff61785f2e}</Project>
-      <Name>Moongate.Events.Reactor</Name>
+      <Name>Moongate.Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\Moongate.Farspeaker\Moongate.Farspeaker.csproj">
       <Project>{0b16f246-8713-428e-84f4-c2427753352e}</Project>
@@ -92,10 +88,6 @@
     <ProjectReference Include="..\Moongate.Identity.Provider\Moongate.Identity.Provider.csproj">
       <Project>{e0c7c57b-fffe-422a-bea6-165bc3f25780}</Project>
       <Name>Moongate.Identity.Provider</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Moongate.Logger\Moongate.Logger.csproj">
-      <Project>{ba97b057-0c2f-4237-b782-006d01ba0399}</Project>
-      <Name>Moongate.Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\Moongate.Messaging.Handler\Moongate.Messaging.Handler.csproj">
       <Project>{b664d639-7a39-4f29-a27a-f6230f9964b2}</Project>

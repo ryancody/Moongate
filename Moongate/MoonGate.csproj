@@ -14,7 +14,9 @@
 
   <ItemGroup>
 
-    <ProjectReference Include="..\Moongate.Events.Reactor\Moongate.Events.Reactor.csproj" />
+    <ProjectReference Include="..\Moongate.Events\Moongate.Events.csproj" />
+
+    <ProjectReference Include="..\Moongate.Events\Moongate.Events.csproj" />
     <ProjectReference Include="..\Moongate.Farspeaker\Moongate.Farspeaker.csproj" />
     <ProjectReference Include="..\Moongate.Identity.Provider\Moongate.Identity.Provider.csproj" />
     <ProjectReference Include="..\Moongate.Messaging.Handler\Moongate.Messaging.Handler.csproj" />

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Moongate.Events.Reactor;
+using Moongate.Events;
 using Moongate.Identity.Provider;
 using Moongate.Messaging.Handler;
 using Moongate.Messaging.Listener;
@@ -24,7 +24,7 @@ namespace Moongate
 		protected readonly IMessageReceiver messageReceiver;
 		protected readonly ITransmittableProcessor transmittableProcessor;
 		protected readonly IHandlerProvider handlerProvider;
-		protected readonly EventReactor eventReactor;
+		protected readonly IEventHandler eventHandler;
 		protected readonly IMessenger messenger;
 		protected readonly IIdentityProvider identityProvider;
 		protected readonly PlayerStateController playerStateController;
@@ -38,7 +38,7 @@ namespace Moongate
 			messageReceiver = dependencyInjection.ServiceProvider.GetRequiredService<IMessageReceiver>();
 			transmittableProcessor = dependencyInjection.ServiceProvider.GetRequiredService<ITransmittableProcessor>();
 			handlerProvider = dependencyInjection.ServiceProvider.GetRequiredService<IHandlerProvider>();
-			eventReactor = dependencyInjection.ServiceProvider.GetRequiredService<EventReactor>();
+			eventHandler = dependencyInjection.ServiceProvider.GetRequiredService<IEventHandler>();
 			messenger = dependencyInjection.ServiceProvider.GetRequiredService<IMessenger>();
 			identityProvider = dependencyInjection.ServiceProvider.GetRequiredService<IIdentityProvider>();
 			playerStateController = dependencyInjection.ServiceProvider.GetRequiredService<PlayerStateController>();

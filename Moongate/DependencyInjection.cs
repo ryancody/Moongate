@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Moongate.Events.Reactor;
+using Moongate.Events;
 using Moongate.Identity.Provider;
 using Moongate.IO;
 using Moongate.Messaging.Handler;
@@ -49,7 +49,7 @@ namespace Moongate
 			services.AddUtilityServices();
 			services.AddFarspeakerService();
 			services.AddIdentityProviderService(isServer);
-			services.AddEventReactorService(isServer);
+			services.AddEventHandlerService(isServer);
 			services.AddLogging();
 
 			return services.BuildServiceProvider();

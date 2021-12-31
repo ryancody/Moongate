@@ -33,9 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Receiver
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Messaging.Handler.Test", "Moongate.Messaging.Handler.Test\Moongate.Messaging.Handler.Test.csproj", "{9C451551-7532-403B-BE65-997AB0406B1E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Events.Reactor", "Moongate.Events.Reactor\Moongate.Events.Reactor.csproj", "{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyInjection", "DependencyInjection\DependencyInjection.csproj", "{D5A53A44-F36A-4D1D-9B90-2959112D7FD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.Events", "Moongate.Events\Moongate.Events.csproj", "{2B8B5FC5-D8DE-4DEB-8F4D-26FF61785F2E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moongate.App.Core", "Moongate.App.Core\Moongate.App.Core.csproj", "{89F90BE6-E231-4746-863D-2A5D81A121E2}"
 EndProject
