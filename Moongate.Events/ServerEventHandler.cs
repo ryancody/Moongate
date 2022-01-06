@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
-using Moongate.Identity.Provider;
 using Moongate.Messaging.Handler;
+using Moongate.Messaging.Listener;
 using Moongate.Messaging.Messenger;
 using Moongate.Models.Events;
 using Moongate.Models.Transmittable;
@@ -8,21 +8,21 @@ using Moongate.State.Controller;
 using Moongate.Transmittable.Factory;
 using System;
 
-namespace Moongate.Events.Reactor.EventHandlers
+namespace Moongate.Events
 {
-	public class ServerHandlerProviderEventHandler : IHandlerProviderEventHandler
+    public class ServerEventHandler : IEventHandler
 	{
-		private readonly ILogger<ServerMessageListenerEventHandler> logger;
+		private readonly ILogger<ServerEventHandler> logger;
 		private readonly IMessenger messenger;
 		private readonly ITransmittableFactory transmittableFactory;
 		private readonly PlayerStateController playerStateController;
 
-		public ServerHandlerProviderEventHandler (
-			ILogger<ServerMessageListenerEventHandler> logger,
+		public ServerEventHandler (
+			ILogger<ServerEventHandler> logger,
 			IHandlerProvider handlerProvider, 
+			IMessageListener messageListener,
 			IMessenger messenger, 
-			ITransmittableFactory transmittableFactory, 
-			IIdentityProvider identityProvider,
+			ITransmittableFactory transmittableFactory,
 			PlayerStateController playerStateController)
 		{
 			this.logger = logger;
@@ -33,6 +33,8 @@ namespace Moongate.Events.Reactor.EventHandlers
 			handlerProvider.PingHandler.PingReceived += OnPingReceived;
 			handlerProvider.PlayerHandshakeHandler.PlayerHandshake += OnPlayerHandshake;
 			handlerProvider.NetEventHandler.NetEventReceived += OnNetEvent;
+			messageListener.Connected += MessageListener_Connected;
+			messageListener.Disconnected += MessageListener_Disconnected;
 		}
 
 		/// <summary>
@@ -79,6 +81,31 @@ namespace Moongate.Events.Reactor.EventHandlers
 			var transmission = transmittableFactory.Build(TransmissionType.NetEvent, e);
 
 			messenger.QueueTransmission(transmission);
+		}
+
+		private void MessageListener_Connected(object sender, MessageArgs e)
+		{
+			Console.WriteLine($"player [connection id {e.FromConnectionId}] connected, initiating handshake");
+			logger.LogInformation($"player [connection id {e.FromConnectionId}] connected, initiating handshake");
+		}
+
+		private void MessageListener_Disconnected(object sender, MessageArgs e)
+		{
+			Console.WriteLine($"player [connection id {e.FromConnectionId}] disconnected");
+			logger.LogInformation($"player [connection id {e.FromConnectionId}] disconnected");
+
+
+			var disconnectedClient = new ClientArgs
+			{
+				ConnectionId = e.FromConnectionId,
+				Guid = playerStateController.GetPlayer(e.FromConnectionId).Guid,
+				Name = playerStateController.GetPlayer(e.FromConnectionId).Name
+			};
+
+			playerStateController.RemovePlayer(e.FromConnectionId);
+
+			var playerStateUpdate = transmittableFactory.Build(TransmissionType.PlayerDisconnected, disconnectedClient);
+			messenger.QueueTransmission(playerStateUpdate);
 		}
 	}
 }
